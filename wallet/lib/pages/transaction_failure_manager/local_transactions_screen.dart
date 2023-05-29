@@ -18,7 +18,7 @@ import 'package:pylons_wallet/utils/extension.dart';
 import '../../generated/locale_keys.g.dart';
 
 class LocalTransactionsScreen extends StatefulWidget {
-  const LocalTransactionsScreen({Key? key}) : super(key: key);
+  const LocalTransactionsScreen({super.key});
 
   @override
   State<LocalTransactionsScreen> createState() => _LocalTransactionsScreenState();

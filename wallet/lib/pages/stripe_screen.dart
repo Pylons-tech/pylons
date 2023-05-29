@@ -18,7 +18,11 @@ class StripeScreen extends StatefulWidget {
   final String url;
   final VoidCallback onBack;
 
-  const StripeScreen({Key? key, required this.url, required this.onBack}) : super(key: key);
+  const StripeScreen({
+    super.key,
+    required this.url,
+    required this.onBack,
+  });
 
   @override
   State<StripeScreen> createState() => _StripeScreenState();

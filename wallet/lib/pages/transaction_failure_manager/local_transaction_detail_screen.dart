@@ -21,7 +21,7 @@ import '../../generated/locale_keys.g.dart';
 TextStyle _titleTextStyle = TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
 
 class LocalTransactionDetailScreen extends StatefulWidget {
-  const LocalTransactionDetailScreen({Key? key}) : super(key: key);
+  const LocalTransactionDetailScreen({super.key});
 
   @override
   State<LocalTransactionDetailScreen> createState() => _LocalTransactionDetailScreenState();

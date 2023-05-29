@@ -8,7 +8,7 @@ import 'package:video_player/video_player.dart';
 class OwnerVideoProgressWidget extends StatefulWidget {
   final String url;
 
-  const OwnerVideoProgressWidget({Key? key, required this.url}) : super(key: key);
+  const OwnerVideoProgressWidget({super.key, required this.url});
 
   @override
   _OwnerVideoProgressWidgetState createState() => _OwnerVideoProgressWidgetState();

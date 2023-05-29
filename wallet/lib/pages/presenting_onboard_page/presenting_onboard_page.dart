@@ -14,7 +14,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import '../../generated/locale_keys.g.dart';
 
 class PresentingOnboardPage extends StatefulWidget {
-  const PresentingOnboardPage({Key? key}) : super(key: key);
+  const PresentingOnboardPage({super.key});
 
   @override
   State<PresentingOnboardPage> createState() => __PresentingOnboardPageState();
@@ -86,14 +86,14 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
                         title: LocaleKeys.create_wallet.tr(),
                         bgColor: AppColors.kCreateWalletButtonColorDark,
                         onPressed: () {
-                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
+                          Navigator.of(context).pushNamed(Routes.createWallet.name);
                         }),
                     VerticalSpace(25.h),
                     buildBackupButton(
                         title: LocaleKeys.restore_wallet.tr(),
                         bgColor: AppColors.kButtonColor,
                         onPressed: () {
-                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);
+                          Navigator.of(context).pushNamed(Routes.restoreWallet.name);
                         }),
                     VerticalSpace(25.h),
                   ],

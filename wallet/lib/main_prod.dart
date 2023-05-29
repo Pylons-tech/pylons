@@ -35,9 +35,12 @@ Future<void> main() async {
 
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-
       return true;
     };
+
+    void logMessage(String message) {
+      FirebaseCrashlytics.instance.log(message);
+    }
 
     HttpOverrides.global = MyHttpOverrides();
 
@@ -52,6 +55,7 @@ Future<void> main() async {
       onLogError: (exception, {bool fatal = false, StackTrace? stack}) {
         FirebaseCrashlytics.instance.recordError(exception, stack, fatal: fatal);
       },
+      onLogMessage: logMessage,
     );
 
     Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
@@ -75,7 +79,7 @@ Future<void> main() async {
         path: 'i18n',
         fallbackLocale: const Locale('en'),
         useOnlyLangCode: true,
-        child: PylonsApp(),
+        child: PylonsApp(onLogMessage: logMessage),
       ),
     );
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));

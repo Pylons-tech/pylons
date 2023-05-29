@@ -10,16 +10,16 @@ class GlassMorphism extends StatelessWidget {
   final double borderRadius;
   final double blurLevel;
 
-  const GlassMorphism(
-      {Key? key,
-      required this.child,
-      required this.startColor,
-      required this.startOpacity,
-      required this.endColor,
-      required this.endOpacity,
-      this.borderRadius = 0,
-      required this.blurLevel})
-      : super(key: key);
+  const GlassMorphism({
+    super.key,
+    required this.child,
+    required this.startColor,
+    required this.startOpacity,
+    required this.endColor,
+    required this.endOpacity,
+    this.borderRadius = 0,
+    required this.blurLevel,
+  });
 
   @override
   Widget build(BuildContext context) {

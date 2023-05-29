@@ -18,7 +18,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 
 abstract class UserImageWidget extends StatelessWidget {
-  const UserImageWidget({Key? key}) : super(key: key);
+  const UserImageWidget({super.key});
 
   @visibleForTesting
   ImageProvider getImage(ImageProvider defaultVal, String uriKey) {

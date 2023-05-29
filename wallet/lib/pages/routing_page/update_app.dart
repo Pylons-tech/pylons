@@ -25,7 +25,7 @@ import '../../generated/locale_keys.g.dart';
 TextStyle kUpdateAppSkipText = const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
 
 class UpdateApp extends StatefulWidget {
-  const UpdateApp({Key? key}) : super(key: key);
+  const UpdateApp({super.key});
 
   @override
   State<UpdateApp> createState() => _UpdateAppState();
@@ -302,10 +302,10 @@ class _UpdateAppState extends State<UpdateApp> {
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      navigator.pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushNamed(Routes.onboarding.name);
     } else {
       // Assigning the latest wallet to the app.
-      navigator.pushNamed(RouteUtil.ROUTE_HOME);
+      navigator.pushNamed(Routes.home.name);
     }
   }
 

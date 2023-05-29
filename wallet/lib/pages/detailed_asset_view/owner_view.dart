@@ -44,7 +44,7 @@ import 'widgets/toggle_button.dart';
 class OwnerView extends StatefulWidget {
   final NFT nft;
 
-  const OwnerView({required this.nft, Key? key}) : super(key: key);
+  const OwnerView({required this.nft, super.key});
 
   @override
   State<OwnerView> createState() => _OwnerViewState();
@@ -84,7 +84,7 @@ class _OwnerViewState extends State<OwnerView> {
 }
 
 class OwnerViewContent extends StatefulWidget {
-  const OwnerViewContent({Key? key}) : super(key: key);
+  const OwnerViewContent({super.key});
 
   @override
   State<OwnerViewContent> createState() => _OwnerViewContentState();
@@ -194,7 +194,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
 }
 
 class OwnerBottomDrawer extends StatefulWidget {
-  const OwnerBottomDrawer({Key? key}) : super(key: key);
+  const OwnerBottomDrawer({super.key});
 
   @override
   State<OwnerBottomDrawer> createState() => _OwnerBottomDrawerState();
@@ -274,7 +274,7 @@ Widget _title({required NFT nft, required String owner}) {
 }
 
 class _CollapsedBottomMenu extends StatefulWidget {
-  const _CollapsedBottomMenu({Key? key}) : super(key: key);
+  const _CollapsedBottomMenu();
 
   @override
   State<_CollapsedBottomMenu> createState() => _CollapsedBottomMenuState();
@@ -381,7 +381,7 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
 }
 
 class _ExpandedBottomMenu extends StatefulWidget {
-  const _ExpandedBottomMenu({Key? key}) : super(key: key);
+  const _ExpandedBottomMenu();
 
   @override
   State<_ExpandedBottomMenu> createState() => __ExpandedBottomMenuState();

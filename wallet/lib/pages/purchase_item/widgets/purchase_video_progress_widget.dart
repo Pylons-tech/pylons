@@ -8,7 +8,7 @@ import 'package:video_player/video_player.dart';
 class PurchaseVideoProgressWidget extends StatefulWidget {
   final String url;
 
-  const PurchaseVideoProgressWidget({Key? key, required this.url}) : super(key: key);
+  const PurchaseVideoProgressWidget({super.key, required this.url});
 
   @override
   _PurchaseVideoProgressWidgetState createState() => _PurchaseVideoProgressWidgetState();

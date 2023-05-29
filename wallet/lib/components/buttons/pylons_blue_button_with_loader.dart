@@ -8,12 +8,12 @@ class PylonsBlueButtonLoading extends StatelessWidget {
   final bool enabled;
 
   const PylonsBlueButtonLoading({
-    Key? key,
+    super.key,
     required this.onTap,
     this.text = "",
     required this.loader,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

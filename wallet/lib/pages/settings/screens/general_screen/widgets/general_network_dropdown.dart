@@ -15,8 +15,8 @@ class GeneralForwardNetworkItem extends StatelessWidget {
 
   const GeneralForwardNetworkItem({
     required this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   GeneralScreenViewModel get _generalScreenProvider => GetIt.I.get();
 

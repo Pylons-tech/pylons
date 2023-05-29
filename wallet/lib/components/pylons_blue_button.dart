@@ -9,11 +9,11 @@ class PylonsBlueButton extends StatelessWidget {
   final bool fulfilled;
 
   const PylonsBlueButton({
-    Key? key,
+    super.key,
     required this.onTap,
     this.text = "",
     this.fulfilled = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -21,9 +21,9 @@ class CurrencyBackgroundCard extends StatelessWidget {
   final bool isDefault;
 
   const CurrencyBackgroundCard({
-    Key? key,
+    super.key,
     required this.isDefault,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class CurrencyCard extends StatelessWidget {
   final Currency currencyModel;
   final VoidCallback onFaucetPressed;
 
-  const CurrencyCard({Key? key, required this.currencyModel, this.color, required this.isDefault, required this.onFaucetPressed}) : super(key: key);
+  const CurrencyCard({super.key, required this.currencyModel, this.color, required this.isDefault, required this.onFaucetPressed});
 
   Widget getHelpIcon(BuildContext context) {
     if (currencyModel.ibcCoins.getName() == kPylons) {

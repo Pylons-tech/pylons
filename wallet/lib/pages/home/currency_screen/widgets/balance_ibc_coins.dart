@@ -13,7 +13,7 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 class BalanceIBCCoins extends StatefulWidget {
   final Balance balance;
 
-  const BalanceIBCCoins({Key? key, required this.balance}) : super(key: key);
+  const BalanceIBCCoins({super.key, required this.balance});
 
   @override
   _BalanceIBCCoinsState createState() => _BalanceIBCCoinsState();

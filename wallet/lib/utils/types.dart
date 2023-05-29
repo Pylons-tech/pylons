@@ -6,6 +6,9 @@ typedef OnLogError = void Function(
 
 typedef OnLogEvent = void Function(AnalyticsEventEnum event);
 
+typedef OnLogMessage = void Function(String message);
+
+
 enum AnalyticsEventEnum {
   noLink,
   chromeThrowLink,

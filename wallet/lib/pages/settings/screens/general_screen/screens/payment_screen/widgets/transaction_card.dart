@@ -14,8 +14,8 @@ class TransactionCard extends StatelessWidget {
     required this.denomText,
     required this.transactionTypeEnum,
     required this.isDateSame,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String transactionType;
   final DateTime date;
@@ -105,11 +105,11 @@ class LeadingBuilder extends StatelessWidget {
   final WalletHistoryTransactionType transactionType;
 
   const LeadingBuilder({
-    Key? key,
+    super.key,
     required this.onSendReceive,
     required this.onBuySell,
     required this.transactionType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

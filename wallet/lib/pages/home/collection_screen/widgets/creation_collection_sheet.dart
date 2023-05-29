@@ -24,7 +24,7 @@ import '../preview_nft_grid.dart';
 class CreationsCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const CreationsCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const CreationsCollection({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {

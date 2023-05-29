@@ -22,7 +22,7 @@ import '../../../generated/locale_keys.g.dart';
 class NewUserForm extends StatefulWidget {
   final WalletsStore walletsStore;
 
-  const NewUserForm({Key? key, required this.walletsStore}) : super(key: key);
+  const NewUserForm({super.key, required this.walletsStore});
 
   @override
   NewUserFormState createState() => NewUserFormState();
@@ -172,7 +172,7 @@ class NewUserFormState extends State<NewUserForm> {
       failure.message.show();
     }, (walletInfo) async {
       firebaseRemoteNotificationsProvider.updateFCMToken(address: accountProvider.accountPublicInfo!.publicAddress);
-      navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
+      navigator.pushNamedAndRemoveUntil(Routes.home.name, (route) => false);
     });
   }
 }

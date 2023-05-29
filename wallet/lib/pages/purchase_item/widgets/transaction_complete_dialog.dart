@@ -46,7 +46,7 @@ class TradeCompleteWidget extends StatefulWidget {
   final TradeReceiptModel model;
   final VoidCallback onBackPressed;
 
-  const TradeCompleteWidget({Key? key, required this.model, required this.onBackPressed}) : super(key: key);
+  const TradeCompleteWidget({super.key, required this.model, required this.onBackPressed});
 
   @override
   State<TradeCompleteWidget> createState() => _TradeCompleteWidgetState();

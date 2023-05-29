@@ -8,8 +8,11 @@ class MoreButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool showText;
 
-  const MoreButton({Key? key, required this.onTap, this.showText = true})
-      : super(key: key);
+  const MoreButton({
+    super.key,
+    required this.onTap,
+    this.showText = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class MoreButton extends StatelessWidget {
               )
             else
               const SizedBox.shrink(),
-             Icon(
+            Icon(
               Icons.keyboard_arrow_right_rounded,
               size: kIconSize,
               color: AppColors.kSelectedIcon,

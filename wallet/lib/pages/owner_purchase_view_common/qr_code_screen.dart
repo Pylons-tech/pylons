@@ -18,7 +18,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../generated/locale_keys.g.dart';
 
 class QRCodeScreen extends StatefulWidget {
-  const QRCodeScreen({Key? key, required this.nft}) : super(key: key);
+  const QRCodeScreen({super.key, required this.nft});
 
   final NFT nft;
 

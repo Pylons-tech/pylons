@@ -34,7 +34,7 @@ class StripePayoutForm extends StatefulWidget {
   final String maxAmount;
   final Function? onCallback;
 
-  const StripePayoutForm({Key? key, required this.maxAmount, this.onCallback}) : super(key: key);
+  const StripePayoutForm({super.key, required this.maxAmount, this.onCallback});
 
   @override
   StripePayoutFormState createState() => StripePayoutFormState();

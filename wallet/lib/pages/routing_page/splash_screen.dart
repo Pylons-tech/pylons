@@ -18,7 +18,7 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      navigator.pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushReplacementNamed(Routes.onboarding.name);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void moveToHome() {
     Navigator.of(
       navigatorKey.currentState!.overlay!.context,
-    ).pushReplacementNamed(RouteUtil.ROUTE_HOME);
+    ).pushReplacementNamed(Routes.home.name);
   }
 
   @override
@@ -182,7 +182,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await accountProvider.loadWallets();
 
     navigator.pushReplacementNamed(
-      RouteUtil.ROUTE_APP_UPDATE,
+      Routes.appUpdate.name,
       arguments: remoteConfigVersion,
     );
 

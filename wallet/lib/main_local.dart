@@ -16,11 +16,17 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   // Read the values from .env file
   await dotenv.load(fileName: Assets.env.localEnv);
+
+  void logMessage(String message) {
+    FirebaseCrashlytics.instance.log(message);
+  }
+
   await di.init(
     onLogEvent: (AnalyticsEventEnum event) {},
     onLogError: (exception, {bool fatal = false, StackTrace? stack}) {
       FirebaseCrashlytics.instance.recordError(exception, stack, fatal: fatal);
     },
+    onLogMessage: logMessage,
   );
 
   runApp(
@@ -30,7 +36,9 @@ Future<void> main() async {
         fallbackLocale: const Locale('en'),
         saveLocale: false,
         useOnlyLangCode: true,
-        child: PylonsApp()),
+        child: PylonsApp(
+          onLogMessage: logMessage,
+        )),
   );
 }
 

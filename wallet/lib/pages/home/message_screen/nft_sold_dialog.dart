@@ -42,9 +42,9 @@ class NftSoldContent extends StatefulWidget {
   final RemoteNotification notification;
 
   const NftSoldContent({
-    Key? key,
+    super.key,
     required this.notification,
-  }) : super(key: key);
+  });
 
   @override
   State<NftSoldContent> createState() => _NftSoldContentState();
@@ -137,7 +137,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
-                              Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                              Navigator.of(context).pushNamed(Routes.message.name);
                             },
                             child: Container(
                               height: 40.h,

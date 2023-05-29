@@ -5,10 +5,10 @@ class ToggleButton extends StatefulWidget {
   final bool enabled;
   final void Function({required bool enabled}) onPressed;
   const ToggleButton({
-    Key? key,
+    super.key,
     required this.enabled,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   State<ToggleButton> createState() => _ToggleButtonState();

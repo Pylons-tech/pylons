@@ -76,6 +76,7 @@ final sl = GetIt.instance;
 Future<void> init({
   required OnLogEvent onLogEvent,
   required OnLogError onLogError,
+  required OnLogMessage onLogMessage,
 }) async {
   /// Services
   sl.registerLazySingleton<InternetConnectionChecker>(

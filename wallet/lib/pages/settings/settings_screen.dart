@@ -29,7 +29,7 @@ TextStyle kSettingsUserEnteredTextStyle = TextStyle(
 TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kSettingsUserNameColor, fontWeight: FontWeight.w500);
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  const SettingScreen({super.key});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -263,7 +263,7 @@ class _SettingScreenState extends State<SettingScreen> {
             imagePath: Assets.images.svg.settingsGeneral,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
+              Navigator.of(context).pushNamed(Routes.general.name);
             },
           ),
           const SettingsDivider(),
@@ -272,7 +272,7 @@ class _SettingScreenState extends State<SettingScreen> {
             imagePath: Assets.images.svg.settingsRecovery,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
+              Navigator.of(context).pushNamed(Routes.recovery.name);
             },
           ),
           const SettingsDivider(),
@@ -281,7 +281,7 @@ class _SettingScreenState extends State<SettingScreen> {
             imagePath: Assets.images.svg.settingsLegal,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
+              Navigator.of(context).pushNamed(Routes.legal.name);
             },
           ),
           const SettingsDivider(),
@@ -357,7 +357,7 @@ class SettingListItem extends StatefulWidget {
   final String imagePath;
   final VoidCallback onPressed;
 
-  const SettingListItem({Key? key, required this.title, required this.imagePath, required this.onPressed}) : super(key: key);
+  const SettingListItem({super.key, required this.title, required this.imagePath, required this.onPressed});
 
   @override
   State<SettingListItem> createState() => _SettingListItemState();

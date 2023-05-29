@@ -32,8 +32,7 @@ class CustomTransactionBroadcasterImp implements CustomTransactionBroadcaster {
           "passed privateCredentials is not $AlanPrivateAccountCredentials"));
     }
     final txSender = TxSender.fromNetworkInfo(_networkInfo);
-    final response = await txSender.broadcastTx(transaction.signedTransaction,
-        mode: BroadcastMode.BROADCAST_MODE_BLOCK);
+    final response = await txSender.broadcastTx(transaction.signedTransaction);
 
     if (response.hasCode()) {
       if (response.code != 0) {

@@ -24,7 +24,7 @@ import '../../../generated/locale_keys.g.dart';
 class ImportFromGoogleForm extends StatefulWidget {
   final WalletsStore walletStore;
 
-  const ImportFromGoogleForm({Key? key, required this.walletStore}) : super(key: key);
+  const ImportFromGoogleForm({super.key, required this.walletStore});
 
   @override
   ImportFromGoogleFormState createState() {
@@ -135,7 +135,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
       failure.message.show();
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 
@@ -165,7 +165,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
       failure.message.show();
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 
@@ -196,7 +196,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
 
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 }

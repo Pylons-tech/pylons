@@ -100,7 +100,7 @@ class DeleteDialog {
 
                                     await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(
                                         networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
-                                    navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
+                                    navigator.pushNamedAndRemoveUntil(Routes.onboarding.name, (route) => false);
                                   })),
                           SizedBox(
                             width: 15.w,
