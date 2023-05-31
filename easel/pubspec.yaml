@@ -53,13 +53,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_screenutil: ^5.5.4
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.0
   flutter_svg: ^1.0.3
   flutter_svg_provider: ^1.0.3
   focus_detector: ^2.0.1
   get_it: ^7.2.0  
   google_fonts: ^4.0.3
-  image_cropper: ^3.0.0
+  image_cropper: ^4.0.1
   internet_connection_checker: ^0.0.1+4
   intl:
   just_audio: ^0.9.28
@@ -71,7 +71,7 @@ dependencies:
   provider: ^6.0.1
   pylons_sdk:
     path: ../dart_sdk
-  share_plus: ^6.0.0  # Used for sharing the NFT link.
+  share_plus: ^7.0.1  # Used for sharing the NFT link.
   shared_preferences: ^2.0.8
   shimmer_animation: 2.1.0+1
   sqflite: ^2.0.3+1

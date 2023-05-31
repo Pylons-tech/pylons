@@ -15,7 +15,7 @@ dependencies:
     path: pkgs/alan
   audio_video_progress_bar: ^1.0.0
   auto_size_text: ^3.0.0
-  backdrop: ^0.8.1
+  backdrop: ^0.9.0
   bottom_drawer: ^0.0.3
   cached_network_image: ^3.1.0
   cloud_firestore: ^4.3.0
@@ -55,7 +55,7 @@ dependencies:
   focus_detector: ^2.0.1
   get_it: ^7.2.0
   google_sign_in: ^6.0.2
-  googleapis: ^10.0.0
+  googleapis: ^11.1.0
   grpc: ^3.0.2
   home_widget: ^0.2.0+1
   http: ^0.13.4
