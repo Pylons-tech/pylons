@@ -97,15 +97,15 @@ class IPCEngine {
       handleEaselLink(
         link: initialLink,
         showOwnerView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
-          RouteUtil.ROUTE_OWNER_VIEW,
+          Routes.ownerView.name,
           arguments: nullableNFT,
         ),
         showCreateAccountView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
-          RouteUtil.ROUTE_ACCEPT_POLICY,
+          Routes.acceptPolicy.name,
           arguments: nullableNFT,
         ),
         showPurchaseView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
-          RouteUtil.ROUTE_PURCHASE_VIEW,
+          Routes.purchaseView.name,
           arguments: nullableNFT,
         ),
         getNFtFromRecipe: getNFtFromRecipe,
@@ -232,7 +232,7 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
+    await navigatorKey.currentState!.pushNamed(Routes.purchaseView.name, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
@@ -259,7 +259,7 @@ class IPCEngine {
       if (item == null) {
         return;
       }
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+      navigatorKey.currentState!.pushNamed(Routes.ownerView.name, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
     }

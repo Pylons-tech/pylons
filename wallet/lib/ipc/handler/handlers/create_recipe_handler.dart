@@ -40,7 +40,7 @@ class CreateRecipeHandler implements BaseHandler {
         final nft = await NFT.fromRecipeId(msgObj.cookbookId, msgObj.id);
 
         if (nft != null) {
-          await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+          await navigatorKey.currentState!.pushNamed(Routes.ownerView.name, arguments: nft);
         }
 
         GetIt.I.get<HomeProvider>().changeTabs(0);

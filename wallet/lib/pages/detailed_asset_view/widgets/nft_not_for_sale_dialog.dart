@@ -45,7 +45,7 @@ class NFTNotForSaleDialog {
 class NFTForSaleConfirmationWidget extends StatefulWidget {
   final OwnerViewViewModel ownerViewViewModel;
 
-  const NFTForSaleConfirmationWidget({Key? key, required this.ownerViewViewModel}) : super(key: key);
+  const NFTForSaleConfirmationWidget({super.key, required this.ownerViewViewModel});
 
   @override
   State<NFTForSaleConfirmationWidget> createState() => _NFTForSaleConfirmationWidgetState();

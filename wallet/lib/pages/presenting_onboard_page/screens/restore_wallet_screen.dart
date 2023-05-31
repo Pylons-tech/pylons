@@ -9,7 +9,7 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class RestoreWalletScreen extends StatefulWidget {
-  const RestoreWalletScreen({Key? key}) : super(key: key);
+  const RestoreWalletScreen({super.key});
 
   @override
   State<RestoreWalletScreen> createState() => _RestoreWalletScreenState();

@@ -42,8 +42,7 @@ class LatestTransactions extends StatelessWidget {
 
   final String defaultCurrency;
 
-  const LatestTransactions({Key? key, required this.denomSpecificTxList, required this.defaultCurrency})
-      : super(key: key);
+  const LatestTransactions({super.key, required this.denomSpecificTxList, required this.defaultCurrency});
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +224,7 @@ class LatestTransactions extends StatelessWidget {
           .value;
 
       navigator.pushNamed(
-        RouteUtil.ROUTE_TRANSACTION_DETAIL,
+        Routes.trasactionDetail.name,
         arguments: TxDetailArguments(
           recipe: recipe,
           creator: creator,

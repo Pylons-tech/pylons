@@ -6,7 +6,7 @@ version: 1.0.1+172
 
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   advance_pdf_viewer:

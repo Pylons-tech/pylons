@@ -19,7 +19,7 @@ import '../../../../generated/locale_keys.g.dart';
 class RowComponents extends StatelessWidget {
   final VoidCallback onRefresh;
 
-  const RowComponents({Key? key, required this.onRefresh}) : super(key: key);
+  const RowComponents({super.key, required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class RowComponents extends StatelessWidget {
             width: 20.w,
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
+            onTap: () => Navigator.of(context).pushNamed(Routes.transactionHistory.name),
             child: SvgPicture.asset(Assets.images.icons.transactionHistory),
           ),
           SizedBox(

@@ -22,7 +22,7 @@ import '../collection_view_model.dart';
 class PurchasesCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const PurchasesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const PurchasesCollection({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +78,13 @@ class PurchaseCollectionItem extends StatelessWidget {
   final String thumbnailUrl;
   final String name;
   const PurchaseCollectionItem({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.assetType,
     required this.url,
     required this.thumbnailUrl,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

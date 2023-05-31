@@ -28,7 +28,7 @@ TextStyle kRecoveryMnemonicText = TextStyle(fontSize: 18.sp, fontFamily: kUniver
 TextStyle kRecoveryMnemonicIndexText = TextStyle(fontSize: 10.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
 
 class ViewRecoveryScreen extends StatefulWidget {
-  const ViewRecoveryScreen({Key? key}) : super(key: key);
+  const ViewRecoveryScreen({super.key});
 
   @override
   State<ViewRecoveryScreen> createState() => _ViewRecoveryScreenState();
@@ -187,7 +187,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                 SizedBox(height: 30.h),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
+                    Navigator.of(context).pushNamed(Routes.practiceTest.name);
                   },
                   child: Text(
                     LocaleKeys.practice_test.tr(),
@@ -285,7 +285,7 @@ class RecoveryForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const RecoveryForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const RecoveryForwardItem({required this.title, super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -346,7 +346,7 @@ class MnemonicClipper extends CustomClipper<Path> {
 class MnemonicList extends StatelessWidget {
   final List<String> mnemonic;
 
-  const MnemonicList({Key? key, required this.mnemonic}) : super(key: key);
+  const MnemonicList({super.key, required this.mnemonic});
 
   @override
   Widget build(BuildContext context) {

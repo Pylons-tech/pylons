@@ -7,119 +7,119 @@ abstract class Failure extends Equatable {
 }
 
 class TxNotFoundFailure extends Failure {
-  const TxNotFoundFailure(String message) : super(message);
+  const TxNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class RecipeNotFoundFailure extends Failure {
-  const RecipeNotFoundFailure(String message) : super(message);
+  const RecipeNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class CookBookNotFoundFailure extends Failure {
-  const CookBookNotFoundFailure(String message) : super(message);
+  const CookBookNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class NoInternetFailure extends Failure {
-  const NoInternetFailure(String message) : super(message);
+  const NoInternetFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class StripeFailure extends Failure {
-  const StripeFailure(String message) : super(message);
+  const StripeFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class WalletCreationFailure extends Failure {
-  const WalletCreationFailure(String message) : super(message);
+  const WalletCreationFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class ExecutionNotFoundFailure extends Failure {
-  const ExecutionNotFoundFailure(String message) : super(message);
+  const ExecutionNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(String message) : super(message);
+  const ServerFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class ItemNotFoundFailure extends Failure {
-  const ItemNotFoundFailure(String message) : super(message);
+  const ItemNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class TradeNotFoundFailure extends Failure {
-  const TradeNotFoundFailure(String message) : super(message);
+  const TradeNotFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class UsernameAddressFoundFailure extends Failure {
-  const UsernameAddressFoundFailure(String message) : super(message);
+  const UsernameAddressFoundFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class InvalidInputFailure extends Failure {
-  const InvalidInputFailure(String message) : super(message);
+  const InvalidInputFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class AccountAlreadyExistsFailure extends Failure {
-  const AccountAlreadyExistsFailure(String message) : super(message);
+  const AccountAlreadyExistsFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class AccountCreationFailure extends Failure {
-  const AccountCreationFailure(String message) : super(message);
+  const AccountCreationFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class CacheFailure extends Failure {
-  const CacheFailure(String message) : super(message);
+  const CacheFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class FirebaseDynamicLinkFailure extends Failure {
-  const FirebaseDynamicLinkFailure(String message) : super(message);
+  const FirebaseDynamicLinkFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class PlatformFailure extends Failure {
-  const PlatformFailure(String message) : super(message);
+  const PlatformFailure(super.message);
 
   @override
   List<Object?> get props => [message];
@@ -170,14 +170,14 @@ class FetchAllNotificationFailure extends Failure {
 }
 
 class FcmTokenRetrievalError extends Failure {
-  const FcmTokenRetrievalError(String message) : super(message);
+  const FcmTokenRetrievalError(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class AppCheckTokenFailure extends Failure {
-  const AppCheckTokenFailure(String message) : super(message);
+  const AppCheckTokenFailure(super.message);
 
   @override
   List<Object?> get props => [message];
@@ -212,14 +212,14 @@ class MarkReadNotificationFailure extends Failure {
 }
 
 class SavingLocalDataFailure extends Failure {
-  const SavingLocalDataFailure(String message) : super(message);
+  const SavingLocalDataFailure(super.message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class GettingLocalDataFailure extends Failure {
-  const GettingLocalDataFailure(String message) : super(message);
+  const GettingLocalDataFailure(super.message);
 
   @override
   List<Object?> get props => [message];

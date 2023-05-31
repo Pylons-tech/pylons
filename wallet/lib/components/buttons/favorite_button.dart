@@ -5,9 +5,9 @@ class FavoriteButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const FavoriteButton({
-    Key? key,
+    super.key,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

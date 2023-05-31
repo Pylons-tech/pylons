@@ -12,12 +12,12 @@ class PylonsRoundedButton extends StatelessWidget {
   final Color textColor;
 
   const PylonsRoundedButton({
-    Key? key,
+    super.key,
     this.glyph,
     required this.onTap,
     this.textColor = Colors.black,
     this.text = "",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -93,7 +93,7 @@ class InsufficientBalanceDialog {
                               title: LocaleKeys.add_pylons.tr(),
                               bgColor: AppColors.kTextBlackColor,
                               onPressed: () async {
-                                Navigator.of(context).pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                                Navigator.of(context).pushNamed(Routes.addPylon.name);
                               }),
                         ),
                         Expanded(

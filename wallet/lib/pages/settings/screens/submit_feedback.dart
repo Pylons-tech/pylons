@@ -32,7 +32,7 @@ class SubmitFeedback {
 }
 
 class _SubmitFeedbackDialogContent extends StatefulWidget {
-  const _SubmitFeedbackDialogContent({Key? key}) : super(key: key);
+  const _SubmitFeedbackDialogContent();
 
   @override
   State<_SubmitFeedbackDialogContent> createState() => _SubmitFeedbackDialogContentState();

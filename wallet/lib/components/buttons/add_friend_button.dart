@@ -6,10 +6,10 @@ class AddFriendButton extends StatelessWidget {
   final String text;
 
   const AddFriendButton({
-    Key? key,
+    super.key,
     required this.onTap,
     this.text = "",
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

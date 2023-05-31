@@ -19,7 +19,7 @@ import '../collection_screen.dart';
 class TradesCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const TradesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const TradesCollection({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {

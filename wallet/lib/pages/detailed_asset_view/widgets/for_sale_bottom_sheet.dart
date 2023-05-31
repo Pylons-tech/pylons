@@ -47,7 +47,7 @@ class ForSaleBottomSheet {
 }
 
 class _ForSaleBottomSheetWidget extends StatefulWidget {
-  const _ForSaleBottomSheetWidget({Key? key}) : super(key: key);
+  const _ForSaleBottomSheetWidget();
 
   @override
   State<_ForSaleBottomSheetWidget> createState() => _ForSaleBottomSheetWidgetState();

@@ -22,13 +22,17 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
+   void logMessage(String message) {
+    FirebaseCrashlytics.instance.log(message);
+  }
+
   // Read the values from .env file
   await dotenv.load(fileName: Assets.env.devEnv);
   await di.init(
     onLogEvent: (AnalyticsEventEnum event) {},
     onLogError: (exception, {bool fatal = false, StackTrace? stack}) {
       FirebaseCrashlytics.instance.recordError(exception, stack, fatal: fatal);
-    },
+    }, onLogMessage: logMessage,
   );
 
   isTablet = getIsCurrentDeviceTablet();
@@ -42,7 +46,7 @@ Future<void> main() async {
       fallbackLocale: const Locale('en'),
       saveLocale: false,
       useOnlyLangCode: true,
-      child: PylonsApp(),
+      child: PylonsApp(onLogMessage: logMessage),
     ),
   );
 }

@@ -15,7 +15,7 @@ TextStyle kRecoveryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUnivers
 TextStyle kRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class RecoveryScreen extends StatefulWidget {
-  const RecoveryScreen({Key? key}) : super(key: key);
+  const RecoveryScreen({super.key});
 
   @override
   State<RecoveryScreen> createState() => _RecoveryScreenState();
@@ -88,13 +88,13 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
             RecoveryForwardItem(
               title: LocaleKeys.view_recovery_phrase.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE);
+                Navigator.of(context).pushNamed(Routes.viewRecoveryPhrase.name);
               },
             ),
             RecoveryForwardItem(
               title: LocaleKeys.practice_test.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
+                Navigator.of(context).pushNamed(Routes.practiceTest.name);
               },
             ),
           ],
@@ -108,7 +108,7 @@ class RecoveryForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const RecoveryForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const RecoveryForwardItem({required this.title, super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -40,7 +40,7 @@ class TradeReceiptDialog {
 class TradeReceiptWidget extends StatefulWidget {
   final TradeReceiptModel model;
 
-  const TradeReceiptWidget({Key? key, required this.model}) : super(key: key);
+  const TradeReceiptWidget({super.key, required this.model});
 
   @override
   State<TradeReceiptWidget> createState() => _TradeReceiptWidgetState();

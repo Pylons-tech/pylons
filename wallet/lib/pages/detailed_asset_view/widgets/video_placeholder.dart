@@ -14,11 +14,11 @@ class VideoPlaceHolder extends StatelessWidget {
   final String thumbnailUrl;
 
   const VideoPlaceHolder({
-    Key? key,
+    super.key,
     required this.nftUrl,
     required this.nftName,
     required this.thumbnailUrl,
-  }) : super(key: key);
+  });
 
   Widget getVideoThumbnailFromUrl() {
     return Stack(
@@ -108,12 +108,12 @@ class BuildThumbnailContainer extends StatelessWidget {
   final WidgetBuilder waitingWidget;
 
   const BuildThumbnailContainer({
-    Key? key,
+    super.key,
     required this.snapshot,
     required this.errorWidget,
     required this.successWidget,
     required this.waitingWidget,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

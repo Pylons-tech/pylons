@@ -45,7 +45,7 @@ class Collection {
 }
 
 class CollectionScreen extends StatefulWidget {
-  const CollectionScreen({Key? key}) : super(key: key);
+  const CollectionScreen({super.key});
 
   @override
   State<CollectionScreen> createState() => _CollectionScreenState();
@@ -137,7 +137,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
     if (asset.type == NftType.TYPE_RECIPE) {
       onRecipeClicked(asset);
     } else {
-      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset);
+      Navigator.of(context).pushNamed(Routes.ownerView.name, arguments: asset);
     }
   }
 
@@ -149,7 +149,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
     loader.dismiss();
 
     if (mounted) {
-      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset);
+      Navigator.of(context).pushNamed(Routes.ownerView.name, arguments: asset);
     }
   }
 }
@@ -157,7 +157,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
 class NONNftCreations extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const NONNftCreations({Key? key, required this.onNFTSelected}) : super(key: key);
+  const NONNftCreations({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -222,11 +222,11 @@ class SheetHeading extends StatelessWidget {
   final String title;
   final CollectionsType collectionType;
   const SheetHeading({
-    Key? key,
+    super.key,
     required this.leadingSVG,
     required this.title,
     required this.collectionType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

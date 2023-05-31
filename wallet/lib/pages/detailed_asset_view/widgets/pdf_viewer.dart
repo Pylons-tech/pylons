@@ -13,7 +13,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 class PdfViewer extends StatefulWidget {
   final String? fileUrl;
 
-  const PdfViewer({Key? key, this.fileUrl}) : super(key: key);
+  const PdfViewer({super.key, this.fileUrl});
 
   @override
   State<PdfViewer> createState() => _PdfViewerState();
@@ -79,7 +79,7 @@ class _PdfViewerState extends State<PdfViewer> {
         child: InkWell(
           onTap: () {
             Navigator.of(context)
-                .pushNamed(RouteUtil.ROUTE_PDF_FULL_SCREEN, arguments: [doc]);
+                .pushNamed(Routes.pdfFullScreen.name, arguments: [doc]);
           },
           child: Container(
             width: 30.w,

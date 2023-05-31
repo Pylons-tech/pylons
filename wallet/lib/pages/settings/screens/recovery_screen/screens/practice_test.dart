@@ -18,7 +18,7 @@ TextStyle kPracticeTestHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUn
 TextStyle kPracticeTestSubtitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
 
 class PracticeTest extends StatefulWidget {
-  const PracticeTest({Key? key}) : super(key: key);
+  const PracticeTest({super.key});
   @override
   State<PracticeTest> createState() => _PracticeTestState();
 }
@@ -327,10 +327,10 @@ class MnemonicList extends StatelessWidget {
   final Function onAcceptF;
   final ScrollController scroller;
   const MnemonicList({
-    Key? key,
+    super.key,
     required this.onAcceptF,
     required this.scroller,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final List<Mnemonic> givenListNotifier = context.read<PracticeTestViewModel>().givenListNotifier.value;
@@ -414,7 +414,7 @@ class PracticeTestMnemonic extends StatelessWidget {
   final bool showSequenceNo;
   final Mnemonic mnemonic;
   final int index;
-  const PracticeTestMnemonic({Key? key, required this.showSequenceNo, required this.mnemonic, required this.index}) : super(key: key);
+  const PracticeTestMnemonic({super.key, required this.showSequenceNo, required this.mnemonic, required this.index});
 
   @override
   Widget build(BuildContext context) {

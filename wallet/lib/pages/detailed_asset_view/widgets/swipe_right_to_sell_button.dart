@@ -14,13 +14,13 @@ class SwipeRightToSellButton extends StatefulWidget {
   final bool isEnabled;
 
   const SwipeRightToSellButton({
-    Key? key,
+    super.key,
     required this.activeColor,
     required this.height,
     required this.initialWidth,
     required this.onSwipeComplete,
     required this.isEnabled,
-  }) : super(key: key);
+  });
 
   @override
   State<SwipeRightToSellButton> createState() => _SwipeRightToSellButtonState();

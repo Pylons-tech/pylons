@@ -816,10 +816,6 @@ class WalletsStoreImp implements WalletsStore {
 
       final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
 
-      if (getUsernameBasedOnAddress.isLeft()) {
-        return Left(getUsernameBasedOnAddress.getLeft());
-      }
-
       final userName = getUsernameBasedOnAddress.getOrElse(() => '');
 
       final creds = AlanPrivateAccountCredentials(

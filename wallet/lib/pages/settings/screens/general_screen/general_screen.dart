@@ -23,7 +23,7 @@ TextStyle kGeneralLabelText = TextStyle(
 TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500);
 
 class GeneralScreen extends StatefulWidget {
-  const GeneralScreen({Key? key}) : super(key: key);
+  const GeneralScreen({super.key});
 
   @override
   State<GeneralScreen> createState() => _GeneralScreenState();
@@ -86,19 +86,19 @@ class _GeneralScreenState extends State<GeneralScreen> {
             GeneralForwardItem(
               title: LocaleKeys.payment.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_PAYMENT);
+                Navigator.of(context).pushNamed(Routes.payment.name);
               },
             ),
             GeneralForwardItem(
               title: LocaleKeys.security.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_SECURITY);
+                Navigator.of(context).pushNamed(Routes.security.name);
               },
             ),
             GeneralForwardItem(
               title: LocaleKeys.transactions.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_FAILURE);
+                Navigator.of(context).pushNamed(Routes.transactionFailure.name);
               },
             ),
             GeneralForwardItem(
@@ -225,7 +225,7 @@ class GeneralForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const GeneralForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const GeneralForwardItem({required this.title, super.key, required this.onPressed});
 
   GeneralScreenLocalizationViewModel get _languageViewModel => GetIt.I.get<GeneralScreenLocalizationViewModel>();
 
@@ -286,7 +286,7 @@ class GeneralForwardItem extends StatelessWidget {
 class NotificationsListItem extends StatefulWidget {
   final String title;
 
-  const NotificationsListItem({Key? key, required this.title}) : super(key: key);
+  const NotificationsListItem({super.key, required this.title});
 
   @override
   State<NotificationsListItem> createState() => _NotificationsListItemState();

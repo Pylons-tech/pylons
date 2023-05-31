@@ -31,7 +31,7 @@ import 'collection_screen/collection_screen.dart';
 import 'wallet_screen/wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => HomeScreenState();
@@ -164,7 +164,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               left: 0.86.sw,
               child: GestureDetector(
                 onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                  Navigator.of(context).pushNamed(Routes.message.name);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Stack(
@@ -286,7 +286,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 right: 0.12.sw,
                 child: InkResponse(
                   onTap: () async {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                    Navigator.of(context).pushNamed(Routes.message.name);
                   },
                   child: Stack(
                     children: [
@@ -407,7 +407,7 @@ class WalletTab extends StatelessWidget {
   final int index;
   final String tabName;
 
-  const WalletTab({Key? key, required this.tabName, required this.index}) : super(key: key);
+  const WalletTab({super.key, required this.tabName, required this.index});
 
   @override
   Widget build(BuildContext context) {

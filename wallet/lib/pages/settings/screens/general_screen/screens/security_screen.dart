@@ -17,7 +17,7 @@ TextStyle kSecurityBiometricIdText = TextStyle(fontSize: 17.sp, color: Colors.bl
 TextStyle kSecurityNoBiometricText = TextStyle(fontSize: 15.sp, color: AppColors.kDarkRed, fontWeight: FontWeight.w500);
 
 class SecurityScreen extends StatefulWidget {
-  const SecurityScreen({Key? key}) : super(key: key);
+  const SecurityScreen({super.key});
 
   @override
   State<SecurityScreen> createState() => _SecurityScreenState();

@@ -13,7 +13,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
 class PylonsDrawer extends StatelessWidget {
-  const PylonsDrawer({Key? key}) : super(key: key);
+  const PylonsDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class PylonsDrawer extends StatelessWidget {
                   width: isTablet ? 60 : 85,
                   icon: Assets.images.svg.settingsGeneral,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
+                    Navigator.of(context).pushNamed(Routes.general.name);
                   },
                 ),
                 /// Revert when the functionality is added
@@ -76,7 +76,7 @@ class PylonsDrawer extends StatelessWidget {
                   width: isTablet ? 60 : 85,
                   icon: Assets.images.svg.settingsRecovery,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
+                    Navigator.of(context).pushNamed(Routes.recovery.name);
                   },
                 ),
                 DrawerTile(
@@ -85,7 +85,7 @@ class PylonsDrawer extends StatelessWidget {
                   width: isTablet ? 60 : 85,
                   icon: Assets.images.svg.settingsLegal,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
+                    Navigator.of(context).pushNamed(Routes.legal.name);
                   },
                 ),
                 const Spacer(),
@@ -120,14 +120,14 @@ class DrawerTile extends StatelessWidget {
 
   const DrawerTile(
     this.title, {
-    Key? key,
+    super.key,
     required this.onPressed,
     this.height = 45,
     this.width = 85,
     this.icon,
     this.iconColor = AppColors.kWhite,
     this.textAlign = TextAlign.start,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

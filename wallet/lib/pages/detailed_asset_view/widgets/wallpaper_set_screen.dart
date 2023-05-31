@@ -33,7 +33,7 @@ class WallpaperScreen {
 }
 
 class _WallpaperScreen extends StatefulWidget {
-  const _WallpaperScreen({Key? key, required this.nft}) : super(key: key);
+  const _WallpaperScreen({required this.nft});
   final String nft;
 
   @override

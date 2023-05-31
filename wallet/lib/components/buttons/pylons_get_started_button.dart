@@ -16,7 +16,7 @@ class PylonsGetStartedButton extends StatelessWidget {
   final double fontSize;
 
   const PylonsGetStartedButton({
-    Key? key,
+    super.key,
     required this.onTap,
     this.text = "",
     required this.loader,
@@ -27,7 +27,7 @@ class PylonsGetStartedButton extends StatelessWidget {
     this.btnHeight = 45,
     this.btnWidth = 200,
     this.fontSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

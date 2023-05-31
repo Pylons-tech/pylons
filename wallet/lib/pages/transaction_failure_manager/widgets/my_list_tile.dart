@@ -11,18 +11,18 @@ class MyListTile extends StatelessWidget {
   final LocalTransactionModel txModel;
 
   const MyListTile({
-    Key? key,
+    super.key,
     required this.leadingWidget,
     required this.titleWidget,
     required this.trailingWidget,
     required this.txModel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_LOCAL_TRX_DETAILS, arguments: txModel);
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(Routes.localTransactionDetails.name, arguments: txModel);
       },
       child: SizedBox(
         height: 40.h,

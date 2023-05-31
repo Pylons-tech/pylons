@@ -47,7 +47,7 @@ import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb
 class PurchaseItemScreen extends StatefulWidget {
   final NFT nft;
 
-  const PurchaseItemScreen({Key? key, required this.nft}) : super(key: key);
+  const PurchaseItemScreen({super.key, required this.nft});
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
@@ -83,8 +83,8 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
 
 class PurchaseItemContent extends StatefulWidget {
   const PurchaseItemContent({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -223,7 +223,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 }
 
 class OwnerBottomDrawer extends StatefulWidget {
-  const OwnerBottomDrawer({Key? key}) : super(key: key);
+  const OwnerBottomDrawer({super.key});
 
   @override
   State<OwnerBottomDrawer> createState() => _OwnerBottomDrawerState();
@@ -322,7 +322,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       GestureDetector(
                         onTap: () async {
                           if (viewModel.accountPublicInfo == null) {
-                            Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                            Navigator.of(context).pushNamed(Routes.onboarding.name);
                             return;
                           }
                           final Size size = MediaQuery.of(context).size;
@@ -618,7 +618,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   if (viewModel.accountPublicInfo == null) {
-                                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                                    Navigator.of(context).pushNamed(Routes.onboarding.name);
                                     return;
                                   }
                                   final Size size = MediaQuery.of(context).size;
@@ -643,7 +643,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       onTapped: () async {
                         if (viewModel.accountPublicInfo == null) {
                           LocaleKeys.create_an_account_first.tr().show();
-                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                          Navigator.of(context).pushNamed(Routes.onboarding.name);
                           return;
                         }
                         bool balancesFetchResult = true;

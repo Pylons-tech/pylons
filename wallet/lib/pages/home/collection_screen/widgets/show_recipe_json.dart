@@ -28,7 +28,7 @@ class ShowRecipeJsonDialog {
 class _RecipeJson extends StatelessWidget {
   final Recipe recipe;
 
-  const _RecipeJson({Key? key, required this.recipe}) : super(key: key);
+  const _RecipeJson({required this.recipe});
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/time_ago.dart' as time_ago;
 
 class MessageTile extends StatefulWidget {
-  const MessageTile({Key? key, required this.notificationMessage}) : super(key: key);
+  const MessageTile({super.key, required this.notificationMessage});
 
   final NotificationMessage notificationMessage;
 

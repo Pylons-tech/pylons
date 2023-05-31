@@ -4,14 +4,14 @@ import 'package:pylons_wallet/pages/presenting_onboard_page/components/custom_cl
 import 'package:pylons_wallet/utils/constants.dart';
 
 class PylonsTextInput extends StatelessWidget {
-  const PylonsTextInput(
-      {Key? key,
-      required this.controller,
-      required this.label,
-      this.disabled = false,
-      this.inputType = TextInputType.text,
-      this.errorText})
-      : super(key: key);
+  const PylonsTextInput({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.disabled = false,
+    this.inputType = TextInputType.text,
+    this.errorText,
+  });
 
   final TextEditingController controller;
   final String label;

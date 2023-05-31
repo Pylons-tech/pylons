@@ -88,11 +88,11 @@ class PayNowWidget extends StatefulWidget {
   final bool shouldBuy;
 
   const PayNowWidget({
-    Key? key,
+    super.key,
     required this.nft,
     required this.onPurchaseDone,
     required this.shouldBuy,
-  }) : super(key: key);
+  });
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -194,7 +194,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                       onPressed: () async {
                         final navigator = Navigator.of(context);
                         navigator.pop();
-                        navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                        navigator.pushNamed(Routes.addPylon.name);
                       },
                     ),
                   ),
@@ -316,7 +316,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     navigator.pop();
     if (!executionResponse.success) {
       executionResponse.error.show();
-      navigator.pushNamed(RouteUtil.ROUTE_FAILURE);
+      navigator.pushNamed(Routes.transactionFailure.name);
       return;
     }
 
@@ -407,7 +407,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       navigator.pop();
 
       if (!executionResponse.success) {
-        navigator.pushNamed(RouteUtil.ROUTE_FAILURE);
+        navigator.pushNamed(Routes.transactionFailure.name);
         return;
       }
 
