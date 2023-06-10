@@ -40,18 +40,15 @@ import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:cosmos_utils/mnemonic.dart';
 import '../generated/locale_keys.g.dart';
+import '../utils/types.dart';
 
 class WalletsStoreImp implements WalletsStore {
-  final Repository repository;
-  final CrashlyticsHelper crashlyticsHelper;
-  final AccountProvider accountProvider;
-  final RemoteNotificationsProvider remoteNotificationProvider;
-
   WalletsStoreImp({
     required this.repository,
     required this.crashlyticsHelper,
     required this.accountProvider,
     required this.remoteNotificationProvider,
+    required this.onLogMessage,
   });
 
   final Observable<bool> isBalancesLoading = Observable(false);
@@ -84,6 +81,8 @@ class WalletsStoreImp implements WalletsStore {
       ),
       mnemonic: mnemonic,
     );
+
+    onLogMessage("Mnemonic generated");
 
     final response = await broadcastWalletCreationMessageOnBlockchain(
         username: userName,
@@ -135,6 +134,11 @@ class WalletsStoreImp implements WalletsStore {
         );
       }
 
+      onLogMessage("Account creation broadcasted on chain");
+
+      // Wait for the account to be included in the previous block
+      await Future.delayed(const Duration(seconds: 5));
+
       final setUserNameResult = await repository.setUserName(
         accountPublicInfo: info,
         address: walletCreationModel.creatorAddress.toString(),
@@ -149,6 +153,8 @@ class WalletsStoreImp implements WalletsStore {
           errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
         );
       }
+
+      onLogMessage("Username updated in chain");
 
       return SdkIpcResponse.success(
         sender: '',
@@ -958,4 +964,10 @@ class WalletsStoreImp implements WalletsStore {
   Future<String> getRemoteNotificationServiceToken() {
     return sl.get<RemoteNotificationsProvider>().getToken();
   }
+
+  final Repository repository;
+  final CrashlyticsHelper crashlyticsHelper;
+  final AccountProvider accountProvider;
+  final RemoteNotificationsProvider remoteNotificationProvider;
+  final OnLogMessage onLogMessage;
 }

@@ -64,7 +64,11 @@ class NewUserFormState extends State<NewUserForm> {
               ),
             )
           ]),
-          PylonsTextInput(controller: usernameController, label: LocaleKeys.user_name.tr(), errorText: validateUsername),
+          PylonsTextInput(
+            controller: usernameController,
+            label: LocaleKeys.user_name.tr(),
+            errorText: validateUsername,
+          ),
           VerticalSpace(30.h),
           CheckboxListTile(
             value: _ackChecked1,

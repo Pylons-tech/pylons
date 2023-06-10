@@ -86,7 +86,9 @@ Future<void> main() async {
 }
 
 Future<void> initializeAppCheck() async {
-  await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+  );
   // FirebaseAppCheck when enforced would block incoming requests from Android and iOS in debug mode.
   // This kDebugMode check gets a android debug token from FirebaseAppCheck which can then be added on the Firebase console
   // iOS debug token from FirebaseAppCheck automatically get without method channel when run on debug mode which can then be added on the Firebase console

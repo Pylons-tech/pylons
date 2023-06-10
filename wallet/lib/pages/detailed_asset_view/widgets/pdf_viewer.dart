@@ -78,8 +78,10 @@ class _PdfViewerState extends State<PdfViewer> {
         clipper: CustomTriangleClipper(),
         child: InkWell(
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(Routes.pdfFullScreen.name, arguments: [doc]);
+            Navigator.of(context).pushNamed(
+              Routes.pdfFullScreen.name,
+              arguments: [doc],
+            );
           },
           child: Container(
             width: 30.w,

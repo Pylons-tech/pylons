@@ -229,7 +229,12 @@ Future<void> init({
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(
     () => WalletsStoreImp(
-        repository: sl(), crashlyticsHelper: sl(), accountProvider: sl(), remoteNotificationProvider: sl()),
+      repository: sl(),
+      crashlyticsHelper: sl(),
+      accountProvider: sl(),
+      remoteNotificationProvider: sl(),
+      onLogMessage: onLogMessage,
+    ),
   );
   sl.registerFactory(
     () => PurchaseItemViewModel(sl(),
@@ -263,6 +268,4 @@ Future<void> init({
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());
-
-  
 }

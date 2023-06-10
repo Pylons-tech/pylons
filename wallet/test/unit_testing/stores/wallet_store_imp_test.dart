@@ -24,7 +24,8 @@ void main() {
       repository: repository,
       crashlyticsHelper: mockCrashlytics,
       accountProvider: AccountProvider(transactionSigningGateway: TransactionSigningGateway()),
-      remoteNotificationProvider: MockRemoteNotificationsProvider()
+      remoteNotificationProvider: MockRemoteNotificationsProvider(),
+      onLogMessage: (String message) {},
     );
   });
 
