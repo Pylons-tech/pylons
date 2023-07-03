@@ -1001,9 +1001,9 @@ bootstrap@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.2.tgz#834e053eed584a65e244d8aa112a6959f56e27a0"
 
-bootswatch@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-5.2.2.tgz#4d3d15dffd8de16112b64fa37c1164cca1543110"
+bootswatch@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-5.3.0.tgz#7c7dd50bbe8519b0c6dbe01f4f9c3100b60228bd"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
