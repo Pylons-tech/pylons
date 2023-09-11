@@ -35,7 +35,7 @@
     "fibers": "^4.0.3",
     "firebase-admin": "^11.0.0",
     "jquery": "^3.6.0",
-    "js-sha256": "^0.9.0",
+    "js-sha256": "^0.10.1",
     "ledger-cosmos-js": "^2.1.8",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^0.4.1",
