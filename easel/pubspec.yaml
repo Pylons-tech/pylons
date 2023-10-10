@@ -71,7 +71,7 @@ dependencies:
   provider: ^6.0.1
   pylons_sdk:
     path: ../dart_sdk
-  share_plus: ^7.0.1  # Used for sharing the NFT link.
+  share_plus: ^8.0.0  # Used for sharing the NFT link.
   shared_preferences: ^2.0.8
   shimmer_animation: 2.1.0+1
   sqflite: ^2.0.3+1
