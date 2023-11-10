@@ -897,9 +897,9 @@ axios@^0.19.0:
   dependencies:
     follow-redirects "1.5.10"
 
-axios@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.1.3.tgz#8274250dada2edf53814ed7db644b9c2866c1e35"
+axios@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.0.tgz#f1e5292f26b2fd5c2e66876adc5b06cdbd7d2102"
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
