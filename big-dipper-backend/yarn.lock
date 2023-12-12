@@ -443,6 +443,58 @@
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.3.tgz#953b88c20ea00d0eddaffdc1b115c08474aa295d"
 
+"@rollup/rollup-android-arm-eabi@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.8.0.tgz#0e42b155630adaaec0f659f979ece4b7d3391329"
+
+"@rollup/rollup-android-arm64@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-android-arm64/-/rollup-android-arm64-4.8.0.tgz#6c9fe8f9eb0cd9029be93b822b1a1c2d6b31c275"
+
+"@rollup/rollup-darwin-arm64@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.8.0.tgz#7dcb1317a8089762c1f7e437c1e1d695b787b70f"
+
+"@rollup/rollup-darwin-x64@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-darwin-x64/-/rollup-darwin-x64-4.8.0.tgz#91d7d31d22607c4fcccce9126457d6785c57f7c7"
+
+"@rollup/rollup-linux-arm-gnueabihf@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-arm-gnueabihf/-/rollup-linux-arm-gnueabihf-4.8.0.tgz#f2015d6e4ff41417f2e2c55b3d9625346e355c57"
+
+"@rollup/rollup-linux-arm64-gnu@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-arm64-gnu/-/rollup-linux-arm64-gnu-4.8.0.tgz#95207444b78f235c9de62797ec2a3dcd18daf473"
+
+"@rollup/rollup-linux-arm64-musl@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-arm64-musl/-/rollup-linux-arm64-musl-4.8.0.tgz#bc994c676fd3aae14aaa905040fdcde461e41ce5"
+
+"@rollup/rollup-linux-riscv64-gnu@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-riscv64-gnu/-/rollup-linux-riscv64-gnu-4.8.0.tgz#67984f1d1f663610f4e1f6e638a2b07169562448"
+
+"@rollup/rollup-linux-x64-gnu@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.8.0.tgz#48e09a455d543be986003c7c2ea37c16ff4a53d5"
+
+"@rollup/rollup-linux-x64-musl@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.8.0.tgz#df8d0966b02d1bdc6447b5eb58fa18666da1f3e8"
+
+"@rollup/rollup-win32-arm64-msvc@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-arm64-msvc/-/rollup-win32-arm64-msvc-4.8.0.tgz#7cce8efc5c9239a1bafe7ac2a52743bc5734471f"
+
+"@rollup/rollup-win32-ia32-msvc@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-ia32-msvc/-/rollup-win32-ia32-msvc-4.8.0.tgz#794ef4058d04f97447e4434c083b1309b2be73c2"
+
+"@rollup/rollup-win32-x64-msvc@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.8.0.tgz#05057436705f0be9203c30612a48225ec70af741"
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
@@ -4458,10 +4510,23 @@ rollup-pluginutils@2.8.1:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^3.2.5:
-  version "3.2.5"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.2.5.tgz#9452168ac083218c8212bf53d2448bdc6b8b0de7"
+rollup@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-4.8.0.tgz#365c34e85f1ed034de974dab934c1663cc69b754"
   optionalDependencies:
+    "@rollup/rollup-android-arm-eabi" "4.8.0"
+    "@rollup/rollup-android-arm64" "4.8.0"
+    "@rollup/rollup-darwin-arm64" "4.8.0"
+    "@rollup/rollup-darwin-x64" "4.8.0"
+    "@rollup/rollup-linux-arm-gnueabihf" "4.8.0"
+    "@rollup/rollup-linux-arm64-gnu" "4.8.0"
+    "@rollup/rollup-linux-arm64-musl" "4.8.0"
+    "@rollup/rollup-linux-riscv64-gnu" "4.8.0"
+    "@rollup/rollup-linux-x64-gnu" "4.8.0"
+    "@rollup/rollup-linux-x64-musl" "4.8.0"
+    "@rollup/rollup-win32-arm64-msvc" "4.8.0"
+    "@rollup/rollup-win32-ia32-msvc" "4.8.0"
+    "@rollup/rollup-win32-x64-msvc" "4.8.0"
     fsevents "~2.3.2"
 
 run-async@^2.2.0:
