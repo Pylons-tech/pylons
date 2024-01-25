@@ -7,9 +7,9 @@ import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart' as url_launcher;
 
+import '../../../gen/assets.gen.dart';
 import '../../../generated/locale_keys.g.dart';
 
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: isTablet ? 10.sp : 14.sp);
@@ -40,7 +40,7 @@ class TradeReceiptDialog {
 class TradeReceiptWidget extends StatefulWidget {
   final TradeReceiptModel model;
 
-  const TradeReceiptWidget({Key? key, required this.model}) : super(key: key);
+  const TradeReceiptWidget({super.key, required this.model});
 
   @override
   State<TradeReceiptWidget> createState() => _TradeReceiptWidgetState();
@@ -94,12 +94,12 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               children: [
                 SizedBox(height: 20.h),
                 SvgPicture.asset(
-                  SVGUtil.TRADE_CHECK,
+                  Assets.images.icons.check,
                   height: 28.h,
                 ),
                 SizedBox(height: 15.h),
                 SvgPicture.asset(
-                  SVGUtil.TRADE_RECEIPT,
+                  Assets.images.svg.tradeReceipt,
                   height: 20.h,
                 ),
                 SizedBox(height: 20.h),

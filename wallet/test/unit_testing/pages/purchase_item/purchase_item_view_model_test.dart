@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
@@ -8,15 +7,11 @@ import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+import '../../../mocks/main_mock.mocks.dart';
 import '../../../mocks/mock_audio_player.dart';
-import '../../../mocks/mock_share_helper.dart';
 import '../../../mocks/mock_video_player.dart';
-import 'purchase_item_view_model_test.mocks.dart';
 
-@GenerateMocks([WalletsStore, AccountPublicInfo, Repository, NFT])
 void main() {
   late PurchaseItemViewModel purchaseItemViewModel;
   late Repository repository;
@@ -26,7 +21,7 @@ void main() {
     final videoPlayerMock = MockVideoPlayerImpl();
     repository = MockRepository();
     final mockWalletStore = MockWalletsStore();
-    final shareHelper = MockShareHelperImpl();
+    final shareHelper = MockShareHelper();
     final mockAccountPublicInfo = MockAccountPublicInfo();
     purchaseItemViewModel = PurchaseItemViewModel(
       mockWalletStore,

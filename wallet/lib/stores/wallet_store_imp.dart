@@ -25,7 +25,7 @@ import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/network_info.dart';
+import 'package:pylons_wallet/services/third_party_services/connectivity_info.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -368,7 +368,7 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
-    final networkInfo = GetIt.I.get<NetworkInfo>();
+    final networkInfo = GetIt.I.get<ConnectivityInfoImpl>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.BuyNFT,
@@ -815,10 +815,6 @@ class WalletsStoreImp implements WalletsStore {
       final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
 
       final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
-
-      if (getUsernameBasedOnAddress.isLeft()) {
-        return Left(getUsernameBasedOnAddress.getLeft());
-      }
 
       final userName = getUsernameBasedOnAddress.getOrElse(() => '');
 

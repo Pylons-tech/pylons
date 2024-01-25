@@ -41,7 +41,7 @@ func CreateUpgradeHandler(
 }
 
 // Burn bedrock denom token
-func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+func BurnToken(ctx sdk.Context, _ *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
 	// only burn bedrock token
 	denom := types.StakingCoinDenom
 	// Get all delegations
@@ -58,10 +58,10 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 				if acc.Address == delegator.DelegatorAddress || acc.Address == MasterWallet {
 					found = true
 					break
-				} else {
-					// If account address address is not equal to delegator address burn token
-					found = false
 				}
+
+				// If account address address is not equal to delegator address burn token
+				found = false
 			}
 			if !found {
 				amount := sdk.NewCoin(denom, balance)

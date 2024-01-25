@@ -78,6 +78,7 @@ class NFT extends Equatable {
     this.createdAt = "",
     this.realWorld = false,
     this.isEnabled = true,
+    this.ownerAddress = "",
   });
 
   Future<String> getOwnerAddress() async {

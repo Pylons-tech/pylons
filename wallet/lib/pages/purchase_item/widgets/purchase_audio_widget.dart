@@ -12,9 +12,9 @@ class PurchaseAudioWidget extends StatefulWidget {
   final String url;
 
   const PurchaseAudioWidget({
-    Key? key,
+    super.key,
     required this.url,
-  }) : super(key: key);
+  });
 
   @override
   _AudioWidgetState createState() => _AudioWidgetState();

@@ -88,11 +88,11 @@ class PayNowWidget extends StatefulWidget {
   final bool shouldBuy;
 
   const PayNowWidget({
-    Key? key,
+    super.key,
     required this.nft,
     required this.onPurchaseDone,
     required this.shouldBuy,
-  }) : super(key: key);
+  });
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -194,7 +194,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                       onPressed: () async {
                         final navigator = Navigator.of(context);
                         navigator.pop();
-                        navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                        navigator.pushNamed(Routes.addPylon.name);
                       },
                     ),
                   ),
@@ -309,13 +309,14 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   }
 
   Future<void> paymentByCoins() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final provider = context.read<PurchaseItemViewModel>();
     final executionResponse = await provider.paymentForRecipe();
 
-    Navigator.pop(navigatorKey.currentState!.overlay!.context);
+    navigator.pop();
     if (!executionResponse.success) {
       executionResponse.error.show();
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+      navigator.pushNamed(Routes.transactionFailure.name);
       return;
     }
 
@@ -323,6 +324,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   }
 
   Future<void> stripePaymentForRecipe(BuildContext context, NFT nft) async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
     final wallet = context.read<AccountProvider>().accountPublicInfo;
@@ -361,7 +363,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             merchantDisplayName: kStripeMerchantDisplayName,
             paymentIntentClientSecret: pi_info.clientsecret),
       );
-      Navigator.pop(navigatorKey.currentState!.overlay!.context);
+      navigator.pop();
       await Stripe.instance.presentPaymentSheet();
 
       final receipt_response = await repository.GeneratePaymentReceipt(
@@ -402,20 +404,22 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       final executionResponse = await walletsStore.executeRecipe(jsonMap);
       loader.dismiss();
 
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
+      navigator.pop();
 
       if (!executionResponse.success) {
-        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+        navigator.pushNamed(Routes.transactionFailure.name);
         return;
       }
 
       widget.onPurchaseDone(executionResponse.data!);
     } catch (error) {
-      Navigator.pop(navigatorKey.currentState!.overlay!.context);
+      navigator.pop();
     }
   }
 
   Future<void> stripePaymentForTrade(BuildContext context, NFT nft) async {
+    final buildContext = navigatorKey.currentState!.overlay!.context;
+    final navigator = Navigator.of(buildContext);
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
 
@@ -448,7 +452,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               merchantDisplayName: kStripeMerchantDisplayName,
               paymentIntentClientSecret: pi_info.clientsecret),
         );
-        Navigator.pop(navigatorKey.currentState!.overlay!.context);
+        navigator.pop();
 
         await Stripe.instance.presentPaymentSheet();
 
@@ -458,26 +462,28 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
-        showLoading(navigatorKey.currentState!.overlay!.context);
-        const json = '''
+        if (buildContext.mounted) {
+          showLoading(buildContext);
+          const json = '''
         {
           "ID": 0,
           "coinInputsIndex": 0,
           "paymentInfos": []
         }
         ''';
-        final jsonMap = jsonDecode(json) as Map;
-        jsonMap["ID"] = nft.tradeID;
-        final paymentInfos = jsonMap["paymentInfos"] as List<dynamic>;
-        paymentInfos.add(receipt.toJson());
+          final jsonMap = jsonDecode(json) as Map;
+          jsonMap["ID"] = nft.tradeID;
+          final paymentInfos = jsonMap["paymentInfos"] as List<dynamic>;
+          paymentInfos.add(receipt.toJson());
 
-        final tradeResponse = await walletsStore.fulfillTrade(jsonMap);
+          final tradeResponse = await walletsStore.fulfillTrade(jsonMap);
 
-        Navigator.pop(navigatorKey.currentState!.overlay!.context);
+          navigator.pop();
 
-        tradeResponse.success ? LocaleKeys.purchase_nft_success.tr() : tradeResponse.error.show();
+          tradeResponse.success ? LocaleKeys.purchase_nft_success.tr() : tradeResponse.error.show();
+        }
       } catch (error) {
-        Navigator.pop(navigatorKey.currentState!.overlay!.context);
+        navigator.pop();
       }
     }
   }

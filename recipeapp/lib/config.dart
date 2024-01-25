@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:pylons_sdk/pylons_sdk.dart';
 
 class Config {

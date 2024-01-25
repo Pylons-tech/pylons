@@ -2,10 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pylons_wallet/gen/fonts.gen.dart';
 
 TextStyle kCurrencyStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp);
 TextStyle kDropdownText = TextStyle(color: AppColors.kBlack, fontSize: 13.sp, fontWeight: FontWeight.w600);
-TextStyle kTransactionTitle = TextStyle(color: AppColors.kBlack, fontSize: 20.sp, fontWeight: FontWeight.w700, fontFamily: 'UniversalSans');
+TextStyle kTransactionTitle = TextStyle(
+  color: AppColors.kBlack,
+  fontSize: 20.sp,
+  fontWeight: FontWeight.w700,
+  fontFamily: FontFamily.universalSans,
+);
 
 class AppColors {
   static Color kMainBG = const Color(0xFFF2EFEA);
@@ -100,7 +106,13 @@ const int kDenomInitial = 1;
 const int kDenomFinal = 4;
 
 const Map<String, dynamic> kCoinDenom = {
-  'upylon': {"name": "Pylon", "denom": "upylon", "short": "pylon", "icon": "assets/images/icons/pylons_logo_24x24.png", "faucet": true},
+  'upylon': {
+    "name": "Pylon",
+    "denom": "upylon",
+    "short": "pylon",
+    "icon": "assets/images/icons/pylons_logo_24x24.png",
+    "faucet": true
+  },
   'BTC': {
     "name": "Bitcoin",
     "denom": "BTC",
@@ -182,12 +194,18 @@ const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
 const ANDROID_VERSION = '1.0.1+145';
-const IOS_VERSION = '1.0.8+1';
+const IOS_VERSION = '1.0.8+3';
 
 const kCurrencyDecimalLength = 2;
 const kMaxPriceLength = 14;
 
-List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
+List<Color> colorList = [
+  AppColors.kYellow,
+  AppColors.kBlue,
+  AppColors.kDarkPurple,
+  AppColors.kDarkRed,
+  AppColors.kDarkGreen
+];
 List<Color> colorListForPracticeTest = [
   AppColors.kYellow,
   AppColors.kDarkPurple,
@@ -272,7 +290,8 @@ List<Map<String, dynamic>> languagesSupported = [
 
 ///review your nft
 
-const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
+const String kPylonsFeeMsg =
+    "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
 const String kStripeAccountNotCreatedIdentifier = "onboarding";
 const String kNftFormat = "NFT_Format";
 const String kDuration = "Duration";
@@ -345,6 +364,7 @@ const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
 const int kMaxItemToShow = 11;
 const String kHistory = "history";
 const String kFirebaseLink = "https://pylons.page.link";
+const String kChromeThrowLink = "google/link?deep_link_id";
 
 //transaction keys
 const String kAddressKey = "address";
@@ -427,7 +447,11 @@ const kCheckoutDialogKey = "checkout_dialog_key";
 const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
 const kCloseBottomSheetKey = "close_bottom_sheet_key";
 
-Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
+Map<String, Color> denomColors = {
+  'upylon': const Color(0xFF5252d5),
+  'ustripeusd': const Color(0xFF85bb65),
+  'uusd': const Color(0xFF85bb65)
+};
 
 const String kNftName = "nftName";
 const String kNftPrice = "nftPrice";
@@ -487,8 +511,6 @@ const String kAcceptPolicyPortionKey = "accept_policy_portion";
 const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
 const String drawerIconKey = "drawer_icon_key";
 const String drawerKey = "drawer_key";
-
-const bool shouldShowAcceptPolicyScreen = true;
 
 const String kRemaining = 'remaining';
 const kTotal = 'total';

@@ -22,7 +22,7 @@ class AcceptPolicyScreen extends StatefulWidget {
   final NFT nft;
   final AcceptPolicyViewModel viewModel;
 
-  const AcceptPolicyScreen({Key? key, required this.nft, required this.viewModel}) : super(key: key);
+  const AcceptPolicyScreen({super.key, required this.nft, required this.viewModel});
 
   @override
   State<AcceptPolicyScreen> createState() => _AcceptPolicyScreenState();
@@ -101,9 +101,9 @@ class AcceptPolicyScreenContent extends StatelessWidget {
   final NFT nft;
 
   const AcceptPolicyScreenContent({
-    Key? key,
+    super.key,
     required this.nft,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -200,8 +200,8 @@ class MyCheckBox extends StatelessWidget {
     required this.isSelected,
     required this.onChange,
     required this.onLinkTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

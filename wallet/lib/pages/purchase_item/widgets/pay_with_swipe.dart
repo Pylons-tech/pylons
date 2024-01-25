@@ -12,7 +12,7 @@ class PylonsPayWithSwipe extends StatefulWidget {
   final double initialWidth;
   final VoidCallback onSwipeComplete;
 
-  const PylonsPayWithSwipe({Key? key, required this.activeColor, required this.inactiveColor, required this.height, required this.initialWidth, required this.onSwipeComplete}) : super(key: key);
+  const PylonsPayWithSwipe({super.key, required this.activeColor, required this.inactiveColor, required this.height, required this.initialWidth, required this.onSwipeComplete});
 
   @override
   State<PylonsPayWithSwipe> createState() => _PylonsPayWithSwipeState();

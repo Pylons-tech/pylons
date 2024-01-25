@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,12 +20,12 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 
 	err := k.verifyAppCheck(msg)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
 	}
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
@@ -65,7 +66,7 @@ func (k msgServer) SetUsername(goCtx context.Context, msg *types.MsgSetUsername)
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
 	}
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
@@ -96,11 +97,11 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
 	}
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
 	username := types.Username{Value: msg.Username}
@@ -117,7 +118,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 	updateFee := k.Keeper.UpdateUsernameFee(ctx)
 	err = k.PayFees(ctx, addr, sdk.NewCoins(updateFee))
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateAccount{

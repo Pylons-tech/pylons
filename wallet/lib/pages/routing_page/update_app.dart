@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
@@ -17,7 +18,6 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../generated/locale_keys.g.dart';
@@ -25,7 +25,7 @@ import '../../generated/locale_keys.g.dart';
 TextStyle kUpdateAppSkipText = const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
 
 class UpdateApp extends StatefulWidget {
-  const UpdateApp({Key? key}) : super(key: key);
+  const UpdateApp({super.key});
 
   @override
   State<UpdateApp> createState() => _UpdateAppState();
@@ -77,7 +77,13 @@ class _UpdateAppState extends State<UpdateApp> {
             child: ColoredBox(
           color: Colors.white,
         )),
-        Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SvgPicture.asset(SVGUtil.UPDATE_NOW_IPAD_BACKGROUND, fit: BoxFit.fill)),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: SvgPicture.asset(Assets.images.svg.updateNowIpad, fit: BoxFit.fill),
+        ),
         Positioned(
             child: Container(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -94,7 +100,7 @@ class _UpdateAppState extends State<UpdateApp> {
                 ),
               ),
               SizedBox(height: 35.h),
-              SvgPicture.asset(SVGUtil.UPDATE_AVAILABLE_CAPTION),
+              SvgPicture.asset(Assets.images.svg.updateAvailable),
               SizedBox(
                 height: 40.h,
               ),
@@ -126,21 +132,22 @@ class _UpdateAppState extends State<UpdateApp> {
             child: Stack(
               children: [
                 Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: InkWell(
-                        onTap: () {
-                          final platform = Theme.of(context).platform;
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: InkWell(
+                      onTap: () {
+                        final platform = Theme.of(context).platform;
 
-                          if (platform == TargetPlatform.android) {
-                            launchPlayStore();
-                          } else {
-                            launchAppStore();
-                          }
-                        },
-                        child: SvgPicture.asset(SVGUtil.BUTTON_BACKGROUND))),
+                        if (platform == TargetPlatform.android) {
+                          launchPlayStore();
+                        } else {
+                          launchAppStore();
+                        }
+                      },
+                      child: SvgPicture.asset(Assets.images.svg.buttonBackground)),
+                ),
                 Positioned(
                     left: 0,
                     right: 0,
@@ -184,7 +191,7 @@ class _UpdateAppState extends State<UpdateApp> {
           right: 0,
           top: 0,
           bottom: 0,
-          child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND, fit: BoxFit.cover),
+          child: SvgPicture.asset(Assets.images.svg.updateNow, fit: BoxFit.cover),
         ),
         Positioned(
           child: Container(
@@ -200,7 +207,7 @@ class _UpdateAppState extends State<UpdateApp> {
                   ),
                 ),
                 SizedBox(height: 35.h),
-                SvgPicture.asset(SVGUtil.UPDATE_AVAILABLE_CAPTION),
+                SvgPicture.asset(Assets.images.svg.updateAvailable),
                 SizedBox(
                   height: 40.h,
                 ),
@@ -246,7 +253,7 @@ class _UpdateAppState extends State<UpdateApp> {
                             launchAppStore();
                           }
                         },
-                        child: SvgPicture.asset(SVGUtil.BUTTON_BACKGROUND))),
+                        child: SvgPicture.asset(Assets.images.svg.buttonBackground))),
                 Positioned(
                     left: 0,
                     right: 0,
@@ -289,15 +296,16 @@ class _UpdateAppState extends State<UpdateApp> {
   }
 
   Future<void> _loadWallets() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
     await accountProvider.loadWallets();
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushNamed(Routes.onboarding.name);
     } else {
       // Assigning the latest wallet to the app.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
+      navigator.pushNamed(Routes.home.name);
     }
   }
 
@@ -309,5 +317,6 @@ class _UpdateAppState extends State<UpdateApp> {
     _launchURL(kIOSAppLink);
   }
 
-  Future _launchURL(String url) async => await canLaunchUrlString(url) ? await launchUrlString(url) : throw '${"could_not_launch".tr()} $url';
+  Future _launchURL(String url) async =>
+      await canLaunchUrlString(url) ? await launchUrlString(url) : throw '${"could_not_launch".tr()} $url';
 }

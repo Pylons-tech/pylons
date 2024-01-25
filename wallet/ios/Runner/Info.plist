@@ -113,5 +113,7 @@
     <!-- changes this number to configure the maximum number of concurrent tasks -->
     <key>FDMaximumConcurrentTasks</key>
     <integer>5</integer>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

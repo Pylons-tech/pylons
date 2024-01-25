@@ -11,11 +11,11 @@ class PdfPlaceHolder extends StatelessWidget {
   final String thumbnailUrl;
 
   const PdfPlaceHolder({
-    Key? key,
+    super.key,
     required this.nftUrl,
     required this.nftName,
     required this.thumbnailUrl,
-  }) : super(key: key);
+  });
 
   Widget getPdfThumbnailFromUrl() {
     return Stack(

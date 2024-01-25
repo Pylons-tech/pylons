@@ -9,7 +9,7 @@ const btcAsset = "assets/images/icons/ico_btc.png";
 class BuyButton extends StatelessWidget {
   final NFT nft;
   final double usdAmount;
-  const BuyButton({Key? key, required this.nft, required this.usdAmount}) : super(key: key);
+  const BuyButton({super.key, required this.nft, required this.usdAmount});
 
   @override
   Widget build(BuildContext context) {

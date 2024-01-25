@@ -13,7 +13,7 @@ class Nft3dWidget extends StatelessWidget {
   final Color backgroundColor;
   final bool showLoader;
 
-  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false}) : super(key: key);
+  const Nft3dWidget({super.key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +36,13 @@ class Nft3dWidget extends StatelessWidget {
 
 class Nft3DWidgetContent extends StatelessWidget {
   const Nft3DWidgetContent({
-    Key? key,
+    super.key,
     required this.backgroundColor,
     required this.url,
     required this.cameraControls,
     required this.viewModel,
     this.showLoader = false,
-  }) : super(key: key);
+  });
 
   final Color backgroundColor;
   final String url;

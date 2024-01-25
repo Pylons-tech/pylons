@@ -12,7 +12,7 @@ import '../../../generated/locale_keys.g.dart';
 class PurchaseVideoPlayerScreen extends StatefulWidget {
   final NFT nft;
 
-  const PurchaseVideoPlayerScreen({Key? key, required this.nft}) : super(key: key);
+  const PurchaseVideoPlayerScreen({super.key, required this.nft});
 
   @override
   State<PurchaseVideoPlayerScreen> createState() => _PurchaseVideoPlayerScreenState();

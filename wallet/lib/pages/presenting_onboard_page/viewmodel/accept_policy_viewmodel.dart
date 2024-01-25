@@ -37,8 +37,8 @@ class AcceptPolicyViewModel extends ChangeNotifier {
 
   void onTapGetStartedButton(NFT nft) {
     setUserAcceptPolicies();
-    navigatorKey.currentState!.pushReplacementNamed(RouteUtil.ROUTE_HOME);
-    navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nft);
+    navigatorKey.currentState!.pushReplacementNamed(Routes.home.name);
+    navigatorKey.currentState!.pushNamed(Routes.purchaseView.name, arguments: nft);
   }
 
   bool getUserAcceptPolicies() {

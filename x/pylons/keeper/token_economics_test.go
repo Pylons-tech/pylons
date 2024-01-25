@@ -181,7 +181,6 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndTokenEconomics() {
 				// Comparing balances of delegator before and after reward distribution
 				require.Equal(balanceToEqual, newBalance)
 			}
-
 		}
 
 	}

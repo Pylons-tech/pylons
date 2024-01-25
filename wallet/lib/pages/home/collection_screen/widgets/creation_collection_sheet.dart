@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -12,7 +13,6 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../../providers/collections_tab_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/image_util.dart';
-import '../../../../utils/svg_util.dart';
 import '../../../detailed_asset_view/widgets/nft_3d_asset.dart';
 import '../../../detailed_asset_view/widgets/pdf_placeholder.dart';
 import '../../../detailed_asset_view/widgets/video_placeholder.dart';
@@ -24,7 +24,7 @@ import '../preview_nft_grid.dart';
 class CreationsCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const CreationsCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const CreationsCollection({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class CreationsCollection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SheetHeading(
-            leadingSVG: SVGUtil.MY_CREATIONS,
+            leadingSVG: Assets.images.svg.creations,
             title: LocaleKeys.my_creations.tr(),
             collectionType: CollectionsType.creations,
           ),

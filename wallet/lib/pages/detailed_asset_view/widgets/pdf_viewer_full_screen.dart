@@ -10,8 +10,8 @@ import 'package:pylons_wallet/utils/image_util.dart';
 
 class PdfViewerFullScreen extends StatefulWidget {
   const PdfViewerFullScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PdfViewerFullScreen> createState() => _PdfViewerFullScreenState();

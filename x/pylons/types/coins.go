@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctypes "github.com/cosmos/ibc-go/v5/modules/apps/transfer/types"
 )
 
@@ -98,14 +98,14 @@ func ValidateIBCDenom(denom string) error {
 	case strings.TrimSpace(denom) == "",
 		len(denomSplit) == 1 && denomSplit[0] == ibctypes.DenomPrefix,
 		len(denomSplit) == 2 && (denomSplit[0] != ibctypes.DenomPrefix || strings.TrimSpace(denomSplit[1]) == ""):
-		return sdkerrors.Wrapf(ibctypes.ErrInvalidDenomForTransfer, "denomination should be prefixed with the format 'ibc/{hash(trace + \"/\" + %s)}'", denom)
+		return errorsmod.Wrapf(ibctypes.ErrInvalidDenomForTransfer, "denomination should be prefixed with the format 'ibc/{hash(trace + \"/\" + %s)}'", denom)
 
 	case denomSplit[0] == denom && strings.TrimSpace(denom) != "":
 		return nil
 	}
 
 	if _, err := ibctypes.ParseHexHash(denomSplit[1]); err != nil {
-		return sdkerrors.Wrapf(err, "invalid denom trace hash %s", denomSplit[1])
+		return errorsmod.Wrapf(err, "invalid denom trace hash %s", denomSplit[1])
 	}
 
 	return nil
@@ -120,7 +120,7 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 		if !IsCookbookDenom(coinOutput.Coin.Denom) {
 			cookbookDenom, err := CookbookDenom(cookbookID, coinOutput.Coin.Denom)
 			if err != nil {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot convert denom to cookbookDenom")
+				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot convert denom to cookbookDenom")
 			}
 
 			validCoinOutputs[i] = CoinOutput{
@@ -134,7 +134,7 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 		// make sure that the cookbookPrefix is the properly provided one
 		split := strings.Split(coinOutput.Coin.Denom, denomDivider)
 		if split[0] != cookbookID {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin Output cookbook prefix %s does not match cookbook prefix %s", split[0], cookbookID)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "coin Output cookbook prefix %s does not match cookbook prefix %s", split[0], cookbookID)
 		}
 
 		validCoinOutputs[i] = coinOutput
@@ -151,7 +151,7 @@ func ParseCoinInputStringArray(coinsStr []string) ([]CoinInput, error) {
 	for i, coinStr := range coinsStr {
 		coins, err := sdk.ParseCoinsNormalized(coinStr)
 		if err != nil {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, err.Error())
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, err.Error())
 		}
 		coinInputs[i].Coins = coins
 	}
@@ -170,7 +170,7 @@ func ParseCoinInputsCLI(arg string) ([]CoinInput, error) {
 		var coinStrs []string
 		err = json.Unmarshal([]byte(arg), &coinStrs)
 		if err != nil {
-			return nil, sdkerrors.Wrap(err, "cannot convert to []string or []CoinInput")
+			return nil, errorsmod.Wrap(err, "cannot convert to []string or []CoinInput")
 		}
 		coinInputs, err = ParseCoinInputStringArray(coinStrs)
 		if err != nil {

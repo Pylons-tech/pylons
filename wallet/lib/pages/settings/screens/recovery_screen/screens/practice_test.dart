@@ -6,11 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/mnemonic.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/view_recovery_phrase.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 
@@ -18,7 +18,7 @@ TextStyle kPracticeTestHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUn
 TextStyle kPracticeTestSubtitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
 
 class PracticeTest extends StatefulWidget {
-  const PracticeTest({Key? key}) : super(key: key);
+  const PracticeTest({super.key});
   @override
   State<PracticeTest> createState() => _PracticeTestState();
 }
@@ -164,7 +164,7 @@ class _PracticeTestState extends State<PracticeTest> {
       child: Stack(
         children: [
           SvgPicture.asset(
-            SVGUtil.BUTTON_BACKGROUND,
+            Assets.images.svg.buttonBackground,
             color: enable ? AppColors.kBlue : AppColors.kBlue.withOpacity(0.5),
           ),
           Positioned(
@@ -327,10 +327,10 @@ class MnemonicList extends StatelessWidget {
   final Function onAcceptF;
   final ScrollController scroller;
   const MnemonicList({
-    Key? key,
+    super.key,
     required this.onAcceptF,
     required this.scroller,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final List<Mnemonic> givenListNotifier = context.read<PracticeTestViewModel>().givenListNotifier.value;
@@ -414,7 +414,7 @@ class PracticeTestMnemonic extends StatelessWidget {
   final bool showSequenceNo;
   final Mnemonic mnemonic;
   final int index;
-  const PracticeTestMnemonic({Key? key, required this.showSequenceNo, required this.mnemonic, required this.index}) : super(key: key);
+  const PracticeTestMnemonic({super.key, required this.showSequenceNo, required this.mnemonic, required this.index});
 
   @override
   Widget build(BuildContext context) {

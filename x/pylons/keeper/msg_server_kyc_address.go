@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,12 +14,12 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 
 	addr, err := sdk.AccAddressFromBech32(msg.AccountAddr)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
 	}
 
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
 	kycAcc := types.KYCAccount{
@@ -31,13 +32,13 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 
 	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
 	if found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account has been registered")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "kyc account has been registered")
 	}
 
 	if k.HasAccountAddr(ctx, types.AccountAddr{Value: msg.AccountAddr}) {
 		k.SetPylonsKYC(ctx, kycAcc)
 	} else {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "kyc account address not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "kyc account address not found")
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventRegisterKYCAccount{
@@ -56,12 +57,12 @@ func (k msgServer) RemoveKYCAddress(goCtx context.Context, msg *types.MsgRemoveK
 
 	addr, err := sdk.AccAddressFromBech32(msg.AccountAddr)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
 	}
 
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
 	kycAcc := types.KYCAccount{
@@ -74,7 +75,7 @@ func (k msgServer) RemoveKYCAddress(goCtx context.Context, msg *types.MsgRemoveK
 
 	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
 	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account not found")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "kyc account not found")
 	}
 
 	k.DeletePylonsKYC(ctx, kycAcc)

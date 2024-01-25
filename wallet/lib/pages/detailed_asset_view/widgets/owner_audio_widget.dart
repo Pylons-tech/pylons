@@ -11,7 +11,7 @@ import '../../owner_purchase_view_common/progress_bar_state.dart';
 class OwnerAudioWidget extends StatefulWidget {
   final String url;
 
-  const OwnerAudioWidget({Key? key, required this.url}) : super(key: key);
+  const OwnerAudioWidget({super.key, required this.url});
 
   @override
   _OwnerAudioWidgetState createState() => _OwnerAudioWidgetState();

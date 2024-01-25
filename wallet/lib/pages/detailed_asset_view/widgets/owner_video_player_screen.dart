@@ -12,7 +12,7 @@ import '../../../generated/locale_keys.g.dart';
 class OwnerVideoPlayerScreen extends StatefulWidget {
   final NFT nft;
 
-  const OwnerVideoPlayerScreen({Key? key, required this.nft}) : super(key: key);
+  const OwnerVideoPlayerScreen({super.key, required this.nft});
 
   @override
   State<OwnerVideoPlayerScreen> createState() => _OwnerVideoPlayerScreenState();

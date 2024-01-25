@@ -3,12 +3,11 @@ package keeper
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/cel-go/cel"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // NewCelEnvCollectionFromItem generate cel env collection for an item
@@ -43,7 +42,7 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 		item, found := k.GetItem(ctx, recipe.CookbookId, itemRecord.Id)
 		if !found {
-			return types.NewCelEnvCollection(nil, nil, nil), sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store")
+			return types.NewCelEnvCollection(nil, nil, nil), errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store")
 		}
 
 		if idx == 0 {

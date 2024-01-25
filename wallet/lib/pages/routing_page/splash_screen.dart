@@ -18,7 +18,7 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -66,15 +66,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _loadWallets() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
 
     await accountProvider.loadWallets();
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      Navigator.of(
-        navigatorKey.currentState!.overlay!.context,
-      ).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushReplacementNamed(Routes.onboarding.name);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -103,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void moveToHome() {
     Navigator.of(
       navigatorKey.currentState!.overlay!.context,
-    ).pushReplacementNamed(RouteUtil.ROUTE_HOME);
+    ).pushReplacementNamed(Routes.home.name);
   }
 
   @override
@@ -163,6 +162,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<bool> checkAppLatestOrNot() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final getAppInfoResult = await getAppInfo();
 
     final appVersion = "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
@@ -181,8 +181,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await accountProvider.loadWallets();
 
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(
-      RouteUtil.ROUTE_APP_UPDATE,
+    navigator.pushReplacementNamed(
+      Routes.appUpdate.name,
       arguments: remoteConfigVersion,
     );
 

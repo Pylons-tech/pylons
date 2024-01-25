@@ -30,7 +30,6 @@ import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as c
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
@@ -48,6 +47,7 @@ import '../../generated/locale_keys.g.dart';
 import '../../model/common.dart';
 import '../../model/update_recipe_model.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
+import '../../utils/types.dart';
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
@@ -355,13 +355,6 @@ abstract class RemoteDataStore {
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
-  final http.Client httpClient;
-  final CrashlyticsHelper crashlyticsHelper;
-  final StorePaymentService storePaymentService;
-  final FirebaseAppCheck firebaseAppCheck;
-  final FirebaseDynamicLinks dynamicLinksGenerator;
-  final FirestoreHelper firebaseHelper;
-  final AnalyticsHelper analyticsHelper;
   final timeOutDuration = const Duration(seconds: 10);
 
   RemoteDataStoreImp({
@@ -369,9 +362,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
     required this.httpClient,
     required this.firebaseHelper,
     required this.analyticsHelper,
-    required this.crashlyticsHelper,
     required this.storePaymentService,
     required this.firebaseAppCheck,
+    required this.onLogError,
   });
 
   @override
@@ -736,9 +729,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final transactionMap = jsonDecode(transactionResponse.body);
 
     if (transactionMap == null || transactionResponse.body.length == 2) return transactionList;
-
-    transactionList.addAll(
-        (transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)).toList());
+    transactionList.addAll((transactionMap as List<dynamic>)
+        .map(
+          (e) => TransactionHistory.fromJson(e as Map<String, dynamic>),
+        )
+        .toList());
 
     return transactionList;
   }
@@ -835,9 +830,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
 
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: walletsResultEither.getLeft().message);
+      onLogError(walletsResultEither.getLeft().toString(), fatal: true);
       throw const TransactionSigningFailure(
-          message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
+        message: SOMETHING_WRONG_FETCHING_WALLETS,
+        type: HandlerFactory.ERR_FETCHING_WALLETS,
+      );
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
@@ -856,7 +853,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (signedTransaction.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: signedTransaction.getLeft().toString());
+      onLogError(signedTransaction.getLeft().toString(), fatal: true);
       throw TransactionSigningFailure(
         message: LocaleKeys.something_wrong_signing_transaction.tr(),
         type: HandlerFactory.ERR_SIG_TRANSACTION,
@@ -869,7 +866,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (response.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: response.getLeft().toString());
+      onLogError(response.getLeft().toString(), fatal: true);
       throw TransactionSigningFailure(
         message: response.swap().toOption().toNullable().toString(),
         type: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
@@ -1142,7 +1139,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: walletsResultEither.getLeft().message);
+      onLogError(walletsResultEither.getLeft().message, fatal: true);
       throw const TransactionSigningFailure(
         message: SOMETHING_WRONG_FETCHING_WALLETS,
         type: HandlerFactory.ERR_FETCHING_WALLETS,
@@ -1410,6 +1407,14 @@ class RemoteDataStoreImp implements RemoteDataStore {
   BaseEnv getBaseEnv() {
     return sl.get<BaseEnv>();
   }
+
+  final http.Client httpClient;
+  final StorePaymentService storePaymentService;
+  final FirebaseAppCheck firebaseAppCheck;
+  final FirebaseDynamicLinks dynamicLinksGenerator;
+  final FirestoreHelper firebaseHelper;
+  final AnalyticsHelper analyticsHelper;
+  final OnLogError onLogError;
 }
 
 class AppleInAppPurchaseModel {

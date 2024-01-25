@@ -52,7 +52,7 @@ class CreateTradeBottomSheet {
 
 class _CreateTradeBottomSheetWidget extends StatefulWidget {
   final NFT nft;
-  const _CreateTradeBottomSheetWidget({Key? key, required this.nft}) : super(key: key);
+  const _CreateTradeBottomSheetWidget({required this.nft});
 
   @override
   State<_CreateTradeBottomSheetWidget> createState() => __CreateTradeBottomSheetWidgetState();

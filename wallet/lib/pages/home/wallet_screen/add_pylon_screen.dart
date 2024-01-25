@@ -34,7 +34,7 @@ TextStyle kSubTitleText = TextStyle(
 );
 
 class AddPylonScreen extends StatefulWidget {
-  const AddPylonScreen({Key? key}) : super(key: key);
+  const AddPylonScreen({super.key});
 
   @override
   State<AddPylonScreen> createState() => _AddPylonScreenState();

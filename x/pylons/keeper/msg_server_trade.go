@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -20,7 +21,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	// coins with send_enable to false cannot be added to CoinOutputs
 	err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.CoinOutputs...)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	// coins with sendEnable to false cannot be added to CoinInputs unless they can be issued by a payment processor
 	paymentProcessors := types.DefaultPaymentProcessors
@@ -34,7 +35,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 				}
 			}
 			if checkSendEnable && !k.bankKeeper.IsSendEnabledCoin(ctx, coin) {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin %s cannot be traded", coin.Denom)
+				return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "coin %s cannot be traded", coin.Denom)
 			}
 		}
 	}
@@ -43,13 +44,13 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	for _, itemRef := range msg.ItemOutputs {
 		item, found := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		if !found {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not found", itemRef.ItemId, itemRef.CookbookId)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not found", itemRef.ItemId, itemRef.CookbookId)
 		}
 		if item.Owner != msg.Creator {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not owned", itemRef.ItemId, itemRef.CookbookId)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not owned", itemRef.ItemId, itemRef.CookbookId)
 		}
 		if !item.Tradeable {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", itemRef.ItemId, itemRef.CookbookId)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", itemRef.ItemId, itemRef.CookbookId)
 		}
 		k.LockItemForTrade(ctx, item)
 		items = append(items, item)
@@ -58,14 +59,14 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		for i, coinInputs := range msg.CoinInputs {
 			_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
 			if err != nil {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
+				return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
 			}
 		}
 	}
 	// lock coins for trade
 	err = k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	trade := types.Trade{
@@ -98,11 +99,11 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !k.HasTrade(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
+		return nil, errorsmod.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
 	trade := k.GetTrade(ctx, msg.Id)
 	if msg.Creator != trade.Creator {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+		return nil, errorsmod.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
 	// unlock locked items

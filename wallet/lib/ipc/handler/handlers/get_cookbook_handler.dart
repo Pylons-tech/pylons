@@ -22,8 +22,7 @@ class GetCookbookHandler implements BaseHandler {
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 
-    final response =
-        await walletsStore.getCookbookByIdForSDK(cookbookId: cookbookId);
+    final response = await walletsStore.getCookbookByIdForSDK(cookbookId: cookbookId);
     response.sender = sdkIpcMessage.sender;
     response.action = sdkIpcMessage.action;
     return SynchronousFuture(response);

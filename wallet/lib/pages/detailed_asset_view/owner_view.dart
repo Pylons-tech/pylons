@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
@@ -33,7 +34,6 @@ import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../utils/failure/failure.dart';
@@ -44,7 +44,7 @@ import 'widgets/toggle_button.dart';
 class OwnerView extends StatefulWidget {
   final NFT nft;
 
-  const OwnerView({required this.nft, Key? key}) : super(key: key);
+  const OwnerView({required this.nft, super.key});
 
   @override
   State<OwnerView> createState() => _OwnerViewState();
@@ -84,7 +84,7 @@ class _OwnerViewState extends State<OwnerView> {
 }
 
 class OwnerViewContent extends StatefulWidget {
-  const OwnerViewContent({Key? key}) : super(key: key);
+  const OwnerViewContent({super.key});
 
   @override
   State<OwnerViewContent> createState() => _OwnerViewContentState();
@@ -115,7 +115,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
                       Navigator.pop(context);
                     },
                     child: SvgPicture.asset(
-                      SVGUtil.OWNER_BACK_ICON,
+                      Assets.images.icons.back,
                       height: 25.h,
                     ),
                   ),
@@ -125,7 +125,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
                       submitFeedbackDialog.show();
                     },
                     child: SvgPicture.asset(
-                      SVGUtil.OWNER_REPORT,
+                      Assets.images.icons.report,
                       height: 25.h,
                     ),
                   ),
@@ -194,7 +194,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
 }
 
 class OwnerBottomDrawer extends StatefulWidget {
-  const OwnerBottomDrawer({Key? key}) : super(key: key);
+  const OwnerBottomDrawer({super.key});
 
   @override
   State<OwnerBottomDrawer> createState() => _OwnerBottomDrawerState();
@@ -261,7 +261,7 @@ Widget _title({required NFT nft, required String owner}) {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: SvgPicture.asset(
-                  SVGUtil.OWNER_VERIFIED_ICON,
+                  Assets.images.icons.verified,
                   height: 15.h,
                 ),
               ),
@@ -274,7 +274,7 @@ Widget _title({required NFT nft, required String owner}) {
 }
 
 class _CollapsedBottomMenu extends StatefulWidget {
-  const _CollapsedBottomMenu({Key? key}) : super(key: key);
+  const _CollapsedBottomMenu();
 
   @override
   State<_CollapsedBottomMenu> createState() => _CollapsedBottomMenuState();
@@ -347,7 +347,7 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
                       context.read<OwnerViewViewModel>().shareNFTLink(size: size);
                     },
                     child: SvgPicture.asset(
-                      SVGUtil.OWNER_SHARE,
+                      Assets.images.icons.shareSvg,
                       height: 20.h,
                     ),
                   ),
@@ -381,7 +381,7 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
 }
 
 class _ExpandedBottomMenu extends StatefulWidget {
-  const _ExpandedBottomMenu({Key? key}) : super(key: key);
+  const _ExpandedBottomMenu();
 
   @override
   State<_ExpandedBottomMenu> createState() => __ExpandedBottomMenuState();
@@ -454,7 +454,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                   ),
                   Row(
                     children: [
-                      SvgPicture.asset(SVGUtil.OWNER_VIEWS),
+                      SvgPicture.asset(Assets.images.icons.views),
                       SizedBox(
                         width: 10.w,
                       ),
@@ -609,7 +609,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                                   );
                                 },
                                 child: SvgPicture.asset(
-                                  SVGUtil.QR_ICON,
+                                  Assets.images.icons.qr,
                                   height: 20.h,
                                 ),
                               ),
@@ -624,7 +624,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                                     wallpaperScreen.show();
                                   },
                                   child: SvgPicture.asset(
-                                    SVGUtil.MY_CREATIONS,
+                                    Assets.images.svg.creations,
                                     height: 20.h,
                                     color: Colors.white,
                                   ),
@@ -637,7 +637,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                                   viewModel.shareNFTLink(size: size);
                                 },
                                 child: SvgPicture.asset(
-                                  SVGUtil.OWNER_SHARE,
+                                  Assets.images.icons.shareSvg,
                                   height: 20.h,
                                 ),
                               ),
@@ -667,7 +667,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                       ),
                       ToggleButton(
                         enabled: viewModel.isNFTEnabled(),
-                        onPressed: (bool enabled) {
+                        onPressed: ({required bool enabled}) {
                           onUpdateToggle(enabled: enabled);
                         },
                       ),

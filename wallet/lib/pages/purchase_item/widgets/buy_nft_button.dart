@@ -15,7 +15,7 @@ class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
   final NFT nft;
 
-  const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
+  const BuyNFTButton({super.key, required this.onTapped, required this.nft});
 
   Widget getButtonContent(NFT nft, PurchaseItemViewModel viewModel) {
     final double btnHeight = 37.h;

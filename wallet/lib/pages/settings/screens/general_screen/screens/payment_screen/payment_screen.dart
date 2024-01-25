@@ -17,7 +17,7 @@ TextStyle kPaymentLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalF
 TextStyle kPaymentOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({super.key});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -78,7 +78,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             PaymentForwardItem(
               title: LocaleKeys.transaction_history.tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY);
+                Navigator.of(context).pushNamed(Routes.transactionHistory.name);
               },
             )
           ],
@@ -111,7 +111,7 @@ class PaymentForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const PaymentForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const PaymentForwardItem({required this.title, super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

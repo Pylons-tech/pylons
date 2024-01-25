@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/date_utils.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class TransactionCard extends StatelessWidget {
   const TransactionCard({
@@ -14,8 +14,8 @@ class TransactionCard extends StatelessWidget {
     required this.denomText,
     required this.transactionTypeEnum,
     required this.isDateSame,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String transactionType;
   final DateTime date;
@@ -68,8 +68,8 @@ class TransactionCard extends StatelessWidget {
           getDateStamp(date: date),
           SizedBox(width: 5.w),
           LeadingBuilder(
-            onSendReceive: (context) => SvgPicture.asset(SVGUtil.PAYMENT_SEND_RECEIVE),
-            onBuySell: (context) => SvgPicture.asset(SVGUtil.PAYMENT_TAG),
+            onSendReceive: (context) => SvgPicture.asset(Assets.images.svg.sendReceiveIcon),
+            onBuySell: (context) => SvgPicture.asset(Assets.images.svg.orangeTagIcon),
             transactionType: transactionTypeEnum,
           ),
           SizedBox(width: 10.w),
@@ -105,11 +105,11 @@ class LeadingBuilder extends StatelessWidget {
   final WalletHistoryTransactionType transactionType;
 
   const LeadingBuilder({
-    Key? key,
+    super.key,
     required this.onSendReceive,
     required this.onBuySell,
     required this.transactionType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

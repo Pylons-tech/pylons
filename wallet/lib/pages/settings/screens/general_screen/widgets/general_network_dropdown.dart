@@ -5,18 +5,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_viewmodel.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class GeneralForwardNetworkItem extends StatelessWidget {
   final String title;
 
   const GeneralForwardNetworkItem({
     required this.title,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   GeneralScreenViewModel get _generalScreenProvider => GetIt.I.get();
 
@@ -75,9 +75,11 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                         padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
                         child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                           SvgPicture.asset(
-                            SVGUtil.DEV_NET,
+                            Assets.images.icons.devNet,
                             height: 15.h,
-                            color: viewModel.selectedValue == kTestNet ? AppColors.kEthereumColor : AppColors.kGreenBackground,
+                            color: viewModel.selectedValue == kTestNet
+                                ? AppColors.kEthereumColor
+                                : AppColors.kGreenBackground,
                           ),
                           SizedBox(width: 15.w),
                           Text(
@@ -109,7 +111,12 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                       horizontal: 10.w,
                     ),
                     child: Row(children: [
-                      SvgPicture.asset(SVGUtil.DEV_NET, height: 15.h, color: viewModel.selectedValue == kDevNet ? AppColors.kEthereumColor : AppColors.kGreenBackground),
+                      SvgPicture.asset(
+                        Assets.images.icons.devNet,
+                        height: 15.h,
+                        color:
+                            viewModel.selectedValue == kDevNet ? AppColors.kEthereumColor : AppColors.kGreenBackground,
+                      ),
                       SizedBox(width: 15.w),
                       Expanded(
                         child: Text(

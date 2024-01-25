@@ -8,9 +8,12 @@ class BlueClippedButton extends StatelessWidget {
   final String text;
   final bool enabled;
 
-  const BlueClippedButton(
-      {Key? key, required this.onTap, this.text = "", this.enabled = true})
-      : super(key: key);
+  const BlueClippedButton({
+    super.key,
+    required this.onTap,
+    this.text = "",
+    this.enabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +28,7 @@ class BlueClippedButton extends StatelessWidget {
           child: Center(
               child: Text(
             text,
-            style: TextStyle(
-                color: enabled ? AppColors.kWhite : AppColors.kDarkGrey.withOpacity(0.5),
-                fontSize: 16.sp),
+            style: TextStyle(color: enabled ? AppColors.kWhite : AppColors.kDarkGrey.withOpacity(0.5), fontSize: 16.sp),
             textAlign: TextAlign.center,
           )),
         ),

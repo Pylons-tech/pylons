@@ -29,10 +29,10 @@ func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, ak
 	}
 }
 
-func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
+func (k Keeper) BeforeEpochStart(_ sdk.Context, _ string, _ int64, _ types.StakingKeeper) {
 }
 
-func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper, ak types.AccountKeeper) {
+func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, _ int64, sk types.StakingKeeper, ak types.AccountKeeper) {
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
 		// get the balance of the feeCollector moduleAcc
 		rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())

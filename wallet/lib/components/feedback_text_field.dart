@@ -6,17 +6,17 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 
 class FeedBackTextField extends StatelessWidget {
-  const FeedBackTextField(
-      {Key? key,
-      required this.label,
-      this.hint = "",
-      this.controller,
-      this.validator,
-      this.noOfLines = 1, // default to single line
-      this.inputFormatters = const [],
-      this.keyboardType = TextInputType.text,
-      this.textCapitalization = TextCapitalization.none})
-      : super(key: key);
+  const FeedBackTextField({
+    super.key,
+    required this.label,
+    this.hint = "",
+    this.controller,
+    this.validator,
+    this.noOfLines = 1, // default to single line
+    this.inputFormatters = const [],
+    this.keyboardType = TextInputType.text,
+    this.textCapitalization = TextCapitalization.none,
+  });
 
   final String label;
   final String hint;
@@ -68,7 +68,11 @@ class FeedBackTextField extends StatelessWidget {
       height: isOneLine() ? 40.h : 120.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(fontSize: isOneLine() ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
+          style: TextStyle(
+            fontSize: isOneLine() ? 18.sp : 15.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColors.kTextBlackColor,
+          ),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -93,7 +97,11 @@ class FeedBackTextField extends StatelessWidget {
       height: isOneLine() ? 32.h : 110.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(fontSize: isOneLine() ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
+          style: TextStyle(
+            fontSize: isOneLine() ? 16.sp : 14.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColors.kTextBlackColor,
+          ),
           controller: controller,
           validator: validator,
           minLines: noOfLines,

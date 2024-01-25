@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/components/new_user_form.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class CreateWalletScreen extends StatefulWidget {
-  const CreateWalletScreen({Key? key}) : super(key: key);
+  const CreateWalletScreen({super.key});
 
   @override
   State<CreateWalletScreen> createState() => _CreateWalletScreenState();
@@ -38,7 +38,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
             top: 0,
             bottom: 0,
             child: SvgPicture.asset(
-              SVGUtil.CREATE_WALLET_BACKGROUND,
+              Assets.images.svg.createWalletBackground,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               fit: BoxFit.cover,

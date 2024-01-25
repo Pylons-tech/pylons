@@ -7,7 +7,7 @@ import '../utils/constants.dart';
 
 
 class MaintenanceModeBannerWidget extends StatelessWidget {
-  const MaintenanceModeBannerWidget({Key? key}) : super(key: key);
+  const MaintenanceModeBannerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class MaintenanceModeBannerWidget extends StatelessWidget {
 }
 
 class MaintenanceModeMessageWidget extends StatelessWidget {
-  const MaintenanceModeMessageWidget({Key? key}) : super(key: key);
+  const MaintenanceModeMessageWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

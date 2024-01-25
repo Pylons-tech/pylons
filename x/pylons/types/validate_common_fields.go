@@ -3,8 +3,8 @@ package types
 import (
 	"regexp"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/rogpeppe/go-internal/semver"
 )
@@ -12,7 +12,7 @@ import (
 // ValidateFieldLength checks if a string field is within minLength and maxLength
 func ValidateFieldLength(field string, minLength, maxLength int) error {
 	if len(field) < minLength || len(field) > maxLength {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid field length for field %v.  Must be in range [%v, %v]", field, minLength, maxLength)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid field length for field %v.  Must be in range [%v, %v]", field, minLength, maxLength)
 	}
 	return nil
 }
@@ -30,7 +30,7 @@ func ValidateEmail(email string) error {
 		return nil
 	}
 
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid email address")
+	return errorsmod.Wrap(ErrInvalidRequestField, "invalid email address")
 }
 
 // ValidateVersion validates the SemVer
@@ -39,7 +39,7 @@ func ValidateVersion(s string) error {
 		return nil
 	}
 
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid semVer")
+	return errorsmod.Wrap(ErrInvalidRequestField, "invalid semVer")
 }
 
 // ValidateID validates IDs
@@ -50,7 +50,7 @@ func ValidateID(s string) error {
 		return nil
 	}
 
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid ID")
+	return errorsmod.Wrap(ErrInvalidRequestField, "invalid ID")
 }
 
 // ValidateUsername validates Usernames
@@ -66,20 +66,20 @@ func ValidateUsername(s string) error {
 	if regex.MatchString(s) {
 		_, err := sdk.AccAddressFromBech32(s) // if valid SDK address, return error
 		if err == nil {
-			return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
+			return errorsmod.Wrap(ErrInvalidRequestField, "invalid username")
 		}
 
 		return nil
 	}
 
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
+	return errorsmod.Wrap(ErrInvalidRequestField, "invalid username")
 }
 
 // ValidateItemID validates an ItemID
 func ValidateItemID(s string) error {
 	decode := DecodeItemID(s)
 	if EncodeItemID(decode) != s {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid itemID")
+		return errorsmod.Wrap(ErrInvalidRequestField, "invalid itemID")
 	}
 
 	return nil
@@ -89,27 +89,27 @@ func ValidateItemID(s string) error {
 func ValidatePaymentInfo(p PaymentInfo) error {
 	_, err := sdk.AccAddressFromBech32(p.PayerAddr)
 	if err != nil {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid address in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "invalid address in payment info")
 	}
 
 	if !p.Amount.IsPositive() {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid amount in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "invalid amount in payment info")
 	}
 
 	if p.ProcessorName == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty payment processor name in payment info")
 	}
 
 	if p.PurchaseId == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty purchase ID in payment info")
 	}
 
 	if p.ProductId == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty product ID in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty product ID in payment info")
 	}
 
 	if p.Signature == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in payment info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty signature in payment info")
 	}
 
 	return nil
@@ -119,23 +119,23 @@ func ValidatePaymentInfo(p PaymentInfo) error {
 func ValidateRedeemInfo(r RedeemInfo) error {
 	_, err := sdk.AccAddressFromBech32(r.Address)
 	if err != nil {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid address in redeem info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "invalid address in redeem info")
 	}
 
 	if !r.Amount.IsPositive() {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid amount in redeem info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "invalid amount in redeem info")
 	}
 
 	if r.ProcessorName == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in redeem info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty payment processor name in redeem info")
 	}
 
 	if r.Id == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in redeem info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty purchase ID in redeem info")
 	}
 
 	if r.Signature == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in redeem info")
+		return errorsmod.Wrap(ErrInvalidRequestField, "empty signature in redeem info")
 	}
 
 	return nil

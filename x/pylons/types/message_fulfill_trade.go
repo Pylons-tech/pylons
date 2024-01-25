@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -41,23 +42,23 @@ func (msg *MsgFulfillTrade) GetSignBytes() []byte {
 func (msg *MsgFulfillTrade) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	for _, item := range msg.Items {
 		err = ValidateItemID(item.ItemId)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		err = ValidateID(item.CookbookId)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
 	for _, pi := range msg.PaymentInfos {
 		if err = ValidatePaymentInfo(pi); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 

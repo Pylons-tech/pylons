@@ -3,6 +3,7 @@ package types
 import (
 	"strings"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -55,28 +56,28 @@ func (msg *MsgCreateRecipe) GetSignBytes() []byte {
 func (msg *MsgCreateRecipe) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	// check length of the name and description fields
 	if err = ValidateFieldLength(msg.Name, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateFieldLength(msg.Description, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateID(msg.CookbookId); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateID(msg.Id); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateVersion(msg.Version); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if !msg.CostPerBlock.IsValid() {
@@ -84,7 +85,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	}
 
 	if msg.BlockInterval < 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
 	}
 
 	for i, coinInputs := range msg.CoinInputs {
@@ -92,18 +93,18 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		if !coins.Empty() {
 			// Validate sdk coins
 			if !coins.IsValid() {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+				return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
 
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
 					if split[0] != msg.CookbookId {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
+						return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
 				}
 				if IsIBCDenomRepresentation(coin.Denom) {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
+					return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
 				}
 			}
 		}
@@ -111,7 +112,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 
 	for _, ii := range msg.ItemInputs {
 		if err = ValidateItemInput(ii); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
@@ -119,13 +120,13 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	varDefs, variables, funcs := GetDefaultCelEnv()
 	ce := GetCustomCelEnv(msg.ItemInputs, varDefs, variables, funcs)
 	if err = ValidateEntriesList(msg.Entries, idMap, ce); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	sum := uint64(0)
 	for _, o := range msg.Outputs {
 		if err = ValidateOutputs(o, idMap); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		sum += o.Weight
 	}
@@ -144,7 +145,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	}
 
 	if sum <= 0 && entriesLen > 0 {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
 	// check if denoms are valid in coinOutputs
@@ -154,7 +155,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	// external ibc denoms "ibc/{hash}" INVALID
 	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookId, msg.Entries.CoinOutputs)
 	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
 	}
 
 	return nil
@@ -203,28 +204,28 @@ func (msg *MsgUpdateRecipe) GetSignBytes() []byte {
 func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	// check length of the name and description fields
 	if err = ValidateFieldLength(msg.Name, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateFieldLength(msg.Description, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateID(msg.CookbookId); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateID(msg.Id); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateVersion(msg.Version); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if !msg.CostPerBlock.IsValid() {
@@ -232,7 +233,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	}
 
 	if msg.BlockInterval < 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
 	}
 
 	for i, coinInputs := range msg.CoinInputs {
@@ -240,18 +241,18 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		if !coins.Empty() {
 			// Validate sdk coins
 			if !coins.IsValid() {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+				return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
 
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
 					if split[0] != msg.CookbookId {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
+						return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
 				}
 				if IsIBCDenomRepresentation(coin.Denom) {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
+					return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
 				}
 			}
 		}
@@ -259,7 +260,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 
 	for _, ii := range msg.ItemInputs {
 		if err = ValidateItemInput(ii); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
@@ -267,13 +268,13 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	varDefs, variables, funcs := GetDefaultCelEnv()
 	ce := GetCustomCelEnv(msg.ItemInputs, varDefs, variables, funcs)
 	if err = ValidateEntriesList(msg.Entries, idMap, ce); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	sum := uint64(0)
 	for _, o := range msg.Outputs {
 		if err = ValidateOutputs(o, idMap); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		sum += o.Weight
 	}
@@ -292,7 +293,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	}
 
 	if sum <= 0 && entriesLen > 0 {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
 	// check if denoms are valid in coinOutputs
@@ -302,7 +303,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	// external ibc denoms "ibc/{hash}" INVALID
 	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookId, msg.Entries.CoinOutputs)
 	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
 	}
 
 	return nil

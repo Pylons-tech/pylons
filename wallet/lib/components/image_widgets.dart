@@ -5,8 +5,8 @@ const backgroundImage = BackgroundImage();
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

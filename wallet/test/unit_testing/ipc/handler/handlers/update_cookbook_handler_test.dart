@@ -1,20 +1,33 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/update_cookbook_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
+import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../../mocks/main_mock.mocks.dart';
 import '../../../../mocks/mock_constants.dart';
-import '../../../../mocks/mock_wallet_store.dart';
 
 void main() {
-  test('should return the user name from get profile', () async {
-    final mockWalletStore = MockWalletStore();
+  group("$UpdateCookbookHandler", () {
+    setUp(() {
+      final mockWalletStore = MockWalletsStore();
+      GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
 
-    GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
-
-    final sdkipcMessage = SdkIpcMessage(
+      when(mockWalletStore.updateCookbook(
+        any,
+      )).thenAnswer(
+        (_) async => SdkIpcResponse.success(
+          data: MOCK_TRANSACTION.hash,
+          sender: SENDER_APP,
+          transaction: "",
+        ),
+      );
+    });
+    test('should return the user name from get profile', () async {
+      final sdkipcMessage = SdkIpcMessage(
         action: HandlerFactory.TX_UPDATE_COOKBOOK,
         json: """
     {
@@ -29,13 +42,15 @@ void main() {
         "CostPerBlock": "50"
         }""",
         sender: SENDER_APP,
-        requestResponse: true);
+        requestResponse: true,
+      );
 
-    final handler = UpdateCookbookHandler(sdkipcMessage);
-    final response = await handler.handle();
+      final handler = UpdateCookbookHandler(sdkipcMessage);
+      final response = await handler.handle();
 
-    expect(SENDER_APP, response.sender);
-    expect(HandlerFactory.TX_UPDATE_COOKBOOK, response.action);
-    expect(response.data, MOCK_TRANSACTION.hash);
+      expect(SENDER_APP, response.sender);
+      expect(HandlerFactory.TX_UPDATE_COOKBOOK, response.action);
+      expect(response.data, MOCK_TRANSACTION.hash);
+    });
   });
 }
