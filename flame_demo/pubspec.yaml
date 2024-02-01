@@ -85,6 +85,7 @@ flutter_icons:
 flutter:
 
   assets:
+    - assets/images/button_background.png
     - assets/images/normal_money.png
     - assets/images/Skull_alien_goofy_skull.png
     - assets/images/spinning_wheel.png

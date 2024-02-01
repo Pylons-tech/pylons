@@ -54,8 +54,8 @@ class Doohickey extends KeyframedAnimationComponent with Tappable {
   void onMount() {
     super.onMount();
     game = findGame() as PylonsGame;
-    size = Vector2(200, 200);
-    position = Vector2(100, 400);
+    size = Vector2(100, 100);
+    position = Vector2(180, 30);
   }
 
   @override

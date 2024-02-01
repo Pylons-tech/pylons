@@ -14,7 +14,7 @@ class PylonsGame extends FlameGame with HasTappables {
   bool dispatchedAction = false;
 
   @override
-  Color backgroundColor() => const Color(0xFFFF00FF);
+  Color backgroundColor() => const Color(0xFFAA00FF);
 
   @override
   Future<void> onLoad() async {

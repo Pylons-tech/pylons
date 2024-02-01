@@ -26,6 +26,7 @@ class Hud extends StatelessWidget {
         "${Provider.of<GameStateNotifier>(context).whatsits.toInt()}";
     return SizedBox.expand(child: Provider.of<GameStateNotifier>(context, listen: false).initialized ? Column(
       children: [
+        const Spacer(),
         TextDisplay(text: text),
         UpgradeButton(recipe: recipeGetThingamabob, imagePath: imagePathThingamabob, caption: captionThingamabob, callback: () {
           gameStateNotifier.updateThingamabob(true);

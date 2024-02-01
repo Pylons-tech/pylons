@@ -6,7 +6,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(child: Container(
-      color: Colors.grey,
+      color: Colors.black12,
       child: const Center(child: Text("Please wait...", style: TextStyle(color: Colors.white))),
     ));
   }
