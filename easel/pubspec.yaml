@@ -49,7 +49,7 @@ dependencies:
   floor: ^1.3.0
   flutter:
     sdk: flutter
-  flutter_image_compress: ^1.1.1
+  flutter_image_compress: ^2.2.0
   flutter_localizations:
     sdk: flutter
   flutter_screenutil: ^5.5.4
