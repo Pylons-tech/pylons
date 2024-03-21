@@ -124,36 +124,27 @@ class WalletsStoreImp implements WalletsStore {
 
       final info = walletCreationModel.creds.publicInfo;
 
-      final result = await repository.createAccount(walletCreationModel: walletCreationModel, publicInfo: info);
-
-      if (result.isLeft()) {
-        await deleteAccountCredentials(customTransactionSigningGateway, info);
-        return SdkIpcResponse.failure(
-          sender: '',
-          error: result.swap().toOption().toNullable().toString(),
-          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
-        );
-      }
-
-      final setUserNameResult = await repository.setUserName(
-        accountPublicInfo: info,
-        address: walletCreationModel.creatorAddress.toString(),
-        username: username,
+      final accountCreationResult = await repository.createAccount(
+        walletCreationModel: walletCreationModel,
+        publicInfo: info,
       );
 
-      if (setUserNameResult.isLeft()) {
+      if (accountCreationResult.isLeft()) {
         await deleteAccountCredentials(customTransactionSigningGateway, info);
         return SdkIpcResponse.failure(
           sender: '',
-          error: setUserNameResult.swap().toOption().toNullable().toString(),
+          error: accountCreationResult.swap().toOption().toNullable().toString(),
           errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
         );
       }
 
-      return SdkIpcResponse.success(
-        sender: '',
-        data: result.getOrElse(() => TransactionResponse.initial()).hash,
-        transaction: '',
+      return setUserNameFunction(
+        info: info,
+        walletCreationModel: walletCreationModel,
+        customTransactionSigningGateway: customTransactionSigningGateway,
+        username: username,
+        maxTries: 2,
+        accountCreationResult: accountCreationResult,
       );
     } catch (error) {
       await deleteAccountCredentials(customTransactionSigningGateway, walletCreationModel.creds.publicInfo);
@@ -164,6 +155,44 @@ class WalletsStoreImp implements WalletsStore {
       error: LocaleKeys.account_creation_failed.tr(),
       errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
     );
+  }
+
+  Future<SdkIpcResponse> setUserNameFunction({
+    required AccountPublicInfo info,
+    required WalletCreationModel walletCreationModel,
+    required CustomTransactionSigningGateway customTransactionSigningGateway,
+    required String username,
+    required int maxTries,
+    required Either<Failure, TransactionResponse> accountCreationResult,
+  }) async {
+    int tries = 0;
+
+    while (true) {
+      final setUserNameResult = await repository.setUserName(
+        accountPublicInfo: info,
+        address: walletCreationModel.creatorAddress.toString(),
+        username: username,
+      );
+
+      if (setUserNameResult.isLeft()) {
+        if (tries > maxTries) {
+          await deleteAccountCredentials(customTransactionSigningGateway, info);
+          return SdkIpcResponse.failure(
+            sender: '',
+            error: setUserNameResult.swap().toOption().toNullable().toString(),
+            errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+          );
+        } else {
+          tries++;
+        }
+      } else {
+        return SdkIpcResponse.success(
+          sender: '',
+          data: accountCreationResult.getOrElse(() => TransactionResponse.initial()).hash,
+          transaction: '',
+        );
+      }
+    }
   }
 
   Future<Either<CredentialsStorageFailure, Unit>> deleteAccountCredentials(
@@ -335,14 +364,15 @@ class WalletsStoreImp implements WalletsStore {
     required String transactionDescription,
   }) {
     final LocalTransactionModel txManager = LocalTransactionModel(
-        transactionType: transactionTypeEnum.name,
-        transactionData: transactionData,
-        transactionCurrency: transactionCurrency,
-        transactionPrice: transactionPrice,
-        transactionDescription: transactionDescription,
-        transactionHash: "",
-        dateTime: DateTime.now().millisecondsSinceEpoch,
-        status: TransactionStatus.Undefined.name);
+      transactionType: transactionTypeEnum.name,
+      transactionData: transactionData,
+      transactionCurrency: transactionCurrency,
+      transactionPrice: transactionPrice,
+      transactionDescription: transactionDescription,
+      transactionHash: "",
+      dateTime: DateTime.now().millisecondsSinceEpoch,
+      status: TransactionStatus.Undefined.name,
+    );
     return txManager;
   }
 

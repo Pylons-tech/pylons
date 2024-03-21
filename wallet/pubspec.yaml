@@ -1,9 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+172
-
-
+version: 1.0.1+176
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -17,7 +15,7 @@ dependencies:
   auto_size_text: ^3.0.0
   backdrop: ^0.9.0
   bottom_drawer: ^0.0.3
-  cached_network_image: ^3.1.0
+  cached_network_image:
   cloud_firestore: ^4.3.0
   cupertino_icons: ^1.0.3
   dartz: ^0.10.1
@@ -27,7 +25,7 @@ dependencies:
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   expandable: ^5.0.1
-  firebase_analytics: ^10.0.8
+  firebase_analytics:
   firebase_app_check: ^0.1.1+7
   firebase_core: ^2.4.0
   firebase_crashlytics: ^3.0.8
@@ -49,19 +47,22 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   flutter_staggered_grid_view: ^0.6.2
   flutter_sticky_header: ^0.6.0
-  flutter_stripe: ^9.0.0+1
-  flutter_svg: ^1.0.3
-  flutter_svg_provider: ^1.0.3
+  flutter_stripe:
+  flutter_svg:
+  flutter_svg_provider:
+    git:
+      url: https://github.com/arigilder/flutter_svg_provider
+      ref: patch-1
   focus_detector: ^2.0.1
   get_it: ^7.2.0
   google_sign_in: ^6.0.2
   googleapis: ^11.1.0
   grpc: ^3.0.2
   home_widget: ^0.2.0+1
-  http: ^0.13.4
+  http:
   icloud_storage: ^2.0.0
   image: ^4.0.12
-  image_cropper: ^4.0.1
+  image_cropper:
   image_picker: ^0.8.5+3
   in_app_purchase: ^3.0.7
   internet_connection_checker: ^1.0.0+1

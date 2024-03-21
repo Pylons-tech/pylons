@@ -172,6 +172,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				CF928C1E0DCFC5A4D6CA1CDA /* [CP] Embed Pods Frameworks */,
+				A9B35EDB27B07E6A1784FF19 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -188,7 +189,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
@@ -300,6 +301,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\necho \"${CONFIGURATION}\"\necho \"${GOOGLE_SERVICE_PATH}\"\n\ncp -r \"${GOOGLE_SERVICE_PATH}\" \"${PROJECT_DIR}/Runner/GoogleService-Info.plist\"\n\necho \"Plist copied\"\n\n\nPLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\necho \"Will copy ${GOOGLE_SERVICE_PATH} to final destination: ${PLIST_DESTINATION}\"\n\n\necho \"Using ${GOOGLE_SERVICE_PATH}\"\ncp \"${GOOGLE_SERVICE_PATH}\" \"${PLIST_DESTINATION}\"\n";
+		};
+		A9B35EDB27B07E6A1784FF19 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		CF928C1E0DCFC5A4D6CA1CDA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
