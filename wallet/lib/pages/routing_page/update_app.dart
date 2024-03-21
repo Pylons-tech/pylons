@@ -106,9 +106,9 @@ class _UpdateAppState extends State<UpdateApp> {
               ),
               ValueListenableBuilder(
                   valueListenable: versionInfoNotifier,
-                  builder: (_, __, ___) {
+                  builder: (_, value, ___) {
                     return Text(
-                      '$__',
+                      '$value',
                       style: TextStyle(color: Colors.black, fontSize: 16.sp),
                       textAlign: TextAlign.center,
                     );
@@ -213,9 +213,9 @@ class _UpdateAppState extends State<UpdateApp> {
                 ),
                 ValueListenableBuilder(
                     valueListenable: versionInfoNotifier,
-                    builder: (_, __, ___) {
+                    builder: (_, value, ___) {
                       return Text(
-                        '$__',
+                        '$value',
                         style: TextStyle(color: Colors.black, fontSize: 16.sp),
                       );
                     }),

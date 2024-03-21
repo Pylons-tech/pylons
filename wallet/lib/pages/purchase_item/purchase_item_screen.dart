@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
@@ -38,7 +40,6 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-
 import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
@@ -70,14 +71,15 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: viewModel,
-      child: WillPopScope(
-        onWillPop: () async {
-          viewModel.destroyPlayers();
-          return true;
-        },
-        child: const PurchaseItemContent(),
-      ),
+      child: const PurchaseItemContent(),
     );
+  }
+
+  @override
+  void dispose() {
+    viewModel.destroyPlayers();
+
+    super.dispose();
   }
 }
 

@@ -72,11 +72,9 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        onBackPressed();
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => onBackPressed(),
       child: ColoredBox(
         color: EaselAppTheme.kWhite,
         child: SafeArea(

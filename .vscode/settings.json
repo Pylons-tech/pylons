@@ -4,4 +4,5 @@
     "go.lintTool": "golangci-lint",
     "go.inferGopath": false,
     "git.ignoreLimitWarning": true,
+    "dart.lineLength": 120,
 }

@@ -722,8 +722,8 @@ class RepositoryImp implements Repository {
       return Right(await remoteDataStore.getExecutionsByRecipeId(cookBookId: cookBookId, recipeId: recipeId));
     } on Failure catch (e) {
       return Left(e);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(RecipeNotFoundFailure(SOMETHING_WENT_WRONG));
     }
   }
@@ -962,12 +962,12 @@ class RepositoryImp implements Repository {
     try {
       final response = await remoteDataStore.generateStripeRegistrationToken(address: address);
       return Right(response);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(StripeFailure(_));
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(StripeFailure(message));
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(StripeFailure(GEN_REGISTRATIONTOKEN_FAILED));
     }
   }
@@ -1027,8 +1027,8 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return const Left(StripeFailure(REGISTERACCOUNT_FAILED));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(REGISTERACCOUNT_FAILED));
@@ -1047,8 +1047,8 @@ class RepositoryImp implements Repository {
     try {
       final result = await remoteDataStore.updateStripeAccount(req: req);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(UPDATEACCOUNT_FAILED));
@@ -1091,8 +1091,8 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return const Left(StripeFailure(UPDATEACCOUNT_FAILED));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(UPDATEACCOUNT_FAILED));
@@ -1112,8 +1112,8 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return const Left(StripeFailure(UPDATEACCOUNT_FAILED));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(UPDATEACCOUNT_FAILED));
@@ -1129,8 +1129,8 @@ class RepositoryImp implements Repository {
     try {
       final result = await remoteDataStore.getIBCHashTrace(ibcHash: ibcHash);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(IBC_HASH_UPDATE_FAILED));
@@ -1150,9 +1150,9 @@ class RepositoryImp implements Repository {
     } on String catch (_) {
       localDataSource.saveStripeExistsOrNot(isExists: false);
       return const Left(StripeFailure(SOMETHING_WENT_WRONG));
-    } on Failure catch (_) {
+    } on Failure catch (failure) {
       localDataSource.saveStripeExistsOrNot(isExists: false);
-      return Left(_);
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       localDataSource.saveStripeExistsOrNot(isExists: false);
@@ -1184,8 +1184,8 @@ class RepositoryImp implements Repository {
       return Right(await localDataSource.pickImageFromGallery(pickImageModel));
     } on Exception catch (_) {
       return const Left(PlatformFailure(PLATFORM_FAILED));
-    } on String catch (_) {
-      return Left(PlatformFailure(_));
+    } on String catch (message) {
+      return Left(PlatformFailure(message));
     }
   }
 
@@ -1307,8 +1307,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, String>> saveImageInLocalDirectory(String imagePath) async {
     try {
       return Right(await localDataSource.saveImageInLocalDirectory(imagePath));
-    } on String catch (_) {
-      return Left(CacheFailure(_));
+    } on String catch (message) {
+      return Left(CacheFailure(message));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1327,8 +1327,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, String>> getMnemonic() async {
     try {
       return Right(await localDataSource.getMnemonics());
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1338,10 +1338,10 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, BiometricType>> isBiometricAvailable() async {
     try {
       return Right(await localAuthHelper.isBiometricAvailable());
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(PlatformFailure(_));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(PlatformFailure(message));
     } on Exception catch (_) {
       return const Left(PlatformFailure(PLATFORM_FAILED));
     }
@@ -1351,11 +1351,11 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> authenticate() async {
     try {
       return Right(await localAuthHelper.authenticate());
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      if (_ is PlatformException) {
-        return Left(PlatformFailure(_.message ?? ''));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      if (exception is PlatformException) {
+        return Left(PlatformFailure(exception.message ?? ''));
       }
 
       return const Left(CacheFailure(PLATFORM_FAILED));
@@ -1366,8 +1366,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, void>> setApplicationDirectory() async {
     try {
       return Right(await localDataSource.setApplicationDirectory());
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1377,8 +1377,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> saveDefaultSecurityBiometric({required bool biometricEnabled}) async {
     try {
       return Right(await localDataSource.saveDefaultSecurityBiometric(biometricEnabled: biometricEnabled));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1388,8 +1388,8 @@ class RepositoryImp implements Repository {
   Either<Failure, bool> getSecurityBiometric() {
     try {
       return Right(localDataSource.getSecurityBiometric());
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1399,8 +1399,8 @@ class RepositoryImp implements Repository {
   Either<Failure, bool> getBiometricLogin() {
     try {
       return Right(localDataSource.getLoginBiometric());
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1410,8 +1410,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> saveBiometricLogin({required bool biometricEnabled}) async {
     try {
       return Right(await localDataSource.saveLoginBiometric(biometricEnabled: biometricEnabled));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1421,8 +1421,8 @@ class RepositoryImp implements Repository {
   Either<Failure, bool> getBiometricTransaction() {
     try {
       return Right(localDataSource.getTransactionBiometric());
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1432,8 +1432,8 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> saveBiometricTransaction({required bool biometricEnabled}) async {
     try {
       return Right(await localDataSource.saveTransactionBiometric(biometricEnabled: biometricEnabled));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1451,8 +1451,8 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return const Left(StripeFailure(SOMETHING_WENT_WRONG));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(StripeFailure(SOMETHING_WENT_WRONG));
@@ -1469,8 +1469,8 @@ class RepositoryImp implements Repository {
       final result = await remoteDataStore.updateRecipe(updateRecipeModel: updateRecipeModel);
 
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on String catch (_) {
       return const Left(StripeFailure(SOMETHING_WENT_WRONG));
     } on Exception catch (error) {
@@ -1489,10 +1489,10 @@ class RepositoryImp implements Repository {
       final result = await googleDriveApi.uploadMnemonic(username: username, mnemonic: mnemonic);
 
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(UploadFailedFailure(message: _));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(UploadFailedFailure(message: message));
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(UploadFailedFailure(message: SOMETHING_WENT_WRONG));
@@ -1508,10 +1508,10 @@ class RepositoryImp implements Repository {
     try {
       final result = await googleDriveApi.getBackupData();
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(UploadFailedFailure(message: _));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(UploadFailedFailure(message: message));
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(UploadFailedFailure(message: SOMETHING_WENT_WRONG));
@@ -1527,10 +1527,10 @@ class RepositoryImp implements Repository {
     try {
       final result = await iCloudDriverApi.uploadMnemonic(username: username, mnemonic: mnemonic);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(UploadFailedFailure(message: _));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(UploadFailedFailure(message: message));
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(UploadFailedFailure(message: SOMETHING_WENT_WRONG));
@@ -1546,10 +1546,10 @@ class RepositoryImp implements Repository {
     try {
       final result = await iCloudDriverApi.getBackupData();
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(UploadFailedFailure(message: _));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(UploadFailedFailure(message: message));
     } on Exception catch (error) {
       recordErrorInCrashlytics(error);
       return const Left(UploadFailedFailure(message: SOMETHING_WENT_WRONG));
@@ -1742,28 +1742,28 @@ class RepositoryImp implements Repository {
         txLocalModel: localTransactionModel,
       );
       return Right(result);
-    } on Failure catch (_) {
+    } on Failure catch (failure) {
       await saveTransactionRecord(
         transactionHash: "",
         transactionStatus: TransactionStatus.Failed,
         txLocalModel: localTransactionModel,
       );
       LocaleKeys.something_wrong.tr().show();
-      return Left(_);
-    } on String catch (_) {
+      return Left(failure);
+    } on String catch (message) {
       await saveTransactionRecord(
         transactionHash: "",
         transactionStatus: TransactionStatus.Failed,
         txLocalModel: localTransactionModel,
       );
-      return Left(InAppPurchaseFailure(message: _));
-    } on Exception catch (_) {
+      return Left(InAppPurchaseFailure(message: message));
+    } on Exception catch (exception) {
       await saveTransactionRecord(
         transactionHash: "",
         transactionStatus: TransactionStatus.Failed,
         txLocalModel: localTransactionModel,
       );
-      recordErrorInCrashlytics(_);
+      recordErrorInCrashlytics(exception);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1825,20 +1825,20 @@ class RepositoryImp implements Repository {
         txLocalModel: localTransactionModel,
       );
       return Left(e);
-    } on String catch (_) {
+    } on String catch (message) {
       await saveTransactionRecord(
         transactionHash: "",
         transactionStatus: TransactionStatus.Failed,
         txLocalModel: localTransactionModel,
       );
-      return Left(InAppPurchaseFailure(message: _));
-    } on Exception catch (_) {
+      return Left(InAppPurchaseFailure(message: message));
+    } on Exception catch (exception) {
       await saveTransactionRecord(
         transactionHash: "",
         transactionStatus: TransactionStatus.Failed,
         txLocalModel: localTransactionModel,
       );
-      recordErrorInCrashlytics(_);
+      recordErrorInCrashlytics(exception);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1872,12 +1872,12 @@ class RepositoryImp implements Repository {
     try {
       final result = await remoteDataStore.getProductsForSale(itemId: itemId);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(InAppPurchaseFailure(message: _));
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(InAppPurchaseFailure(message: message));
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1894,12 +1894,12 @@ class RepositoryImp implements Repository {
     try {
       final result = await remoteDataStore.buyProduct(productDetails);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(InAppPurchaseFailure(message: _));
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(InAppPurchaseFailure(message: message));
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1938,12 +1938,12 @@ class RepositoryImp implements Repository {
     try {
       final result = await remoteDataStore.isInAppPurchaseAvailable();
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(InAppPurchaseFailure(message: _));
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (error) {
+      return Left(error);
+    } on String catch (message) {
+      return Left(InAppPurchaseFailure(message: message));
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1958,12 +1958,12 @@ class RepositoryImp implements Repository {
       final token = await remoteDataStore.getAppCheckToken();
       final result = await remoteDataStore.updateFcmToken(address: address, fcmToken: fcmToken, appCheckToken: token);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
-    } on String catch (_) {
-      return Left(UpdateFcmTokenFailure(message: _));
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on String catch (message) {
+      return Left(UpdateFcmTokenFailure(message: message));
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(UpdateFcmTokenFailure(message: SOMETHING_WENT_WRONG));
     }
   }
@@ -1979,8 +1979,8 @@ class RepositoryImp implements Repository {
       final token = await remoteDataStore.getAppCheckToken();
       final result = await remoteDataStore.markNotificationAsRead(idsList: idsList, appCheckToken: token);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on String catch (_) {
       return Left(MarkReadNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     } on Exception catch (error) {
@@ -2003,10 +2003,10 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
@@ -2029,10 +2029,10 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
@@ -2056,8 +2056,8 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (failure) {
+      return Left(failure);
     } on Exception catch (_) {
       // recordErrorInCrashlytics(_);
       return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
@@ -2075,10 +2075,10 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on String catch (_) {
       return Left(AppCheckTokenCreationFailure(message: LocaleKeys.something_wrong.tr()));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return Left(AppCheckTokenCreationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
@@ -2110,12 +2110,12 @@ class RepositoryImp implements Repository {
         referralToken: inviteAddress,
       );
       return Right(result);
-    } on String catch (_) {
-      return Left(AccountCreationFailure(_));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on String catch (message) {
+      return Left(AccountCreationFailure(message));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
   }
@@ -2304,12 +2304,12 @@ class RepositoryImp implements Repository {
         publicInfo: accountPublicInfo,
       );
       return Right(result);
-    } on String catch (_) {
-      return Left(AccountCreationFailure(_));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on String catch (message) {
+      return Left(AccountCreationFailure(message));
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
   }
@@ -2327,8 +2327,8 @@ class RepositoryImp implements Repository {
   Either<Failure, List<Cookbook>?> getStoredCookBooks() {
     try {
       return Right(localDataSource.getStoredCookBooks());
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
     }
   }
@@ -2347,8 +2347,8 @@ class RepositoryImp implements Repository {
   Either<Failure, List<NFT>?> getStoredCreations() {
     try {
       return Right(localDataSource.getStoredCreations());
-    } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+    } on Exception catch (exception) {
+      recordErrorInCrashlytics(exception);
       return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
     }
   }

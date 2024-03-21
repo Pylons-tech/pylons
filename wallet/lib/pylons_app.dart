@@ -141,7 +141,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           builder: (context, widget) {
             return Material(
               child: MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
                 child: widget ?? Container(),
               ),
             );

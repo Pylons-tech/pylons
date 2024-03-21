@@ -39,6 +39,7 @@ class PylonsDrawer extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
+
                 /// Revert when the functionality is added
                 // DrawerTile(
                 //   LocaleKeys.edit_profile.tr(),
@@ -55,6 +56,7 @@ class PylonsDrawer extends StatelessWidget {
                     Navigator.of(context).pushNamed(Routes.general.name);
                   },
                 ),
+
                 /// Revert when the functionality is added
                 // DrawerTile(
                 //   LocaleKeys.cash_out.tr(),
@@ -143,7 +145,7 @@ class DrawerTile extends StatelessWidget {
             if (icon != null)
               SvgPicture.asset(
                 icon!,
-                color: iconColor,
+                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                 width: 18.r,
                 height: 18.r,
               )

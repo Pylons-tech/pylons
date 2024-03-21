@@ -377,7 +377,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
-                color: AppColors.kBlack,
+                colorFilter: ColorFilter.mode(AppColors.kBlack, BlendMode.srcIn),
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,

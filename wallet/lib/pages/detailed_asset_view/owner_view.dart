@@ -67,19 +67,19 @@ class _OwnerViewState extends State<OwnerView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        ownerViewViewModel.destroyPlayers();
-        return true;
-      },
-      child: ChangeNotifierProvider.value(
-        value: ownerViewViewModel,
-        builder: (_, __) => Scaffold(
-          backgroundColor: AppColors.kBlack,
-          body: const OwnerViewContent(),
-        ),
+    return ChangeNotifierProvider.value(
+      value: ownerViewViewModel,
+      builder: (_, __) => Scaffold(
+        backgroundColor: AppColors.kBlack,
+        body: const OwnerViewContent(),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    ownerViewViewModel.destroyPlayers();
+    super.dispose();
   }
 }
 
@@ -626,7 +626,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                                   child: SvgPicture.asset(
                                     Assets.images.svg.creations,
                                     height: 20.h,
-                                    color: Colors.white,
+                                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                                   ),
                                 ),
                               SizedBox(height: 12.h),

@@ -247,7 +247,7 @@ void registerStubs(OwnerViewViewModel viewModel) {
 
   when(viewModel.videoPlayerController).thenAnswer((realInvocation) {
     final VideoPlayerController controller;
-    controller = VideoPlayerController.network(MOCK_URL);
+    controller = VideoPlayerController.networkUrl(Uri.parse(MOCK_URL));
     controller.value = const VideoPlayerValue(
       duration: Duration(
         minutes: 2,

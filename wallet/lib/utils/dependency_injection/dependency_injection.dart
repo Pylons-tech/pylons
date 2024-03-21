@@ -116,7 +116,7 @@ Future<void> init({
   sl.registerLazySingleton(() => FirebaseRemoteConfig.instance);
   sl.registerLazySingleton(() => const FlutterSecureStorage());
   sl.registerFactory<AudioPlayer>(() => AudioPlayer());
-  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.network(''));
+  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.networkUrl(Uri(host: "")));
   sl.registerLazySingleton<http.Client>(() => http.Client());
   sl.registerLazySingleton<AlanTransactionSigner>(() => AlanTransactionSigner(sl.get<BaseEnv>().networkInfo));
   sl.registerLazySingleton<AlanTransactionBroadcaster>(() => AlanTransactionBroadcaster(sl.get<BaseEnv>().networkInfo));

@@ -37,8 +37,8 @@ class Loading {
       context: navigatorKey.currentState!.overlay!.context,
       barrierDismissible: true,
       barrierColor: Colors.white.withOpacity(0),
-      builder: (ctx) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (ctx) => PopScope(
+        canPop: false,
         child: AlertDialog(
           elevation: 0,
           backgroundColor: Colors.transparent,

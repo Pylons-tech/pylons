@@ -19,13 +19,19 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 
-TextStyle kRecoveryOptionsText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
-TextStyle kViewRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kRecoveryOptionsText =
+    TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kViewRecoveryHeadlineText =
+    TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
-TextStyle kRecoveryBiometricIdText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
-TextStyle kRecoveryInfoText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w500);
-TextStyle kRecoveryMnemonicText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
-TextStyle kRecoveryMnemonicIndexText = TextStyle(fontSize: 10.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
+TextStyle kRecoveryBiometricIdText =
+    TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kRecoveryInfoText =
+    TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w500);
+TextStyle kRecoveryMnemonicText =
+    TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
+TextStyle kRecoveryMnemonicIndexText =
+    TextStyle(fontSize: 10.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
 
 class ViewRecoveryScreen extends StatefulWidget {
   const ViewRecoveryScreen({super.key});
@@ -214,7 +220,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
           children: [
             SvgPicture.asset(
               Assets.images.svg.buttonBackground,
-              color: AppColors.kBlue,
+              colorFilter: ColorFilter.mode(AppColors.kBlue, BlendMode.srcIn),
             ),
             Positioned(
               left: 0,
@@ -398,7 +404,13 @@ class MnemonicList extends StatelessWidget {
     );
   }
 
-  Widget buildMnemonicRow({required int leftIndex, required int rightIndex, required List<String> mnemonic, required Color leftColor, required Color rightColor}) {
+  Widget buildMnemonicRow({
+    required int leftIndex,
+    required int rightIndex,
+    required List<String> mnemonic,
+    required Color leftColor,
+    required Color rightColor,
+  }) {
     return Container(
       height: 40.h,
       margin: EdgeInsets.only(bottom: 8.h),
