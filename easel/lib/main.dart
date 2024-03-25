@@ -30,7 +30,7 @@ bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-      
+
   await Firebase.initializeApp();
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();
@@ -108,7 +108,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 bool _getIsCurrentDeviceTablet() {
   final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);

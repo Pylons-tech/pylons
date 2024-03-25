@@ -13,6 +13,7 @@ import 'package:easel_flutter/services/third_party_services/audio_player_helper.
 import 'package:easel_flutter/services/third_party_services/crashlytics_helper.dart';
 import 'package:easel_flutter/services/third_party_services/database.dart';
 import 'package:easel_flutter/services/third_party_services/network_info.dart';
+import 'package:easel_flutter/services/third_party_services/quick_node.dart';
 import 'package:easel_flutter/services/third_party_services/video_player_helper.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';
 import 'package:easel_flutter/viewmodels/home_viewmodel.dart';
@@ -62,7 +63,7 @@ void _registerExternalDependencies() {
 }
 
 void _registerRemoteDataSources() {
-  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(httpClient: sl<Dio>(), analyticsHelper: sl()));
+  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(httpClient: sl<Dio>(), analyticsHelper: sl(), quickNode: sl<QuickNode>()));
 }
 
 void _registerLocalDataSources() {
@@ -70,7 +71,8 @@ void _registerLocalDataSources() {
 }
 
 void _registerProviders() {
-  sl.registerLazySingleton<EaselProvider>(() => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
+  sl.registerLazySingleton<EaselProvider>(
+      () => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
   sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
   sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel(repository: sl()));
@@ -85,4 +87,6 @@ void _registerServices() {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton<CrashlyticsHelper>(() => CrashlyticsHelperImp(crashlytics: sl()));
   sl.registerLazySingleton<Repository>(() => RepositoryImp(networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl(), fileUtilsHelper: sl(), crashlyticsHelper: sl()));
+
+  sl.registerLazySingleton<QuickNode>(() => QuickNodeImpl());
 }
