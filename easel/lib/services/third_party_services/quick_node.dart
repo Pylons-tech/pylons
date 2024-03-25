@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:easel_flutter/env.dart';
 import 'package:easel_flutter/models/storage_response_model.dart';
 
 ///* using this because dio is already init with other  base url
@@ -29,7 +30,7 @@ class QuickNodeImpl extends QuickNode {
     final url = Uri.parse('https://api.quicknode.com/ipfs/rest/v1/s3/put-object');
 
     final headers = {
-      'x-api-key': 'QN_bcb81a5bf4774ea88621cf47c8a06385',
+      'x-api-key': xApiKey,
     };
 
     final fields = {
