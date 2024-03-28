@@ -72,12 +72,7 @@ class _PublishScreenState extends State<PublishScreen> {
       body: Consumer<EaselProvider>(builder: (_, easelProvider, __) {
         return Stack(
           children: [
-            Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
+            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
             Positioned(
                 left: 10.w,
                 top: 30.h,
@@ -187,10 +182,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             collapseStatus: viewModel.collapsed,
             onCollapsed: (context) => DecoratedBox(
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack]),
+                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack]),
               ),
               child: Padding(
                 padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 16.h),
@@ -236,11 +228,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     builder: (_, value, __) {
                                       switch (value) {
                                         case ButtonState.loading:
-                                          return SizedBox(
-                                              height: 20.h,
-                                              width: 15.h,
-                                              child: CircularProgressIndicator(
-                                                  strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                                          return SizedBox(height: 20.h, width: 15.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
@@ -282,8 +270,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           bufferedBarColor: EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
-                                          timeLabelTextStyle: TextStyle(
-                                              color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                                          timeLabelTextStyle: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
@@ -316,9 +303,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _title(
-                          nft: widget.nft,
-                          owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator),
+                      _title(nft: widget.nft, owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator),
                       SizedBox(
                         height: 30.h,
                       ),
@@ -387,16 +372,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(
-                                title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(
-                                    title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
+                                return buildRow(title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
@@ -522,10 +505,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   builder: (_, value, __) {
                     switch (value) {
                       case ButtonState.loading:
-                        return SizedBox(
-                            height: 22.h,
-                            width: 22.h,
-                            child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                        return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
                       case ButtonState.paused:
                         return InkWell(
                           onTap: () {
@@ -751,9 +731,7 @@ class BuildPublishBottomSheet extends StatelessWidget {
   final WidgetBuilder onOpened;
   final bool collapseStatus;
 
-  const BuildPublishBottomSheet(
-      {Key? key, required this.onCollapsed, required this.onOpened, required this.collapseStatus})
-      : super(key: key);
+  const BuildPublishBottomSheet({Key? key, required this.onCollapsed, required this.onOpened, required this.collapseStatus}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

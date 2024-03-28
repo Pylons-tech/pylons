@@ -36,6 +36,9 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
+
+
+
     if (!provider.nftFormat.extensions.contains(result.extension)) {
       final fileName = result.fileName.replaceAll(".${result.extension}", "");
       errorText.value = LocaleKeys.could_not_uploaded.tr(

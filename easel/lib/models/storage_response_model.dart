@@ -1,3 +1,5 @@
+import 'package:easel_flutter/services/third_party_services/quick_node.dart';
+
 class StorageResponseModel {
   bool? ok;
   Value? value;
@@ -20,6 +22,26 @@ class StorageResponseModel {
 
   factory StorageResponseModel.initial() {
     return StorageResponseModel();
+  }
+
+  factory StorageResponseModel.fromQuickNode({required UploadIPFSOutput uploadIPFSOutput}) {
+    return StorageResponseModel(
+      ok: true,
+      value: Value(
+          cid: uploadIPFSOutput.pin?.cid,
+          created: uploadIPFSOutput.created,
+          size: int.parse(
+            uploadIPFSOutput.info?.size ?? '0',
+          ),
+          pin: Pin(
+            cid: uploadIPFSOutput.pin?.cid,
+            created: uploadIPFSOutput.created,
+            size: int.parse(
+              uploadIPFSOutput.info?.size ?? '0',
+            ),
+            status: uploadIPFSOutput.status,
+          )),
+    );
   }
 }
 
