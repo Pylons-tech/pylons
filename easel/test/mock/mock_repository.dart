@@ -169,7 +169,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput}) {
+  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) {
     throw UnimplementedError();
   }
 }

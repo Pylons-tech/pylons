@@ -115,7 +115,7 @@ abstract class Repository {
   /// This method is used uploading provided file to the server using [QuickNode]
   /// Input : [UploadIPFSInput] which needs to be uploaded
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
-  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput});
+  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// This method will get the drafts List from the local database
   /// Output: [List] returns that contains a number of [NFT]
@@ -331,13 +331,13 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput}) async {
+  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
-      final storageResponseModel = await remoteDataSource.uploadFileUsingQuickNode(uploadIPFSInput: uploadIPFSInput);
+      final storageResponseModel = await remoteDataSource.uploadFileUsingQuickNode(uploadIPFSInput: uploadIPFSInput, onUploadProgressCallback: onUploadProgressCallback);
       return Right(storageResponseModel);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());

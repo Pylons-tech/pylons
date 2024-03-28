@@ -813,11 +813,11 @@ class EaselProvider extends ChangeNotifier {
       uploadThumbnailResponse = uploadResponse.getOrElse(() => StorageResponseModel.initial());
     }
 
-    final whereToUpload = QuickNode.listOfQuickNodeAllowedExtension().contains(fileExtension.toLowerCase());
+    final shouldUploadToQuickNode = QuickNode.listOfQuickNodeAllowedExtension().contains(fileExtension.toLowerCase());
 
     Either<Failure, StorageResponseModel> response;
 
-    if (!whereToUpload) {
+    if (!shouldUploadToQuickNode) {
       response = await repository.uploadFile(
         file: _file!,
         onUploadProgressCallback: (value) {
@@ -826,11 +826,10 @@ class EaselProvider extends ChangeNotifier {
       );
     } else {
       response = await repository.uploadFileUsingQuickNode(
-        uploadIPFSInput: UploadIPFSInput(
-          fileName: fileName,
-          filePath: file?.path ?? '',
-          contentType: QuickNode.getContentType(fileExtension),
-        ),
+        uploadIPFSInput: UploadIPFSInput(fileName: fileName, filePath: file!.path, contentType: QuickNode.getContentType(fileExtension)),
+        onUploadProgressCallback: (value) {
+          _uploadProgressController.sink.add(value);
+        },
       );
     }
 

@@ -30,7 +30,7 @@ abstract class RemoteDataSource {
   /// This method is used uploading provided file to the server using [QuickNode]
   /// Input : [UploadIPFSInput] which needs to be uploaded
   /// Output : [Future<ApiResponse<StorageResponseModel>>] the ApiResponse which can contain [success] or [error] response
-  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput});
+  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
@@ -45,8 +45,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   });
 
   @override
-  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput}) async {
-    final response = await quickNode.uploadNewObjectToIPFS(uploadIPFSInput);
+  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
+
+    final response = await quickNode.uploadNewObjectToIPFS(uploadIPFSInput: uploadIPFSInput, onUploadProgressCallback: onUploadProgressCallback);
     return response;
   }
 

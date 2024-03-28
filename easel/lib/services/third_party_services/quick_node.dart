@@ -1,16 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/env.dart';
 import 'package:easel_flutter/models/storage_response_model.dart';
-
-///* using this because dio is already init with other  base url
-import 'package:http/http.dart' as http;
+import 'package:easel_flutter/models/upload_progress.dart';
 
 abstract class QuickNode {
   /// Upload a new object to IPFS and pins it for permanent storage on the network.
   /// [UploadIPFSInput] as an input
   /// [UploadIPFSOutput] as an output
-  Future<StorageResponseModel> uploadNewObjectToIPFS(UploadIPFSInput uploadIPFSInput);
+  Future<StorageResponseModel> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// these are the list of extension required
   static List<String> listOfQuickNodeAllowedExtension() {
@@ -25,40 +24,36 @@ abstract class QuickNode {
 }
 
 class QuickNodeImpl extends QuickNode {
+  QuickNodeImpl({required this.httpClient});
+
+  final Dio httpClient;
+
   @override
-  Future<StorageResponseModel> uploadNewObjectToIPFS(UploadIPFSInput uploadIPFSInput) async {
-    final url = Uri.parse('https://api.quicknode.com/ipfs/rest/v1/s3/put-object');
+  Future<StorageResponseModel> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
+    try {
+      httpClient.options.headers['x-api-key'] = xApiKey;
 
-    final headers = {
-      'x-api-key': xApiKey,
-    };
+      final response = await httpClient.post(
+        'https://api.quicknode.com/ipfs/rest/v1/s3/put-object',
+        data: FormData.fromMap({
+          'Body': await MultipartFile.fromFile(uploadIPFSInput.filePath),
+          'Key': uploadIPFSInput.fileName,
+          'ContentType': uploadIPFSInput.contentType,
+        }),
+        onSendProgress: (uploaded, total) {
+          final double uploadedPercentage = uploaded / total;
+          onUploadProgressCallback(
+            UploadProgress(totalSize: total, sendSize: uploaded, uploadedProgressData: uploadedPercentage),
+          );
+        },
+      );
 
-    final fields = {
-      'Key': uploadIPFSInput.fileName,
-      'ContentType': uploadIPFSInput.contentType,
-    };
+      final uploadIPFSOutput = UploadIPFSOutput.fromJson(response.data as Map<String, dynamic>);
 
-    final file = File(uploadIPFSInput.filePath);
-
-    final request = http.MultipartRequest('POST', url);
-
-    request.headers.addAll(headers);
-
-    fields.forEach((key, value) {
-      request.fields[key] = value;
-    });
-
-    final fileStream = http.ByteStream(file.openRead());
-    final fileLength = await file.length();
-    final multipartFile = http.MultipartFile('Body', fileStream, fileLength, filename: file.path.split('/').last);
-
-    request.files.add(multipartFile);
-
-    final response = await http.Response.fromStream(await request.send());
-
-    final a = UploadIPFSOutput.fromJson(json.decode(response.body) as Map<String, dynamic>);
-
-    return StorageResponseModel.fromQuickNode(uploadIPFSOutput: a);
+      return StorageResponseModel.fromQuickNode(uploadIPFSOutput: uploadIPFSOutput);
+    } catch (e) {
+      throw Exception('Failed to upload file: $e');
+    }
   }
 }
 
@@ -72,10 +67,6 @@ class UploadIPFSInput {
     required this.filePath,
     required this.contentType,
   });
-
-  Map<String, dynamic> toJson() {
-    return {};
-  }
 }
 
 class UploadIPFSOutput {
@@ -86,33 +77,25 @@ class UploadIPFSOutput {
   final Info? info;
   final List<String>? delegates;
 
-  UploadIPFSOutput({
-    this.requestId,
-    this.status,
-    this.created,
-    this.pin,
-    this.info,
-    this.delegates,
-  });
+  UploadIPFSOutput({this.requestId, this.status, this.created, this.pin, this.info, this.delegates});
 
-  factory UploadIPFSOutput.fromJson(Map<String, dynamic> json) => UploadIPFSOutput(
-        requestId: json['requestid'] as String?,
-        status: json['status'] as String?,
-        created: json['created'] as String?,
-        pin: Pin.fromJson(json['pin'] as Map<String, dynamic>),
-        info: Info.fromJson(json['info'] as Map<String, dynamic>),
-        delegates: [],
-      );
+  factory UploadIPFSOutput.fromJson(Map<String, dynamic> json) {
+    return UploadIPFSOutput(
+      requestId: json['requestid'] as String?,
+      status: json['status'] as String?,
+      created: json['created'] as String?,
+      pin: Pin.fromJson(json['pin'] as Map<String, dynamic>),
+      info: Info.fromJson(json['info'] as Map<String, dynamic>),
+      delegates: [],
+    );
+  }
 }
 
 class Pin {
   String? cid;
   String? name;
 
-  Pin({
-    this.cid,
-    this.name,
-  });
+  Pin({this.cid, this.name});
 
   factory Pin.fromJson(Map<String, dynamic> json) => Pin(
         cid: json['cid'] as String?,
@@ -123,9 +106,7 @@ class Pin {
 class Info {
   final String? size;
 
-  Info({
-    this.size,
-  });
+  Info({this.size});
 
   factory Info.fromJson(Map<String, dynamic> json) => Info(size: json['size'] as String?);
 }
