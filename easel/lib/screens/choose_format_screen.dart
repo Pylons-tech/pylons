@@ -36,6 +36,9 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
+
+
+
     if (!provider.nftFormat.extensions.contains(result.extension)) {
       final fileName = result.fileName.replaceAll(".${result.extension}", "");
       errorText.value = LocaleKeys.could_not_uploaded.tr(
@@ -351,7 +354,9 @@ class _ErrorMessageWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudioVideoInGB * 1000).toStringAsFixed(0)}MB limit" : "• ${kFileSizeLimitInGB}GB limit",
+                  (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
+                      ? "• ${(kFileSizeLimitForAudioVideoInGB * 1000).toStringAsFixed(0)}MB limit"
+                      : "• ${kFileSizeLimitInGB}GB limit",
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.white,
                         fontSize: 12.sp,

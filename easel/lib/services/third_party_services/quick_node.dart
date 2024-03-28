@@ -12,9 +12,7 @@ abstract class QuickNode {
   Future<StorageResponseModel> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// these are the list of extension required
-  static List<String> listOfQuickNodeAllowedExtension() {
-    return ['pdf', 'mpeg', 'jpg', 'png', 'plain'];
-  }
+  static List<String> listOfQuickNodeAllowedExtension() => ['pdf', 'mpeg', 'jpg', 'png', 'plain'];
 
   /// this method is used to get the content type while making request input to quick node
   static String getContentType(String fileExtension) {
