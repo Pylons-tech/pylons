@@ -22,10 +22,10 @@ class SDKApprovalDialog {
         barrierDismissible: false,
         context: context,
         barrierColor: Colors.transparent,
-        builder: (_) {
-          final screenSize = ScreenSizeUtil(_);
-          return WillPopScope(
-            onWillPop: () async => false,
+        builder: (context) {
+          final screenSize = ScreenSizeUtil(context);
+          return PopScope(
+            canPop: false,
             child: Stack(
               fit: StackFit.passthrough,
               children: [
@@ -72,7 +72,7 @@ class SDKApprovalDialog {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  Navigator.of(_).pop();
+                                  Navigator.of(context).pop();
                                   onCancel.call();
                                 },
                                 child: Text(
@@ -88,7 +88,7 @@ class SDKApprovalDialog {
                                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 6),
                                 ),
                                 onPressed: () async {
-                                  Navigator.of(_).pop();
+                                  Navigator.of(context).pop();
                                   onApproved.call();
                                 },
                                 child: Text(

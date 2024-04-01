@@ -25,13 +25,61 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
   @override
   void initState() {
     scheduleMicrotask(() {
-      easelProvider.initializePlayers(
-          publishedNFT: easelProvider.publishedNFTClicked);
+      easelProvider.initializePlayers(publishedNFT: easelProvider.publishedNFTClicked);
     });
     super.initState();
   }
 
-  void onBackPressed({required BuildContext context}) {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Stack(
+        children: [
+          PreviewNFTBuilder(
+              onImage: (context) => NftImageWidget(imageUrl: easelProvider.publishedNFTClicked.url),
+              onVideo: (context) => const NFTVideoPlayerScreen(),
+              on3D: (context) => Model3dViewer(
+                    isFile: false,
+                    path: easelProvider.publishedNFTClicked.url,
+                  ),
+              assetType: easelProvider.publishedNFTClicked.assetType.toAssetTypeEnum()),
+          Column(
+            children: [
+              ClipRect(
+                child: ColoredBox(
+                  color: Colors.black.withOpacity(0.3),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20.w, 30.h, 0, 10.h),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            size: 22.h,
+                            color: EaselAppTheme.kWhite,
+                          ),
+                        ),
+                        Text(
+                          kBack,
+                          style: EaselAppTheme.titleStyle.copyWith(fontSize: 18.sp, color: EaselAppTheme.kWhite),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
     if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name &&
         easelProvider.videoPlayerController.value.isInitialized) {
       if (easelProvider.videoPlayerController.value.isPlaying) {
@@ -40,64 +88,7 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
     }
     easelProvider.videoLoadingError = '';
 
-    Navigator.pop(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: WillPopScope(
-        onWillPop: () async {
-          onBackPressed(context: context);
-          return true;
-        },
-        child: Stack(
-          children: [
-            PreviewNFTBuilder(
-                onImage: (context) => NftImageWidget(
-                    imageUrl: easelProvider.publishedNFTClicked.url),
-                onVideo: (context) => const NFTVideoPlayerScreen(),
-                on3D: (context) => Model3dViewer(
-                      isFile: false,
-                      path: easelProvider.publishedNFTClicked.url,
-                    ),
-                assetType: easelProvider.publishedNFTClicked.assetType
-                    .toAssetTypeEnum()),
-            Column(
-              children: [
-                ClipRect(
-                  child: ColoredBox(
-                    color: Colors.black.withOpacity(0.3),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20.w, 30.h, 0, 10.h),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              onBackPressed(context: context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios,
-                              size: 22.h,
-                              color: EaselAppTheme.kWhite,
-                            ),
-                          ),
-                          Text(
-                            kBack,
-                            style: EaselAppTheme.titleStyle.copyWith(
-                                fontSize: 18.sp, color: EaselAppTheme.kWhite),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+    super.dispose();
   }
 }
 

@@ -26,8 +26,8 @@ class LoadingProgress {
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
       barrierDismissible: true,
-      builder: (ctx) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (ctx) => PopScope(
+        canPop: false,
         child: AlertDialog(
           elevation: 0,
           backgroundColor: EaselAppTheme.kTransparent,

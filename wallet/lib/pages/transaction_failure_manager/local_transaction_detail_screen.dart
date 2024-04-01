@@ -18,11 +18,17 @@ import 'package:pylons_wallet/utils/extension.dart';
 
 import '../../generated/locale_keys.g.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
+TextStyle _titleTextStyle = TextStyle(
+  color: AppColors.kBlack,
+  fontFamily: kUniversalFontFamily,
+  fontWeight: FontWeight.bold,
+  fontSize: 20.sp,
+);
 
 class LocalTransactionDetailScreen extends StatefulWidget {
-  const LocalTransactionDetailScreen({super.key});
+  const LocalTransactionDetailScreen({super.key, required this.localTransactionModel});
 
+  final LocalTransactionModel localTransactionModel;
   @override
   State<LocalTransactionDetailScreen> createState() => _LocalTransactionDetailScreenState();
 }
@@ -121,7 +127,9 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
               child: AutoSizeText(
                 getFormattedPrice(args),
                 style: TextStyle(
-                    color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? AppColors.kDarkGreen : AppColors.kDarkRed,
+                    color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum())
+                        ? AppColors.kDarkGreen
+                        : AppColors.kDarkRed,
                     fontFamily: kUniversalFontFamily,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold),
@@ -138,16 +146,20 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
     if (txArgs.status.toTransactionStatusEnum() == TransactionStatus.Success && txArgs.transactionHash.isNotEmpty) {
       return {
         "txId".tr(): txArgs.transactionHash,
-        LocaleKeys.transaction_date.tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
-        LocaleKeys.transaction_time.tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
+        LocaleKeys.transaction_date.tr():
+            DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
+        LocaleKeys.transaction_time.tr():
+            "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
         LocaleKeys.currency.tr(): txArgs.transactionCurrency,
         LocaleKeys.price.tr(): txArgs.transactionPrice,
       };
     }
 
     return {
-      LocaleKeys.transaction_date.tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
-      LocaleKeys.transaction_time.tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
+      LocaleKeys.transaction_date.tr():
+          DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
+      LocaleKeys.transaction_time.tr():
+          "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
       LocaleKeys.currency.tr(): txArgs.transactionCurrency,
       LocaleKeys.price.tr(): txArgs.transactionPrice,
     };
@@ -165,7 +177,8 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
       children: [
         Text(key, style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600)),
         SizedBox(height: 20.h),
-        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: AppColors.kBlack)),
+        Text(value.trimString(stringTrimConstantMax),
+            style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: AppColors.kBlack)),
       ],
     );
   }
@@ -236,7 +249,6 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments! as LocalTransactionModel;
     return Scaffold(
       body: Stack(
         children: [
@@ -265,12 +277,12 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
                 ],
               ),
               SizedBox(height: 20.h),
-              buildErrorHeader(status: args.status.toTransactionStatusEnum()),
-              buildNFTDetailHeader(args: args),
-              buildTxDetailBody(txArgs: args),
+              buildErrorHeader(status: widget.localTransactionModel.status.toTransactionStatusEnum()),
+              buildNFTDetailHeader(args: widget.localTransactionModel),
+              buildTxDetailBody(txArgs: widget.localTransactionModel),
             ],
           ),
-          buildPageFooterButtons(txModel: args),
+          buildPageFooterButtons(txModel: widget.localTransactionModel),
         ],
       ),
     );

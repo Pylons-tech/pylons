@@ -185,8 +185,8 @@ class RepositoryImp implements Repository {
       log(sdkResponse.toString(), name: 'pylons_sdk');
 
       return Right(sdkResponse);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
     }
   }
@@ -261,8 +261,8 @@ class RepositoryImp implements Repository {
     try {
       final int id = await localDataSource.saveNft(nft);
       return Right(id);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.save_error.tr()));
     }
   }
@@ -276,8 +276,8 @@ class RepositoryImp implements Repository {
         return Left(CacheFailure(LocaleKeys.upload_error.tr()));
       }
       return Right(result);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
@@ -291,8 +291,8 @@ class RepositoryImp implements Repository {
         return Left(CacheFailure(LocaleKeys.upload_error.tr()));
       }
       return Right(result);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
@@ -303,8 +303,8 @@ class RepositoryImp implements Repository {
       final bool result = await localDataSource.updateNftFromPrice(saveNft);
 
       return Right(result);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
@@ -319,8 +319,8 @@ class RepositoryImp implements Repository {
       final storageResponseModel = await remoteDataSource.uploadFile(file: file, uploadProgressCallback: onUploadProgressCallback);
 
       return Right(storageResponseModel);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.update_failed.tr()));
     }
   }
@@ -331,8 +331,8 @@ class RepositoryImp implements Repository {
       final response = await localDataSource.getNfts();
 
       return Right(response);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
@@ -342,8 +342,8 @@ class RepositoryImp implements Repository {
     try {
       final bool result = await localDataSource.deleteNft(id);
       return Right(result);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
@@ -356,8 +356,8 @@ class RepositoryImp implements Repository {
         return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
       }
       return Right(data);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
@@ -368,8 +368,8 @@ class RepositoryImp implements Repository {
       final PickedFileModel pickedFileModel = await fileUtilsHelper.pickFile(format);
 
       return Right(pickedFileModel);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(PickingFileFailure(message: LocaleKeys.picking_file_error.tr()));
     }
   }
@@ -399,8 +399,8 @@ class RepositoryImp implements Repository {
     try {
       final file = await fileUtilsHelper.launchMyUrl(url: url);
       return Right(file);
-    } catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
       return Left(UrlLaunchingFileFailure(message: LocaleKeys.url_launching_error.tr()));
     }
   }

@@ -93,7 +93,9 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
     final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = widget.textDirection ?? Directionality.of(context);
-    final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+    final textScaleFactor =
+        widget.textScaleFactor != null ? TextScaler.linear(widget.textScaleFactor!) : MediaQuery.textScalerOf(context);
+
     final overflow = defaultTextStyle.overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
@@ -134,7 +136,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
           text: link,
           textAlign: textAlign,
           textDirection: textDirection,
-          textScaleFactor: textScaleFactor,
+          textScaler: textScaleFactor,
           maxLines: widget.trimLines,
           ellipsis: overflow == TextOverflow.ellipsis ? widget.delimiter : null,
           locale: locale,

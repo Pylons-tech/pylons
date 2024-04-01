@@ -59,11 +59,9 @@ class _StripeScreenState extends State<StripeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        backHistory(context);
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_) => backHistory(context),
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,

@@ -26,7 +26,7 @@ class DeleteDialog {
         barrierColor: Colors.black38,
         barrierDismissible: false,
         context: contextt,
-        builder: (_) {
+        builder: (context) {
           return Dialog(
             elevation: 0,
             insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
@@ -75,7 +75,7 @@ class DeleteDialog {
                               fontWeight: FontWeight.w300,
                               clipperType: ClipperType.bottomLeftTopRight,
                               onPressed: () async {
-                                Navigator.of(_).pop();
+                                Navigator.of(context).pop();
                                 creatorHubViewModel.deleteNft(nft.id);
                               },
                               cuttingHeight: 12.h,
@@ -90,7 +90,7 @@ class DeleteDialog {
                               bgColor: EaselAppTheme.kWhite.withOpacity(0.3),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () {
-                                Navigator.of(_).pop();
+                                Navigator.of(context).pop();
                               },
                               cuttingHeight: 12.h,
                               fontWeight: FontWeight.w300,

@@ -9,8 +9,8 @@ class MessageDialog {
     showDialog(
       context: navigatorKey.currentState!.overlay!.context,
       barrierDismissible: false,
-      builder: (ctx) => WillPopScope(
-        onWillPop: () => Future.value(false),
+      builder: (ctx) => PopScope(
+        canPop: false,
         child: AlertDialog(
           content: Text(
             message,
