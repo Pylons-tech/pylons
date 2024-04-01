@@ -77,9 +77,12 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                           SvgPicture.asset(
                             Assets.images.icons.devNet,
                             height: 15.h,
-                            color: viewModel.selectedValue == kTestNet
-                                ? AppColors.kEthereumColor
-                                : AppColors.kGreenBackground,
+                            colorFilter: ColorFilter.mode(
+                              viewModel.selectedValue == kTestNet
+                                  ? AppColors.kEthereumColor
+                                  : AppColors.kGreenBackground,
+                              BlendMode.srcIn,
+                            ),
                           ),
                           SizedBox(width: 15.w),
                           Text(
@@ -114,8 +117,10 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                       SvgPicture.asset(
                         Assets.images.icons.devNet,
                         height: 15.h,
-                        color:
-                            viewModel.selectedValue == kDevNet ? AppColors.kEthereumColor : AppColors.kGreenBackground,
+                        colorFilter: ColorFilter.mode(
+                          viewModel.selectedValue == kDevNet ? AppColors.kEthereumColor : AppColors.kGreenBackground,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       SizedBox(width: 15.w),
                       Expanded(

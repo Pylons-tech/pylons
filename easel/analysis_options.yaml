@@ -16,7 +16,6 @@ analyzer:
     avoid_setters_without_getters: ignore
     import_of_legacy_library_into_null_safe: error
     avoid_single_cascade_in_expression_statements: ignore
-    null_aware_in_logical_operator: error
     missing_required_param: error
 #    implicit_dynamic_map_literal: ignore
     prefer_single_quotes: ignore

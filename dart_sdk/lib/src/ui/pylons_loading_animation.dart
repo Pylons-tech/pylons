@@ -13,12 +13,16 @@ class PylonsLoadingAnimation {
       context: context,
       barrierDismissible: true,
       barrierColor: Colors.white.withOpacity(0),
-      builder: (ctx) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (ctx) => PopScope(
+        canPop: false,
         child: AlertDialog(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          content: SizedBox(height: _height, width: _width, child: Image.asset('assets/loading.gif', package: 'pylons_sdk',)),
+          content: SizedBox(
+            height: _height,
+            width: _width,
+            child: Image.asset('assets/loading.gif', package: 'pylons_sdk'),
+          ),
         ),
       ),
     );

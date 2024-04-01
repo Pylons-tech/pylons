@@ -5,6 +5,7 @@ import 'package:pylons_wallet/pages/settings/screens/general_screen/general_scre
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/recovery_screen.dart';
 
 import '../model/nft.dart';
+import '../model/transaction_failure_model.dart';
 import '../pages/detailed_asset_view/owner_view.dart';
 import '../pages/detailed_asset_view/widgets/pdf_viewer_full_screen.dart';
 import '../pages/home/home.dart';
@@ -100,12 +101,19 @@ class RouteUtil {
 
         return createRoute(const SizedBox());
       case Routes.localTransactionDetails:
-        return createRoute(const LocalTransactionDetailScreen());
+        if (settings.arguments != null && settings.arguments is LocalTransactionModel) {
+          return createRoute(LocalTransactionDetailScreen(
+            localTransactionModel: settings.arguments as LocalTransactionModel,
+          ));
+        }
+        break;
       case Routes.fallback:
         return createRoute(const SizedBox());
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
     }
+
+    return null;
   }
 
   static MaterialPageRoute createRoute(Widget page) {

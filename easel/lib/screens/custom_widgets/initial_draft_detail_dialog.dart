@@ -124,8 +124,8 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
   Widget build(BuildContext context) {
     final EaselProvider easelProvider = context.watch<EaselProvider>();
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Dialog(
         backgroundColor: EaselAppTheme.kTransparent,
         insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 65.w : 21.w),

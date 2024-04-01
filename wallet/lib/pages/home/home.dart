@@ -110,21 +110,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               quarterTurns: 0,
               child: ColoredBox(
                 color: AppColors.kMainBG,
-                child: WillPopScope(
-                  onWillPop: () async => false,
-                  child: DefaultTabController(
-                    length: tabLen,
-                    child: Scaffold(
-                      key: _scaffoldKey,
-                      backgroundColor: AppColors.kMainBG,
-                      drawer: const PylonsDrawer(
-                        key: Key(drawerKey),
-                      ),
-                      appBar: buildAppBar(context, provider),
-                      body: pages[provider.selectedIndex],
-                      bottomSheet:
-                          remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
+                child: DefaultTabController(
+                  length: tabLen,
+                  child: Scaffold(
+                    key: _scaffoldKey,
+                    backgroundColor: AppColors.kMainBG,
+                    drawer: const PylonsDrawer(
+                      key: Key(drawerKey),
                     ),
+                    appBar: buildAppBar(context, provider),
+                    body: pages[provider.selectedIndex],
+                    bottomSheet: remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                   ),
                 ),
               ),
@@ -174,7 +170,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       height: 15.h,
                       width: 15.w,
                       fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      colorFilter: ColorFilter.mode(
+                        provider.isBannerDark() ? Colors.white : Colors.black,
+                        BlendMode.srcIn,
+                      ),
                     ),
                     if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                   ],
@@ -191,7 +190,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 },
                 child: SvgPicture.asset(
                   Assets.images.icons.sort,
-                  color: provider.isBannerDark() ? Colors.white : Colors.black,
+                  colorFilter: ColorFilter.mode(provider.isBannerDark() ? Colors.white : Colors.black, BlendMode.srcIn),
                   height: 20.h,
                   width: 20.w,
                 ),
@@ -295,7 +294,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                         height: 20.h,
                         width: 20.w,
                         fit: BoxFit.fill,
-                        color: provider.isBannerDark() ? Colors.white : Colors.black,
+                        colorFilter: ColorFilter.mode(
+                          provider.isBannerDark() ? Colors.white : Colors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                     ],
@@ -312,7 +314,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     },
                     child: SvgPicture.asset(
                       Assets.images.icons.sort,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      colorFilter: ColorFilter.mode(
+                        provider.isBannerDark() ? Colors.white : Colors.black,
+                        BlendMode.srcIn,
+                      ),
                       height: 20.h,
                       width: 20.w,
                     )),
