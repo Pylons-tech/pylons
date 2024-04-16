@@ -893,16 +893,15 @@ class RemoteDataStoreImp implements RemoteDataStore {
     try {
       const r = RetryOptions(maxAttempts: 8);
       final response = await r.retry(
-        // Make a GET request
             () async{
               final pylons.QueryClient queryClient = getQueryClient();
               final request = pylons.QueryGetRecipeRequest.create()
                 ..cookbookId = cookBookId.toString()
                 ..id = recipeId.toString();
-              final thisA = await queryClient.recipe(request);
-              return thisA;
+              final thisRecipe = await queryClient.recipe(request);
+              return thisRecipe;
             },
-        // Retry on SocketException or TimeoutException
+        // Retry on Exception or RecipeNotFoundFailure
         retryIf: (e) => e is Exception || e is RecipeNotFoundFailure,
       );
 
@@ -1090,7 +1089,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<String> getAppCheckToken() async {
-    return "6B189291-D2AE-439B-AA5D-E2B99679C01E";
     final String? token = await firebaseAppCheck.getToken();
 
     if (token == null || token.isEmpty) {
