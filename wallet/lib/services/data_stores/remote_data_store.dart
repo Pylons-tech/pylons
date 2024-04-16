@@ -891,7 +891,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<pylons.Recipe> getRecipe({required CookbookId cookBookId, required RecipeId recipeId}) async {
     try {
-      const r = RetryOptions(maxAttempts: 8);
+      const r = RetryOptions();
       final response = await r.retry(
             () async{
               final pylons.QueryClient queryClient = getQueryClient();
@@ -902,7 +902,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
               return thisRecipe;
             },
         // Retry on Exception or RecipeNotFoundFailure
-        retryIf: (e) => e is Exception || e is RecipeNotFoundFailure,
+        retryIf: (e) => true,
       );
 
       if (response.hasRecipe()) {
