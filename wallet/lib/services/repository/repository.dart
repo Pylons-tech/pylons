@@ -607,7 +607,7 @@ class RepositoryImp implements Repository {
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (error) {
-      recordErrorInCrashlytics(error);
+       recordErrorInCrashlytics(error);
       return Left(RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr()));
     }
   }
