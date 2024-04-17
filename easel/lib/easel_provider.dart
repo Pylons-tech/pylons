@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/denom.dart';
 import 'package:easel_flutter/models/nft.dart';
@@ -12,10 +13,12 @@ import 'package:easel_flutter/models/upload_progress.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/services/third_party_services/audio_player_helper.dart';
+import 'package:easel_flutter/services/third_party_services/quick_node.dart';
 import 'package:easel_flutter/services/third_party_services/video_player_helper.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';
 import 'package:easel_flutter/widgets/audio_widget.dart';
 import 'package:easel_flutter/widgets/loading_with_progress.dart';
@@ -239,9 +242,7 @@ class EaselProvider extends ChangeNotifier {
     royaltyController.text = royalties ?? "";
     priceController.text = price ?? "";
     noOfEditionController.text = edition ?? "";
-    _selectedDenom = denom != ""
-        ? Denom.availableDenoms.firstWhere((element) => element.symbol == denom)
-        : Denom.availableDenoms.first;
+    _selectedDenom = denom != "" ? Denom.availableDenoms.firstWhere((element) => element.symbol == denom) : Denom.availableDenoms.first;
     isFreeDrop = freeDrop!;
     notifyListeners();
   }
@@ -571,6 +572,9 @@ class EaselProvider extends ChangeNotifier {
       final isCookBookCreated = await createCookbook();
 
       if (isCookBookCreated) {
+        // this delay is added to wait the transaction is settle
+        // on the blockchain
+        Future.delayed(const Duration(milliseconds: 800));
         // get device cookbook id
         _cookbookId = repository.getCookbookId();
         notifyListeners();
@@ -680,8 +684,7 @@ class EaselProvider extends ChangeNotifier {
       currentUsername = sdkResponse.data!.username;
       stripeAccountExists = sdkResponse.data!.stripeExists;
 
-      supportedDenomList =
-          Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
+      supportedDenomList = Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
 
       if (supportedDenomList.isNotEmpty && selectedDenom.symbol.isEmpty) {
         _selectedDenom = supportedDenomList.first;
@@ -777,8 +780,7 @@ class EaselProvider extends ChangeNotifier {
     }
   }
 
-  bool isThumbnailPresent() =>
-      nftFormat.format == NFTTypes.audio || nftFormat.format == NFTTypes.video || nftFormat.format == NFTTypes.pdf;
+  bool isThumbnailPresent() => nftFormat.format == NFTTypes.audio || nftFormat.format == NFTTypes.video || nftFormat.format == NFTTypes.pdf;
 
   Future<bool> saveNftLocally(UploadStep step) async {
     final scaffoldMessengerOptionalState = navigatorKey.getState();
@@ -814,12 +816,26 @@ class EaselProvider extends ChangeNotifier {
       uploadThumbnailResponse = uploadResponse.getOrElse(() => StorageResponseModel.initial());
     }
 
-    final response = await repository.uploadFile(
-      file: _file!,
-      onUploadProgressCallback: (value) {
-        _uploadProgressController.sink.add(value);
-      },
-    );
+    final shouldUploadToQuickNode = QuickNode.listOfQuickNodeAllowedExtension().contains(fileExtension.toLowerCase());
+
+    Either<Failure, StorageResponseModel> response;
+
+    if (!shouldUploadToQuickNode) {
+      response = await repository.uploadFile(
+        file: _file!,
+        onUploadProgressCallback: (value) {
+          _uploadProgressController.sink.add(value);
+        },
+      );
+    } else {
+      response = await repository.uploadFileUsingQuickNode(
+        uploadIPFSInput: UploadIPFSInput(fileName: fileName, filePath: file!.path, contentType: QuickNode.getContentType(fileExtension)),
+        onUploadProgressCallback: (value) {
+          _uploadProgressController.sink.add(value);
+        },
+      );
+    }
+
     if (response.isLeft()) {
       loading.dismiss();
       LocaleKeys.something_wrong_while_uploading.tr().show();
