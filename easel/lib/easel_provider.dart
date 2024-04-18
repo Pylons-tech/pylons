@@ -572,10 +572,6 @@ class EaselProvider extends ChangeNotifier {
       final isCookBookCreated = await createCookbook();
 
       if (isCookBookCreated) {
-        // this delay is added to wait the transaction is settle
-        // on the blockchain
-        await Future.delayed(const Duration(milliseconds: 800));
-        // get device cookbook id
         _cookbookId = repository.getCookbookId();
         notifyListeners();
       } else {

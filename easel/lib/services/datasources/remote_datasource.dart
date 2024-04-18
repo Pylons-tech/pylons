@@ -45,11 +45,8 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   });
 
   @override
-  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
-
-    final response = await quickNode.uploadNewObjectToIPFS(uploadIPFSInput: uploadIPFSInput, onUploadProgressCallback: onUploadProgressCallback);
-    return response;
-  }
+  Future<StorageResponseModel> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async =>
+      await quickNode.uploadNewObjectToIPFS(uploadIPFSInput: uploadIPFSInput, onUploadProgressCallback: onUploadProgressCallback);
 
   @override
   Future<StorageResponseModel> uploadFile({required OnUploadProgressCallback uploadProgressCallback, required File file}) async {

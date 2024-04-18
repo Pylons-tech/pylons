@@ -112,7 +112,7 @@ abstract class Repository {
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
   Future<Either<Failure, StorageResponseModel>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback});
 
-  /// This method is used uploading provided file to the server using [QuickNode]
+  /// This method is used for uploading provided file to the server using [QuickNode]
   /// Input : [UploadIPFSInput] which needs to be uploaded
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
   Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
