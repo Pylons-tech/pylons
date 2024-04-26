@@ -40,6 +40,7 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:retry/retry.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
@@ -901,18 +902,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<pylons.Recipe> getRecipe({required CookbookId cookBookId, required RecipeId recipeId}) async {
-    final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryGetRecipeRequest.create()
-      ..cookbookId = cookBookId.toString()
-      ..id = recipeId.toString();
 
-    final response = await queryClient.recipe(request);
+    try{
+      const retry = RetryOptions();
+      final response = await retry.retry(()async {
+        final pylons.QueryClient queryClient = getQueryClient();
+        final request = pylons.QueryGetRecipeRequest.create()
+          ..cookbookId = cookBookId.toString()
+          ..id = recipeId.toString();
 
-    if (response.hasRecipe()) {
-      return response.recipe;
+        final response = await queryClient.recipe(request);
+        return response;
+      }, retryIf: (_) => true );
+
+      if (response.hasRecipe()) {
+        return response.recipe;
+      }
+      throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
+    }catch(_){
+      throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
     }
-
-    throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
   }
 
   @override
@@ -958,15 +967,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<pylons.Cookbook> getCookbookBasedOnId({required String cookBookId}) async {
-    final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryGetCookbookRequest.create()..id = cookBookId;
+    try{
+      const retry = RetryOptions();
 
-    final response = await queryClient.cookbook(request);
-    if (response.hasCookbook()) {
-      return response.cookbook;
+     final response = await retry.retry(()async {
+        final pylons.QueryClient queryClient = getQueryClient();
+        final request = pylons.QueryGetCookbookRequest.create()..id = cookBookId;
+
+        final response = await queryClient.cookbook(request);
+        return response;
+      }, retryIf: (_) => true);
+
+      if (response.hasCookbook()) {
+        return response.cookbook;
+      }
+
+      throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
+
+    }catch(_){
+      throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
     }
-
-    throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
   }
 
   @override
