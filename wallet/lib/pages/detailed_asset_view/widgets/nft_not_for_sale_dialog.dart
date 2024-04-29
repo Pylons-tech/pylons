@@ -45,7 +45,7 @@ class NFTNotForSaleDialog {
 class NFTForSaleConfirmationWidget extends StatefulWidget {
   final OwnerViewViewModel ownerViewViewModel;
 
-  const NFTForSaleConfirmationWidget({Key? key, required this.ownerViewViewModel}) : super(key: key);
+  const NFTForSaleConfirmationWidget({super.key, required this.ownerViewViewModel});
 
   @override
   State<NFTForSaleConfirmationWidget> createState() => _NFTForSaleConfirmationWidgetState();
@@ -54,95 +54,89 @@ class NFTForSaleConfirmationWidget extends StatefulWidget {
 class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWidget> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(context);
-        return false;
-      },
-      child: Container(
-        key: const Key(kNotForSaleDialogKey),
-        color: Colors.black.withOpacity(0.7),
-        height: 250.h,
-        width: isTablet ? 200.w : 270.w,
-        margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
-        child: Stack(
-          children: [
-            Positioned(
-              right: 0,
-              top: 0,
-              child: SizedBox(
-                height: 60.h,
-                width: 80.w,
-                child: ClipPath(
-                  clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
-                  child: Container(
-                    color: AppColors.kDarkRed,
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 20.h,
-                        ),
+    return Container(
+      key: const Key(kNotForSaleDialogKey),
+      color: Colors.black.withOpacity(0.7),
+      height: 250.h,
+      width: isTablet ? 200.w : 270.w,
+      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      child: Stack(
+        children: [
+          Positioned(
+            right: 0,
+            top: 0,
+            child: SizedBox(
+              height: 60.h,
+              width: 80.w,
+              child: ClipPath(
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
+                child: Container(
+                  color: AppColors.kDarkRed,
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 20.h,
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 40.h,
+                  ),
+                  Text(
+                    LocaleKeys.confirmation.tr(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppColors.kWhite, fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Text(
+                    LocaleKeys.delist_confirmation_msg.tr(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppColors.kWhite, fontSize: 15.sp, fontWeight: FontWeight.normal),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: PylonsPayWithSwipe(
+                      activeColor: AppColors.kDarkRed,
+                      inactiveColor: AppColors.kPayNowBackgroundGrey,
                       height: 40.h,
+                      initialWidth: 40.w,
+                      onSwipeComplete: () {},
                     ),
-                    Text(
-                      LocaleKeys.confirmation.tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 18.sp, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Text(
-                      LocaleKeys.delist_confirmation_msg.tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 15.sp, fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: PylonsPayWithSwipe(
-                        activeColor: AppColors.kDarkRed,
-                        inactiveColor: AppColors.kPayNowBackgroundGrey,
-                        height: 40.h,
-                        initialWidth: 40.w,
-                        onSwipeComplete: () {},
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

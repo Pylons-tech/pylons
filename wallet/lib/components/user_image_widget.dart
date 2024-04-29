@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image/image.dart' as im;
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/user_image_widget_viewmodel.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/image_picker.dart';
@@ -15,10 +18,9 @@ import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 abstract class UserImageWidget extends StatelessWidget {
-  const UserImageWidget({Key? key}) : super(key: key);
+  const UserImageWidget({super.key});
 
   @visibleForTesting
   ImageProvider getImage(ImageProvider defaultVal, String uriKey) {
@@ -36,15 +38,14 @@ abstract class UserImageWidget extends StatelessWidget {
       return defaultVal;
     }
 
-    file = File.fromUri(Uri.parse(imageEither.getOrElse(() =>
-        ''))); // todo? - does this work when the URI points to a network file?
+    file = File.fromUri(
+        Uri.parse(imageEither.getOrElse(() => ''))); // todo? - does this work when the URI points to a network file?
 
     return FileImage(file);
   }
 
   @visibleForTesting
-  static void setToFile(
-      int filesizeLimit, String uriKey, File? file, BuildContext context) {
+  static void setToFile(int filesizeLimit, String uriKey, File? file, BuildContext context) {
     final userBanner = GetIt.I.get<UserBannerViewModel>();
     userBanner.setToFile(filesizeLimit, uriKey, file, context);
   }
@@ -53,8 +54,7 @@ abstract class UserImageWidget extends StatelessWidget {
 class UserAvatarWidget extends UserImageWidget {
   final double radius;
   @visibleForTesting
-  static const filesizeLimit =
-      1024 * 1024 * 4; // 4MB (this should always divide cleanly)
+  static const filesizeLimit = 1024 * 1024 * 4; // 4MB (this should always divide cleanly)
   @visibleForTesting
   static const resolutionLimitX = 2048;
   @visibleForTesting
@@ -62,8 +62,7 @@ class UserAvatarWidget extends UserImageWidget {
   @visibleForTesting
   static const uriKey = "pylons_avatar_file_uri";
   @visibleForTesting
-  static svg.Svg defaultImage =
-      svg.Svg(SVGUtil.USER_AVATAR); // todo: sensible default avatar
+  static svg.Svg defaultImage = svg.Svg(Assets.images.svg.userAvatar); // todo: sensible default avatar
 
   const UserAvatarWidget({this.radius = 20});
 
@@ -95,42 +94,40 @@ class UserAvatarPickerWidget extends UserAvatarWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(builder:
-        (BuildContext context, void Function(void Function()) setState) {
+    return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState) {
       return GestureDetector(
         onTap: () async {
           final userInfoProvider = context.read<UserInfoProvider>();
           final file = await pickImageFromGallery(
-              UserAvatarWidget.resolutionLimitX.toDouble(),
-              UserAvatarWidget.resolutionLimitY.toDouble(),
-              kImageQuality,
-              context);
+            UserAvatarWidget.resolutionLimitX.toDouble(),
+            UserAvatarWidget.resolutionLimitY.toDouble(),
+            kImageQuality,
+            context,
+          );
 
           if (file == null) {
             return;
           }
 
-          final newImagePathEither = await GetIt.I
-              .get<Repository>()
-              .saveImageInLocalDirectory(file.path);
+          final newImagePathEither = await GetIt.I.get<Repository>().saveImageInLocalDirectory(file.path);
 
           if (newImagePathEither.isLeft()) {
             return;
           }
 
-          // ignore: use_build_context_synchronously
           UserImageWidget.setToFile(
-              UserAvatarWidget.filesizeLimit,
-              UserAvatarWidget.uriKey,
-              File(newImagePathEither.getOrElse(() => '')),
-              context);
+            UserAvatarWidget.filesizeLimit,
+            UserAvatarWidget.uriKey,
+            File(newImagePathEither.getOrElse(() => '')),
+            context,
+          );
 
           userInfoProvider.onImageChange();
 
           setState(() {});
         },
         child: SvgPicture.asset(
-          SVGUtil.IMAGE_PICKER,
+          Assets.images.icons.imagePicker,
           height: 12.h,
           width: 12.w,
           fit: BoxFit.scaleDown,
@@ -143,8 +140,7 @@ class UserAvatarPickerWidget extends UserAvatarWidget {
 class UserBannerWidget extends UserImageWidget {
   final double height;
   @visibleForTesting
-  static const filesizeLimit =
-      1024 * 1024 * 4; // 4MB (this should always divide cleanly)
+  static const filesizeLimit = 1024 * 1024 * 4; // 4MB (this should always divide cleanly)
   @visibleForTesting
   static const resolutionLimitX = 2048;
   @visibleForTesting
@@ -162,8 +158,7 @@ class UserBannerWidget extends UserImageWidget {
     return ChangeNotifierProvider.value(
         value: userBannerViewModel,
         builder: (context, child) {
-          return Consumer<UserBannerViewModel>(
-              builder: (context, viewModel, child) {
+          return Consumer<UserBannerViewModel>(builder: (context, viewModel, child) {
             return Container(
               height: height,
               decoration: BoxDecoration(
@@ -214,33 +209,32 @@ class UserBannerPickerWidget extends UserBannerWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeProvider>();
-    return StatefulBuilder(builder:
-        (BuildContext context, void Function(void Function()) setState) {
+    return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState) {
       return InkResponse(
         onTap: () async {
           final file = await pickImageFromGallery(
-              UserBannerWidget.resolutionLimitX.toDouble(),
-              UserBannerWidget.resolutionLimitY.toDouble(),
-              kImageQuality,
-              context);
+            UserBannerWidget.resolutionLimitX.toDouble(),
+            UserBannerWidget.resolutionLimitY.toDouble(),
+            kImageQuality,
+            context,
+          );
 
           if (file == null) {
             return;
           }
 
-          final newImagePathEither =
-              await repository.saveImageInLocalDirectory(file.path);
+          final newImagePathEither = await repository.saveImageInLocalDirectory(file.path);
 
           if (newImagePathEither.isLeft()) {
             return;
           }
 
-          // ignore: use_build_context_synchronously
           UserImageWidget.setToFile(
-              UserBannerWidget.filesizeLimit,
-              UserBannerWidget.uriKey,
-              File(newImagePathEither.getOrElse(() => '')),
-              context);
+            UserBannerWidget.filesizeLimit,
+            UserBannerWidget.uriKey,
+            File(newImagePathEither.getOrElse(() => '')),
+            context,
+          );
 
           final int brightness = getBrightness(file);
           final bool isBannerDark = getIsBannerDark(brightness);
@@ -251,11 +245,11 @@ class UserBannerPickerWidget extends UserBannerWidget {
           setState(() {});
         },
         child: SvgPicture.asset(
-          SVGUtil.BANNER_IMAGE_EDIT,
+          Assets.images.icons.bannerImageEdit,
           height: isTablet ? 20.h : 22.h,
           width: isTablet ? 20.w : 22.w,
           fit: BoxFit.fill,
-          color: viewModel.isBannerDark() ? Colors.white : Colors.black,
+          colorFilter: ColorFilter.mode(viewModel.isBannerDark() ? Colors.white : Colors.black, BlendMode.srcIn),
         ),
       );
     });

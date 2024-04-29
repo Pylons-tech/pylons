@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -42,15 +43,15 @@ func (msg *MsgRegisterKYCAddress) ValidateBasic() error {
 	// Validate Sender and receiver addresses
 	_, err := sdk.AccAddressFromBech32(msg.AccountAddr)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	if err = ValidateUsername(msg.Username); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	if err = ValidateUsername(msg.Provider); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	return nil
@@ -91,15 +92,15 @@ func (msg *MsgRemoveKYCAddress) ValidateBasic() error {
 	// Validate Sender and receiver addresses
 	_, err := sdk.AccAddressFromBech32(msg.AccountAddr)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	if err = ValidateUsername(msg.Username); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	if err = ValidateUsername(msg.Provider); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	return nil

@@ -8,7 +8,7 @@ class CustomPaintButton extends StatelessWidget {
   final Color bgColor;
   final double width;
 
-  const CustomPaintButton({Key? key, required this.onPressed, required this.title, required this.bgColor, required this.width}) : super(key: key);
+  const CustomPaintButton({super.key, required this.onPressed, required this.title, required this.bgColor, required this.width});
 
   @override
   Widget build(BuildContext context) {

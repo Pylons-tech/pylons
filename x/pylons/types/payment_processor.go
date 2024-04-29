@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -34,7 +35,7 @@ func (pp PaymentProcessor) verifySignature(msg, signature string) error {
 	}
 
 	if !pubKey.VerifySignature(msgBytes, signatureBytes) {
-		return sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", pp.Name)
+		return errorsmod.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", pp.Name)
 	}
 
 	return nil

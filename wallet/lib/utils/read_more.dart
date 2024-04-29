@@ -1,5 +1,3 @@
-library readmore;
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,7 @@ enum TrimMode {
 class ReadMoreText extends StatefulWidget {
   const ReadMoreText(
     this.data, {
-    Key? key,
+    super.key,
     this.trimExpandedText = 'show less',
     this.trimCollapsedText = 'read more',
     this.colorClickableText,
@@ -32,7 +30,7 @@ class ReadMoreText extends StatefulWidget {
     this.delimiter = '$_kEllipsis  ',
     this.delimiterStyle,
     this.callback,
-  }) : super(key: key);
+  });
 
   /// Used on TrimMode.Length
   final int trimLength;
@@ -52,7 +50,7 @@ class ReadMoreText extends StatefulWidget {
   final TextStyle? lessStyle;
 
   ///Called when state change between expanded/compress
-  final Function(bool val)? callback;
+  final Function({required bool val})? callback;
 
   final String delimiter;
   final String data;
@@ -81,7 +79,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
   void _onTapLink() {
     setState(() {
       _readMore = !_readMore;
-      widget.callback?.call(_readMore);
+      widget.callback?.call(val: _readMore);
     });
   }
 
@@ -95,7 +93,9 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
     final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = widget.textDirection ?? Directionality.of(context);
-    final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+    final textScaleFactor =
+        widget.textScaleFactor != null ? TextScaler.linear(widget.textScaleFactor!) : MediaQuery.textScalerOf(context);
+
     final overflow = defaultTextStyle.overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
@@ -136,7 +136,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
           text: link,
           textAlign: textAlign,
           textDirection: textDirection,
-          textScaleFactor: textScaleFactor,
+          textScaler: textScaleFactor,
           maxLines: widget.trimLines,
           ellipsis: overflow == TextOverflow.ellipsis ? widget.delimiter : null,
           locale: locale,
@@ -193,7 +193,9 @@ class ReadMoreTextState extends State<ReadMoreText> {
             if (textPainter.didExceedMaxLines) {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
-                text: _readMore ? widget.data.substring(0, endIndex) + (linkLongerThanLine ? _kLineSeparator : '') : widget.data,
+                text: _readMore
+                    ? widget.data.substring(0, endIndex) + (linkLongerThanLine ? _kLineSeparator : '')
+                    : widget.data,
                 children: <TextSpan>[delimiter, link],
               );
             } else {

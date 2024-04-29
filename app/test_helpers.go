@@ -24,7 +24,7 @@ import (
 )
 
 // Setup initializes a new PylonsApp.
-func Setup(isCheckTx bool) *PylonsApp {
+func Setup(_ bool) *PylonsApp {
 	privVal := mock.NewPV()
 	pubKey, _ := privVal.GetPubKey()
 

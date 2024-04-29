@@ -7,6 +7,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -16,7 +17,7 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !k.HasPendingExecution(ctx, msg.Id) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Cannot find a pending execution with ID %v", msg.Id)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "Cannot find a pending execution with ID %v", msg.Id)
 	}
 
 	pendingExecution := k.GetPendingExecution(ctx, msg.Id)

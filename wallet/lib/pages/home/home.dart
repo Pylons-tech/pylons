@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -23,7 +24,6 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
@@ -31,7 +31,7 @@ import 'collection_screen/collection_screen.dart';
 import 'wallet_screen/wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => HomeScreenState();
@@ -110,21 +110,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               quarterTurns: 0,
               child: ColoredBox(
                 color: AppColors.kMainBG,
-                child: WillPopScope(
-                  onWillPop: () async => false,
-                  child: DefaultTabController(
-                    length: tabLen,
-                    child: Scaffold(
-                      key: _scaffoldKey,
-                      backgroundColor: AppColors.kMainBG,
-                      drawer: const PylonsDrawer(
-                        key: Key(drawerKey),
-                      ),
-                      appBar: buildAppBar(context, provider),
-                      body: pages[provider.selectedIndex],
-                      bottomSheet:
-                          remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
+                child: DefaultTabController(
+                  length: tabLen,
+                  child: Scaffold(
+                    key: _scaffoldKey,
+                    backgroundColor: AppColors.kMainBG,
+                    drawer: const PylonsDrawer(
+                      key: Key(drawerKey),
                     ),
+                    appBar: buildAppBar(context, provider),
+                    body: pages[provider.selectedIndex],
+                    bottomSheet: remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                   ),
                 ),
               ),
@@ -164,17 +160,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               left: 0.86.sw,
               child: GestureDetector(
                 onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                  Navigator.of(context).pushNamed(Routes.message.name);
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Stack(
                   children: [
                     SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
+                      Assets.images.svg.messageEnvelope,
                       height: 15.h,
                       width: 15.w,
                       fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      colorFilter: ColorFilter.mode(
+                        provider.isBannerDark() ? Colors.white : Colors.black,
+                        BlendMode.srcIn,
+                      ),
                     ),
                     if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                   ],
@@ -190,8 +189,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   _scaffoldKey.currentState!.openDrawer();
                 },
                 child: SvgPicture.asset(
-                  SVGUtil.SORT,
-                  color: provider.isBannerDark() ? Colors.white : Colors.black,
+                  Assets.images.icons.sort,
+                  colorFilter: ColorFilter.mode(provider.isBannerDark() ? Colors.white : Colors.black, BlendMode.srcIn),
                   height: 20.h,
                   width: 20.w,
                 ),
@@ -236,7 +235,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(Assets.images.icons.copySvg, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),
@@ -286,16 +285,19 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 right: 0.12.sw,
                 child: InkResponse(
                   onTap: () async {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                    Navigator.of(context).pushNamed(Routes.message.name);
                   },
                   child: Stack(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.MESSAGE_ENVELOPE,
+                        Assets.images.svg.messageEnvelope,
                         height: 20.h,
                         width: 20.w,
                         fit: BoxFit.fill,
-                        color: provider.isBannerDark() ? Colors.white : Colors.black,
+                        colorFilter: ColorFilter.mode(
+                          provider.isBannerDark() ? Colors.white : Colors.black,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                     ],
@@ -311,8 +313,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       _scaffoldKey.currentState!.openDrawer();
                     },
                     child: SvgPicture.asset(
-                      SVGUtil.SORT,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      Assets.images.icons.sort,
+                      colorFilter: ColorFilter.mode(
+                        provider.isBannerDark() ? Colors.white : Colors.black,
+                        BlendMode.srcIn,
+                      ),
                       height: 20.h,
                       width: 20.w,
                     )),
@@ -363,7 +368,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               await Clipboard.setData(ClipboardData(text: publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(Assets.images.icons.copySvg, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),
@@ -407,7 +412,7 @@ class WalletTab extends StatelessWidget {
   final int index;
   final String tabName;
 
-  const WalletTab({Key? key, required this.tabName, required this.index}) : super(key: key);
+  const WalletTab({super.key, required this.tabName, required this.index});
 
   @override
   Widget build(BuildContext context) {

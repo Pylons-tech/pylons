@@ -44,101 +44,92 @@ class _PreviewScreenState extends State<PreviewScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Consumer<EaselProvider>(
-        builder: (_, provider, __) => WillPopScope(
-          onWillPop: () {
-            provider.setAudioThumbnail(null);
-            provider.setVideoThumbnail(null);
-            provider.stopVideoIfPlaying();
-
-            return Future.value(true);
-          },
-          child: Stack(
-            children: [
-              if (provider.file != null) buildPreviewWidget(provider),
-              Image.asset(PngUtils.kPreviewGradient, width: 1.sw, fit: BoxFit.fill),
-              if (provider.nftFormat.format == NFTTypes.image)
-                SizedBox(
-                  key: const Key(kImageFullScreenGridviewKey),
-                  width: double.maxFinite,
-                  child: SvgPicture.asset(SVGUtils.kFullScreenImgGridview, width: 1.sw, height: 1.sh, fit: BoxFit.fill),
-                ),
-              Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20.h),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.w),
-                      child: IconButton(
-                        onPressed: () {
-                          provider.setAudioThumbnail(null);
-                          provider.setVideoThumbnail(null);
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: EaselAppTheme.kWhite,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        LocaleKeys.nft_preview_header.tr(),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: EaselAppTheme.kLightPurple,
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30.w,
-                    )
-                  ],
-                ),
+        builder: (_, provider, __) => Stack(
+          children: [
+            if (provider.file != null) buildPreviewWidget(provider),
+            Image.asset(PngUtils.kPreviewGradient, width: 1.sw, fit: BoxFit.fill),
+            if (provider.nftFormat.format == NFTTypes.image)
+              SizedBox(
+                key: const Key(kImageFullScreenGridviewKey),
+                width: double.maxFinite,
+                child: SvgPicture.asset(SVGUtils.kFullScreenImgGridview, width: 1.sw, height: 1.sh, fit: BoxFit.fill),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: 30.h,
-                ),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: () async {
-                      final navigator = Navigator.of(context);
-                      final result = await onUploadPressed();
-                      if (result) {
-                        navigator.pop();
-                        widget.onMoveToNextScreen();
-                      }
-                    },
-                    child: ClipPath(
-                      clipper: PylonsButtonClipper(),
-                      child: Container(
-                        width: 0.75.sw,
-                        height: isTablet ? 0.09.sw : 0.12.sw,
-                        decoration: const BoxDecoration(color: EaselAppTheme.kBlue),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Text(
-                                LocaleKeys.continue_key.tr(),
-                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      fontSize: 15.sp,
-                                      color: EaselAppTheme.kWhite,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            )
-                          ],
-                        ),
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20.h),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.w),
+                    child: IconButton(
+                      onPressed: () {
+                        provider.setAudioThumbnail(null);
+                        provider.setVideoThumbnail(null);
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: EaselAppTheme.kWhite,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      LocaleKeys.nft_preview_header.tr(),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: EaselAppTheme.kLightPurple,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30.w,
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 30.h,
+              ),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () async {
+                    final navigator = Navigator.of(context);
+                    final result = await onUploadPressed();
+                    if (result) {
+                      navigator.pop();
+                      widget.onMoveToNextScreen();
+                    }
+                  },
+                  child: ClipPath(
+                    clipper: PylonsButtonClipper(),
+                    child: Container(
+                      width: 0.75.sw,
+                      height: isTablet ? 0.09.sw : 0.12.sw,
+                      decoration: const BoxDecoration(color: EaselAppTheme.kBlue),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: Text(
+                              LocaleKeys.continue_key.tr(),
+                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontSize: 15.sp,
+                                    color: EaselAppTheme.kWhite,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -211,5 +202,15 @@ class _PreviewScreenState extends State<PreviewScreen> {
       return false;
     }
     return true;
+  }
+
+  @override
+  void dispose() {
+    final provider = context.read<EaselProvider>();
+    provider.setAudioThumbnail(null);
+    provider.setVideoThumbnail(null);
+    provider.stopVideoIfPlaying();
+
+    super.dispose();
   }
 }

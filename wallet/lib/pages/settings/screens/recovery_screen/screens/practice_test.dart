@@ -6,19 +6,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/mnemonic.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/view_recovery_phrase.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 
-TextStyle kPracticeTestHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
-TextStyle kPracticeTestSubtitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
+TextStyle kPracticeTestHeadlineText =
+    TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kPracticeTestSubtitleText =
+    TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
 
 class PracticeTest extends StatefulWidget {
-  const PracticeTest({Key? key}) : super(key: key);
+  const PracticeTest({super.key});
   @override
   State<PracticeTest> createState() => _PracticeTestState();
 }
@@ -112,7 +114,12 @@ class _PracticeTestState extends State<PracticeTest> {
                         onAcceptF: (int fromIndex, int index) {
                           final givenList = viewModel.givenListNotifier.value.toList();
                           final Mnemonic mnemonic = viewModel.acceptedList[fromIndex];
-                          viewModel.acceptedList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: false, sequenceNo: 0);
+                          viewModel.acceptedList[fromIndex] = Mnemonic(
+                            title: "",
+                            cardColor: Colors.grey,
+                            successDrop: false,
+                            sequenceNo: 0,
+                          );
                           mnemonic.successDrop = false;
                           givenList[index] = mnemonic;
                           viewModel.givenListNotifier.value = givenList;
@@ -125,7 +132,8 @@ class _PracticeTestState extends State<PracticeTest> {
                 ValueListenableBuilder<List<Mnemonic>>(
                     valueListenable: viewModel.givenListNotifier,
                     builder: (context, value, child) {
-                      final bool isAnyUnplacedItemExists = viewModel.acceptedList.where((element) => element.sequenceNo == 0).isNotEmpty;
+                      final bool isAnyUnplacedItemExists =
+                          viewModel.acceptedList.where((element) => element.sequenceNo == 0).isNotEmpty;
 
                       return InkWell(
                         onTap: isAnyUnplacedItemExists ? null : () => onSubmit(),
@@ -164,8 +172,8 @@ class _PracticeTestState extends State<PracticeTest> {
       child: Stack(
         children: [
           SvgPicture.asset(
-            SVGUtil.BUTTON_BACKGROUND,
-            color: enable ? AppColors.kBlue : AppColors.kBlue.withOpacity(0.5),
+            Assets.images.svg.buttonBackground,
+            colorFilter: ColorFilter.mode(enable ? AppColors.kBlue : AppColors.kBlue.withOpacity(0.5), BlendMode.srcIn),
           ),
           Positioned(
             left: 0,
@@ -255,10 +263,10 @@ class _PracticeTestState extends State<PracticeTest> {
             ),
           );
         },
-        onWillAccept: (data) => true,
-        onAccept: (List list) {
-          final int fromIndex = list[0] as int;
-          final String fromType = list[1] as String;
+        onWillAcceptWithDetails: (data) => true,
+        onAcceptWithDetails: (DragTargetDetails<List<dynamic>> dragTargetDetails) {
+          final int fromIndex = dragTargetDetails.data[0] as int;
+          final String fromType = dragTargetDetails.data[1] as String;
           if (viewModel.acceptedList[acceptNo].successDrop == false) {
             if (fromType != "accepted") {
               onAcceptF(fromIndex);
@@ -267,7 +275,12 @@ class _PracticeTestState extends State<PracticeTest> {
             final newList = viewModel.givenListNotifier.value.toList();
             final Mnemonic mnemonic = viewModel.acceptedList[fromIndex];
             viewModel.acceptedList[acceptNo] = mnemonic;
-            viewModel.acceptedList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: false, sequenceNo: 0);
+            viewModel.acceptedList[fromIndex] = Mnemonic(
+              title: "",
+              cardColor: Colors.grey,
+              successDrop: false,
+              sequenceNo: 0,
+            );
             viewModel.givenListNotifier.value = newList;
           }
         },
@@ -327,17 +340,22 @@ class MnemonicList extends StatelessWidget {
   final Function onAcceptF;
   final ScrollController scroller;
   const MnemonicList({
-    Key? key,
+    super.key,
     required this.onAcceptF,
     required this.scroller,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final List<Mnemonic> givenListNotifier = context.read<PracticeTestViewModel>().givenListNotifier.value;
     final gridView = GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 10.w, crossAxisSpacing: 5.w, childAspectRatio: 2.3),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10.w,
+          crossAxisSpacing: 5.w,
+          childAspectRatio: 2.3,
+        ),
         itemCount: givenListNotifier.length,
         itemBuilder: (BuildContext context, int index) {
           return LayoutBuilder(builder: (context, constraints) {
@@ -353,9 +371,17 @@ class MnemonicList extends StatelessWidget {
                         child: Container(),
                       ),
                       feedback: Material(
-                          color: Colors.transparent,
-                          child:
-                              SizedBox(width: constraints.maxWidth, height: constraints.maxHeight, child: PracticeTestMnemonic(mnemonic: givenListNotifier[index], index: 0, showSequenceNo: false))),
+                        color: Colors.transparent,
+                        child: SizedBox(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          child: PracticeTestMnemonic(
+                            mnemonic: givenListNotifier[index],
+                            index: 0,
+                            showSequenceNo: false,
+                          ),
+                        ),
+                      ),
                       child: givenListNotifier[index].successDrop == false
                           ? PracticeTestMnemonic(mnemonic: givenListNotifier[index], index: 0, showSequenceNo: false)
                           : DottedBorder(
@@ -373,10 +399,10 @@ class MnemonicList extends StatelessWidget {
                   ),
                 );
               },
-              onWillAccept: (data) => true,
-              onAccept: (List list) {
-                final int fromIndex = list[0] as int;
-                final String fromType = list[1] as String;
+              onWillAcceptWithDetails: (data) => true,
+              onAcceptWithDetails: (DragTargetDetails dragTargetDetails) {
+                final int fromIndex = dragTargetDetails.data[0] as int;
+                final String fromType = dragTargetDetails.data[1] as String;
 
                 if (fromType == "accepted") {
                   if (givenListNotifier[index].successDrop) {
@@ -414,7 +440,7 @@ class PracticeTestMnemonic extends StatelessWidget {
   final bool showSequenceNo;
   final Mnemonic mnemonic;
   final int index;
-  const PracticeTestMnemonic({Key? key, required this.showSequenceNo, required this.mnemonic, required this.index}) : super(key: key);
+  const PracticeTestMnemonic({super.key, required this.showSequenceNo, required this.mnemonic, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -487,7 +513,14 @@ class PracticeTestViewModel {
         int i = 0;
         final List<Mnemonic> list = [];
         for (int index = 0; index < mnemonicStringList.length; index++) {
-          list.add(Mnemonic(title: mnemonicStringList[index], cardColor: colorListForPracticeTest[i % 5], successDrop: false, sequenceNo: index + 1));
+          list.add(
+            Mnemonic(
+              title: mnemonicStringList[index],
+              cardColor: colorListForPracticeTest[i % 5],
+              successDrop: false,
+              sequenceNo: index + 1,
+            ),
+          );
           i++;
           if (shouldRepeatColorForSecondColumn(index)) {
             i = 3;

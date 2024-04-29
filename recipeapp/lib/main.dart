@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
           ),
-          children: [
+          children: const [
             //InventoryPane(items: [
             //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
             //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
@@ -116,7 +116,7 @@ class InventoryItemPane extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: Column(
+      child: const Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Text(item.id, style: const TextStyle(color: Colors.white),),
@@ -199,7 +199,6 @@ class RecipeOutputPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 
@@ -211,7 +210,6 @@ class RecipeSelectPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 
@@ -224,7 +222,6 @@ class RecipeSelectRecipeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 }

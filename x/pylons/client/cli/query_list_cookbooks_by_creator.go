@@ -3,6 +3,7 @@ package cli
 import (
 	"strconv"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -27,7 +28,7 @@ func CmdListCookbooksByCreator() *cobra.Command {
 			// verify address is proper
 			_, err = sdk.AccAddressFromBech32(reqCreator)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx := client.GetClientContextFromCmd(cmd)

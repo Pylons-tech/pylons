@@ -24,7 +24,7 @@ class TabField extends StatefulWidget {
   final Function(TabFields) onChangeTab;
 
   TabField({
-    Key? key,
+    super.key,
     required this.name,
     required this.icon,
     required this.nft,
@@ -32,7 +32,7 @@ class TabField extends StatefulWidget {
     required this.nftOwnershipHistoryList,
     required this.isExpanded,
     required this.onChangeTab,
-  }) : super(key: key);
+  });
 
   @override
   State<TabField> createState() => _TabFieldState();

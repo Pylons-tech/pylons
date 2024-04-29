@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/spf13/cobra"
@@ -49,7 +50,7 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 
 			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			var clientCtx client.Context
@@ -94,7 +95,7 @@ func CmdUpdateCookbook() *cobra.Command {
 
 			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := HandleAlternativeContextForCommand(cmd)

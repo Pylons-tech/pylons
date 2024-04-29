@@ -16,13 +16,13 @@ class GesturesForDetailsScreen extends StatefulWidget {
   final Function(TapUpDetails)? tapUp;
 
   const GesturesForDetailsScreen({
-    Key? key,
+    super.key,
     required this.child,
     required this.screen,
     required this.nft,
     required this.viewModel,
     this.tapUp,
-  }) : super(key: key);
+  });
 
   @override
   State<GesturesForDetailsScreen> createState() => _GesturesForDetailsScreenState();
@@ -207,7 +207,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       index = index + 1;
       final NFT nft = recipesProvider.nftCreations.elementAt(index);
 
-      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+      Navigator.of(context).pushReplacementNamed(Routes.ownerView.name, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
       int index = itemsProvider.items.indexOf(widget.nft);
@@ -215,7 +215,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (itemsProvider.items.length - 1 == index) return;
       index = index + 1;
       final NFT nft = itemsProvider.items.elementAt(index);
-      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+      Navigator.of(context).pushReplacementNamed(Routes.ownerView.name, arguments: nft);
     }
   }
 
@@ -227,7 +227,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (index == 0) return;
       index = index - 1;
       final NFT nft = collectionViewModel.creations.elementAt(index);
-      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+      Navigator.of(context).pushReplacementNamed(Routes.ownerView.name, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
       int index = collectionViewModel.assets.indexOf(widget.nft);
@@ -235,7 +235,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (index == 0) return;
       index = index - 1;
       final NFT nft = collectionViewModel.assets.elementAt(index);
-      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+      Navigator.of(context).pushReplacementNamed(Routes.ownerView.name, arguments: nft);
     }
   }
 }

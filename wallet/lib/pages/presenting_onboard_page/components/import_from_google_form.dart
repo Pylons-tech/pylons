@@ -12,19 +12,19 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_rounded_button.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
 class ImportFromGoogleForm extends StatefulWidget {
   final WalletsStore walletStore;
 
-  const ImportFromGoogleForm({Key? key, required this.walletStore}) : super(key: key);
+  const ImportFromGoogleForm({super.key, required this.walletStore});
 
   @override
   ImportFromGoogleFormState createState() {
@@ -47,7 +47,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
         children: [
           VerticalSpace(90.h),
           SvgPicture.asset(
-            SVGUtil.PYLONS_LOGO,
+            Assets.images.icons.pylonsLogoSvg,
             width: 60.w,
             fit: BoxFit.fill,
           ),
@@ -55,7 +55,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           const VerticalSpace(30),
           if (Platform.isAndroid)
             PylonsRoundedButton(
-                glyph: svg.Svg(SVGUtil.GOOGLE_DRIVE_ICON, size: const Size(30, 30)),
+                glyph: svg.Svg(Assets.images.icons.googleDrive, size: const Size(30, 30)),
                 text: LocaleKeys.import_from_google_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
@@ -63,7 +63,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
                 }),
           if (Platform.isIOS)
             PylonsRoundedButton(
-                glyph: svg.Svg(SVGUtil.ICLOUD_ICON, size: const Size(30, 30)),
+                glyph: svg.Svg(Assets.images.icons.icloud, size: const Size(30, 30)),
                 text: LocaleKeys.import_from_i_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
@@ -135,7 +135,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
       failure.message.show();
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 
@@ -165,7 +165,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
       failure.message.show();
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 
@@ -196,7 +196,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
     }, (walletInfo) {
       remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
 
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(Routes.home.name, (route) => true);
     });
   }
 }

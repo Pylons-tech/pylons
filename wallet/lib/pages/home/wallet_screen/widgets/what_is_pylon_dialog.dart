@@ -34,7 +34,7 @@ class WhatIsPylonDialog {
 }
 
 class WhatIsPylonWidget extends StatefulWidget {
-  const WhatIsPylonWidget({Key? key}) : super(key: key);
+  const WhatIsPylonWidget({super.key});
 
   @override
   State<WhatIsPylonWidget> createState() => _WhatIsPylonWidgetState();

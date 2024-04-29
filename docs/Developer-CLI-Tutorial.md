@@ -33,7 +33,7 @@ The Pylons module is based on the [Cosmos SDK](https://cosmos.network/sdk), the 
 
 2. Download the latest tagged release of the `pylonsd` binary from [https://github.com/Pylons-tech/pylons/tags](https://github.com/Pylons-tech/pylons/tags).
 
-3. Move the `pylonsd` binary to the the `bin` folder of your Go installation, or run `make install` on the local Pylons repo. 
+3. Move the `pylonsd` binary to the `bin` folder of your Go installation, or run `make install` on the local Pylons repo. 
 
 4. Ensure GOPATH is set properly to point to the `go` directory of your Go installation: 
 

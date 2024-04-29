@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
@@ -15,7 +16,6 @@ import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -29,7 +29,7 @@ TextStyle kSettingsUserEnteredTextStyle = TextStyle(
 TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kSettingsUserNameColor, fontWeight: FontWeight.w500);
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  const SettingScreen({super.key});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -260,34 +260,34 @@ class _SettingScreenState extends State<SettingScreen> {
         children: [
           SettingListItem(
             title: LocaleKeys.general.tr(),
-            imagePath: SVGUtil.SETTINGS_GENERAL,
+            imagePath: Assets.images.svg.settingsGeneral,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
+              Navigator.of(context).pushNamed(Routes.general.name);
             },
           ),
           const SettingsDivider(),
           SettingListItem(
             title: LocaleKeys.recovery.tr(),
-            imagePath: SVGUtil.SETTINGS_RECOVERY,
+            imagePath: Assets.images.svg.settingsRecovery,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
+              Navigator.of(context).pushNamed(Routes.recovery.name);
             },
           ),
           const SettingsDivider(),
           SettingListItem(
             title: LocaleKeys.legal.tr(),
-            imagePath: SVGUtil.SETTINGS_LEGAL,
+            imagePath: Assets.images.svg.settingsLegal,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
+              Navigator.of(context).pushNamed(Routes.legal.name);
             },
           ),
           const SettingsDivider(),
           SettingListItem(
             title: LocaleKeys.submit_feedback.tr(),
-            imagePath: SVGUtil.OWNER_REPORT,
+            imagePath: Assets.images.icons.report,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
@@ -297,7 +297,7 @@ class _SettingScreenState extends State<SettingScreen> {
           const SettingsDivider(),
           SettingListItem(
             title: LocaleKeys.delete_wallet.tr(),
-            imagePath: SVGUtil.SETTINGS_DELETE,
+            imagePath: Assets.images.svg.settingsDelete,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               final DeleteDialog deleteDialog = DeleteDialog(context);
@@ -357,7 +357,7 @@ class SettingListItem extends StatefulWidget {
   final String imagePath;
   final VoidCallback onPressed;
 
-  const SettingListItem({Key? key, required this.title, required this.imagePath, required this.onPressed}) : super(key: key);
+  const SettingListItem({super.key, required this.title, required this.imagePath, required this.onPressed});
 
   @override
   State<SettingListItem> createState() => _SettingListItemState();
@@ -377,7 +377,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
-                color: AppColors.kBlack,
+                colorFilter: ColorFilter.mode(AppColors.kBlack, BlendMode.srcIn),
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,

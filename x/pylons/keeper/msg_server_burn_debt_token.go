@@ -7,6 +7,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -20,20 +21,20 @@ func (k msgServer) BurnDebtToken(goCtx context.Context, msg *types.MsgBurnDebtTo
 			found = true
 			err := pp.ValidateRedeemInfo(msg.RedeemInfo)
 			if err != nil {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			coins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, msg.RedeemInfo.Amount))
 			addr, _ := sdk.AccAddressFromBech32(msg.RedeemInfo.Address)
 			err = k.BurnCreditFromAddr(ctx, addr, coins)
 			if err != nil {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			break
 		}
 	}
 	if !found {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", msg.RedeemInfo.ProcessorName)
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", msg.RedeemInfo.ProcessorName)
 	}
 
 	k.SetRedeemInfo(ctx, msg.RedeemInfo)

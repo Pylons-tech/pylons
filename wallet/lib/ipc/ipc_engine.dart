@@ -28,22 +28,18 @@ import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../generated/locale_keys.g.dart';
+import '../utils/types.dart';
 
 /// Terminology
 /// Signal : Incoming request from a 3rd party app
 /// Key : The key is the process against which the 3rd part app has sent the signal
 class IPCEngine {
-  late StreamSubscription _sub;
-  AccountProvider accountProvider;
-  WalletsStore walletsStore;
-  Repository repository;
-
-  bool systemHandlingASignal = false;
-
   IPCEngine({
     required this.accountProvider,
     required this.repository,
     required this.walletsStore,
+    required this.onLogEvent,
+    required this.onLogError,
   });
 
   /// This method initiate the IPC Engine
@@ -59,6 +55,7 @@ class IPCEngine {
   void setUpListener() {
     _sub = linkStream.listen((String? link) async {
       if (link == null) {
+        onLogEvent(AnalyticsEventEnum.noLink);
         return;
       }
 
@@ -67,7 +64,9 @@ class IPCEngine {
       handleLinksBasedOnUri(unwrappedLink);
 
       // Link contains the data that the wallet need
-    }, onError: (err) {});
+    }, onError: (err) {
+      onLogError(err);
+    });
   }
 
   /// This method is used to handle the uni link when the app first opens
@@ -94,12 +93,31 @@ class IPCEngine {
 
   Future handleLinksBasedOnUri(String initialLink) async {
     if (_isEaselUniLink(initialLink)) {
-      _handleEaselLink(initialLink);
+      onLogEvent(AnalyticsEventEnum.easelLink);
+      handleEaselLink(
+        link: initialLink,
+        showOwnerView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          Routes.ownerView.name,
+          arguments: nullableNFT,
+        ),
+        showCreateAccountView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          Routes.acceptPolicy.name,
+          arguments: nullableNFT,
+        ),
+        showPurchaseView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          Routes.purchaseView.name,
+          arguments: nullableNFT,
+        ),
+        getNFtFromRecipe: getNFtFromRecipe,
+      );
     } else if (_isNFTViewUniLink(initialLink)) {
+      onLogEvent(AnalyticsEventEnum.viewNFTLink);
       _handleNFTViewLink(initialLink);
     } else if (_isNFTTradeUniLink(initialLink)) {
+      onLogEvent(AnalyticsEventEnum.tradeNFTLink);
       _handleNFTTradeLink(initialLink);
     } else {
+      onLogEvent(AnalyticsEventEnum.unknownLink);
       handleLink(initialLink);
     }
   }
@@ -139,7 +157,17 @@ class IPCEngine {
     await showApprovalDialog(sdkIPCMessage: sdkIPCMessage);
   }
 
-  Future<void> _handleEaselLink(String link) async {
+  @visibleForTesting
+  Future<void> handleEaselLink({
+    required String link,
+    required Future<NFT?> Function({
+      required String cookbookId,
+      required String recipeId,
+    }) getNFtFromRecipe,
+    required void Function(NFT?) showOwnerView,
+    required void Function(NFT?) showCreateAccountView,
+    required void Function(NFT?) showPurchaseView,
+  }) async {
     final queryParameters = Uri.parse(link).queryParameters;
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
@@ -158,13 +186,13 @@ class IPCEngine {
     }
 
     if (isOwnerIsViewing(nullableNFT, currentWallet)) {
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
+      showOwnerView(nullableNFT);
     } else {
-      if (!getUserAcceptPolicies() && shouldShowAcceptPolicyScreen) {
-        navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
-        return;
+      if (currentWallet != null) {
+        showPurchaseView(nullableNFT);
+      } else {
+        showCreateAccountView(nullableNFT);
       }
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
@@ -204,11 +232,12 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
+    await navigatorKey.currentState!.pushNamed(Routes.purchaseView.name, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
   Future<void> _handleNFTViewLink(String link) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context);
     final queryParameters = Uri.parse(link).queryParameters;
     final itemId = queryParameters['item_id'];
     final cookbookId = queryParameters['cookbook_id'];
@@ -220,7 +249,7 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult == null) {
-      ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Text(LocaleKeys.nft_does_not_exists.tr()),
         ),
@@ -230,7 +259,7 @@ class IPCEngine {
       if (item == null) {
         return;
       }
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+      navigatorKey.currentState!.pushNamed(Routes.ownerView.name, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
     }
@@ -315,9 +344,10 @@ class IPCEngine {
   /// Input: [sdkIPCMessage] the transaction that the user cancels
   Future<void> onUserCancelled(SdkIpcMessage sdkIPCMessage) async {
     final cancelledResponse = SdkIpcResponse.failure(
-        sender: sdkIPCMessage.sender,
-        error: LocaleKeys.user_declined_request.tr(),
-        errorCode: HandlerFactory.ERR_USER_DECLINED);
+      sender: sdkIPCMessage.sender,
+      error: LocaleKeys.user_declined_request.tr(),
+      errorCode: HandlerFactory.ERR_USER_DECLINED,
+    );
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: cancelledResponse, responseSendingNeeded: true);
   }
 
@@ -341,11 +371,6 @@ class IPCEngine {
     if (responseSendingNeeded) {
       await dispatchUniLink(handlerMessage.createMessageLink(isAndroid: Platform.isAndroid));
     }
-  }
-
-  /// This method disposes the
-  void dispose() {
-    _sub.cancel();
   }
 
   /// This method disconnect any new signal. If another signal is already in process
@@ -373,18 +398,32 @@ class IPCEngine {
   }
 
   Future<String> checkAndUnWrapFirebaseLink(String link) async {
+    if (link.contains(kChromeThrowLink)) {
+      onLogEvent(AnalyticsEventEnum.chromeThrowLink);
+      final regex = RegExp("(?<=deep_link_id=)[^&]+");
+      final match = regex.firstMatch(link);
+      if (match != null) {
+        final result = match.group(0)!;
+        return Uri.decodeFull(result);
+      } else {
+        onLogEvent(AnalyticsEventEnum.chromeThrowLinkParsingFailed);
+      }
+    }
+
     if (!link.contains(kFirebaseLink)) {
+      onLogEvent(AnalyticsEventEnum.firebaseLink);
       return link;
     }
 
     final uri = Uri.parse(link);
 
-    if (uri.queryParameters.containsKey([kLinkKey])) {
+    if (uri.queryParameters.containsKey(kLinkKey)) {
+      onLogEvent(AnalyticsEventEnum.link);
       return uri.queryParameters[kLinkKey] ?? '';
     }
 
     final pendingDynamicLink = await FirebaseDynamicLinks.instance.getDynamicLink(Uri.parse(link));
-
+    onLogEvent(AnalyticsEventEnum.shortLink);
     return pendingDynamicLink?.link.toString() ?? "";
   }
 
@@ -401,6 +440,7 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult.isLeft()) {
+      onLogEvent(AnalyticsEventEnum.nftNotExists);
       LocaleKeys.nft_does_not_exists.tr().show();
       return null;
     }
@@ -411,4 +451,15 @@ class IPCEngine {
 
     return nft;
   }
+
+  void dispose() {
+    _sub.cancel();
+  }
+
+  late StreamSubscription _sub;
+  final AccountProvider accountProvider;
+  final WalletsStore walletsStore;
+  final Repository repository;
+  final OnLogEvent onLogEvent;
+  final OnLogError onLogError;
 }

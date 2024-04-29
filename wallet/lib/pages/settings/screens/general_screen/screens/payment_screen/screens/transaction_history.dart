@@ -15,7 +15,7 @@ TextStyle kTransactionHistoryLabelText = TextStyle(fontSize: 20.sp, fontFamily: 
 TextStyle kTransactionHistoryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
 
 class TransactionHistoryScreen extends StatefulWidget {
-  const TransactionHistoryScreen({Key? key}) : super(key: key);
+  const TransactionHistoryScreen({super.key});
 
   @override
   State<TransactionHistoryScreen> createState() => _TransactionHistoryScreenState();

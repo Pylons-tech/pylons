@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
@@ -11,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
@@ -36,7 +39,6 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -46,7 +48,7 @@ import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb
 class PurchaseItemScreen extends StatefulWidget {
   final NFT nft;
 
-  const PurchaseItemScreen({Key? key, required this.nft}) : super(key: key);
+  const PurchaseItemScreen({super.key, required this.nft});
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
@@ -69,21 +71,22 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: viewModel,
-      child: WillPopScope(
-        onWillPop: () async {
-          viewModel.destroyPlayers();
-          return true;
-        },
-        child: const PurchaseItemContent(),
-      ),
+      child: const PurchaseItemContent(),
     );
+  }
+
+  @override
+  void dispose() {
+    viewModel.destroyPlayers();
+
+    super.dispose();
   }
 }
 
 class PurchaseItemContent extends StatefulWidget {
   const PurchaseItemContent({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -173,7 +176,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         Navigator.pop(context);
                       },
                       child: SvgPicture.asset(
-                        SVGUtil.OWNER_BACK_ICON,
+                        Assets.images.icons.back,
                         height: 25.h,
                       ),
                     ),
@@ -183,7 +186,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         submitFeedbackDialog.show();
                       },
                       child: SvgPicture.asset(
-                        SVGUtil.OWNER_REPORT,
+                        Assets.images.icons.report,
                         height: 25.h,
                       ),
                     ),
@@ -222,7 +225,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 }
 
 class OwnerBottomDrawer extends StatefulWidget {
-  const OwnerBottomDrawer({Key? key}) : super(key: key);
+  const OwnerBottomDrawer({super.key});
 
   @override
   State<OwnerBottomDrawer> createState() => _OwnerBottomDrawerState();
@@ -295,7 +298,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   Column(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.OWNER_VIEWS_BOLD,
+                        Assets.images.icons.eyeBold,
                         width: 20.w,
                         height: 15.h,
                       ),
@@ -321,7 +324,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       GestureDetector(
                         onTap: () async {
                           if (viewModel.accountPublicInfo == null) {
-                            Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                            Navigator.of(context).pushNamed(Routes.onboarding.name);
                             return;
                           }
                           final Size size = MediaQuery.of(context).size;
@@ -330,7 +333,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         child: Container(
                           padding: EdgeInsets.only(bottom: 12.h),
                           child: SvgPicture.asset(
-                            SVGUtil.OWNER_SHARE,
+                            Assets.images.icons.shareSvg,
                             height: 15.h,
                             width: 15.w,
                           ),
@@ -574,7 +577,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Column(
                             children: [
                               SvgPicture.asset(
-                                SVGUtil.OWNER_VIEWS_BOLD,
+                                Assets.images.icons.eyeBold,
                                 width: 15.w,
                                 height: 15.h,
                               ),
@@ -617,14 +620,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   if (viewModel.accountPublicInfo == null) {
-                                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                                    Navigator.of(context).pushNamed(Routes.onboarding.name);
                                     return;
                                   }
                                   final Size size = MediaQuery.of(context).size;
                                   context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
                                 },
                                 child: SvgPicture.asset(
-                                  SVGUtil.OWNER_SHARE,
+                                  Assets.images.icons.shareSvg,
                                   height: 15.h,
                                 ),
                               ),
@@ -642,7 +645,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       onTapped: () async {
                         if (viewModel.accountPublicInfo == null) {
                           LocaleKeys.create_an_account_first.tr().show();
-                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                          Navigator.of(context).pushNamed(Routes.onboarding.name);
                           return;
                         }
                         bool balancesFetchResult = true;
@@ -750,7 +753,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: SvgPicture.asset(
-                    SVGUtil.OWNER_VERIFIED_ICON,
+                    Assets.images.icons.verified,
                     height: 12.h,
                   ),
                 ),

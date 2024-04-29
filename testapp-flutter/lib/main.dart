@@ -3,7 +3,6 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:testapp_flutter/spinner.dart';
 
 import 'game.dart';
-import "spinner.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

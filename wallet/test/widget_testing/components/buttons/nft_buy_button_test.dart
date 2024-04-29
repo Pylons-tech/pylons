@@ -12,15 +12,14 @@ import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart'
 import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import '../../../mocks/main_mock.mocks.dart';
 import '../../../mocks/mock_constants.dart';
-import '../../../mocks/mock_wallet_public_info.dart';
-import '../../../mocks/mock_wallet_store.dart';
 import '../../../mocks/purchase_item_view_model.mocks.dart';
 import '../../extension/size_extension.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  final WalletsStore walletStore = MockWalletStore();
+  final WalletsStore walletStore = MockWalletsStore();
   final PurchaseItemViewModel viewModel = MockPurchaseItemViewModel();
   GetIt.I.registerLazySingleton<PurchaseItemViewModel>(() => viewModel);
 

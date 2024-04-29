@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -207,7 +208,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 				Signature:     signature,
 			},
 			addr: addrInc,
-			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", purchaseId),
+			err:  errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", purchaseId),
 		},
 		{
 			desc: "Signature Invalid",
@@ -220,7 +221,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 				Signature:     signature,
 			},
 			addr: addr,
-			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", purchaseId, sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", processorName).Error()),
+			err:  errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", purchaseId, errorsmod.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", processorName).Error()),
 		},
 		{
 			desc: "Invalid Payment processor",
@@ -233,7 +234,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 				Signature:     signature,
 			},
 			addr: addr,
-			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", test_processorName),
+			err:  errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", test_processorName),
 		},
 	} {
 		tc := tc

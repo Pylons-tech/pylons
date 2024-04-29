@@ -36,6 +36,9 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
+
+
+
     if (!provider.nftFormat.extensions.contains(result.extension)) {
       final fileName = result.fileName.replaceAll(".${result.extension}", "");
       errorText.value = LocaleKeys.could_not_uploaded.tr(
@@ -257,9 +260,9 @@ class _CardWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   NftFormat.supportedFormats[typeIdx].format.getTitle().toUpperCase(),
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                         color: textIconColor,
-                                        fontSize: 45.sp,
+                                        fontSize: 45,
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),

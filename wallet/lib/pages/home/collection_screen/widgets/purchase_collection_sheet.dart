@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/preview_nft_grid.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -12,7 +13,6 @@ import '../../../../providers/collections_tab_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/enums.dart';
 import '../../../../utils/image_util.dart';
-import '../../../../utils/svg_util.dart';
 import '../../../detailed_asset_view/widgets/nft_3d_asset.dart';
 import '../../../detailed_asset_view/widgets/pdf_placeholder.dart';
 import '../../../detailed_asset_view/widgets/video_placeholder.dart';
@@ -22,7 +22,7 @@ import '../collection_view_model.dart';
 class PurchasesCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const PurchasesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const PurchasesCollection({super.key, required this.onNFTSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class PurchasesCollection extends StatelessWidget {
       child: Column(
         children: [
           SheetHeading(
-            leadingSVG: SVGUtil.MY_PURCHASES,
+            leadingSVG: Assets.images.svg.purchases,
             title: LocaleKeys.my_purchase.tr(),
             collectionType: CollectionsType.purchases,
           ),
@@ -78,13 +78,13 @@ class PurchaseCollectionItem extends StatelessWidget {
   final String thumbnailUrl;
   final String name;
   const PurchaseCollectionItem({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.assetType,
     required this.url,
     required this.thumbnailUrl,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

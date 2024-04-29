@@ -28,7 +28,7 @@ class AlanTransactionBroadcaster implements TransactionBroadcaster {
     }
     final txSender = TxSender.fromNetworkInfo(_networkInfo);
     final response =
-        await txSender.broadcastTx(transaction.signedTransaction, mode: BroadcastMode.BROADCAST_MODE_BLOCK);
+        await txSender.broadcastTx(transaction.signedTransaction);
 
     if (response.hasTxhash()) {
       return right(response.toTransactionResponse());

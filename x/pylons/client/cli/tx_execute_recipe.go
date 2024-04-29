@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -28,20 +29,20 @@ func CmdExecuteRecipe() *cobra.Command {
 			argsRecipeID := args[1]
 			argsCoinInputsIndex, err := cast.ToUint64E(args[2])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsItemIDs := args[3]
 			jsonArgsItemIDs := make([]string, 0)
 			err = json.Unmarshal([]byte(argsItemIDs), &jsonArgsItemIDs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsPaymentInfo := args[4]
 			jsonArgsPaymentInfo := make([]types.PaymentInfo, 0)
 			err = json.Unmarshal([]byte(argsPaymentInfo), &jsonArgsPaymentInfo)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)

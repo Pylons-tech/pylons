@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
@@ -29,7 +30,7 @@ bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-      
+
   await Firebase.initializeApp();
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();
@@ -40,7 +41,7 @@ Future<void> main() async {
 
     PylonsWallet.setup(mode: PylonsMode.prod, host: 'easel');
 
-    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= tabletMinWidth;
+    isTablet = _getIsCurrentDeviceTablet();
 
     FlutterError.onError = firebaseCrashlytics.recordFlutterError;
 
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
           builder: (context, widget) {
             ScreenUtil.init(context);
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
               child: widget!,
             );
           },
@@ -106,4 +107,9 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _getIsCurrentDeviceTablet() {
+  final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
+  return mediaQuery.size.shortestSide >= tabletMinWidth;
 }

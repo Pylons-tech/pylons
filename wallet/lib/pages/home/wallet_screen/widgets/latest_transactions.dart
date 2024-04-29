@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
@@ -14,7 +15,6 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 
@@ -42,8 +42,7 @@ class LatestTransactions extends StatelessWidget {
 
   final String defaultCurrency;
 
-  const LatestTransactions({Key? key, required this.denomSpecificTxList, required this.defaultCurrency})
-      : super(key: key);
+  const LatestTransactions({super.key, required this.denomSpecificTxList, required this.defaultCurrency});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +106,7 @@ class LatestTransactions extends StatelessWidget {
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           minVerticalPadding: 0,
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_PURCHASE)),
+          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(Assets.images.icons.nftPurchase)),
           title: Text(
             LocaleKeys.nft_purchase.tr(),
             softWrap: false,
@@ -131,7 +130,7 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_SELL)),
+          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(Assets.images.icons.nftSell)),
           title: Text(
             LocaleKeys.nft_sold.tr(),
             softWrap: false,
@@ -153,7 +152,7 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_RECEIVE)),
+          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(Assets.images.icons.currencyReceive)),
           title: Text(
             LocaleKeys.pylons_purchase.tr(),
             softWrap: false,
@@ -165,7 +164,7 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_SENT)),
+          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(Assets.images.icons.currencySent)),
           title: Text(
             LocaleKeys.pylons_sent.tr(),
             softWrap: false,
@@ -179,6 +178,7 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Future<void> onTxTapped({required TransactionHistory txHistory, required BuildContext context}) async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final walletsStore = GetIt.I.get<WalletsStore>();
     final wallet = context.read<AccountProvider>().accountPublicInfo;
 
@@ -223,8 +223,8 @@ class LatestTransactions extends StatelessWidget {
           .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam())
           .value;
 
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(
-        RouteUtil.ROUTE_TRANSACTION_DETAIL,
+      navigator.pushNamed(
+        Routes.trasactionDetail.name,
         arguments: TxDetailArguments(
           recipe: recipe,
           creator: creator,
@@ -234,7 +234,7 @@ class LatestTransactions extends StatelessWidget {
           transactionTime: DateFormat("MMM dd yyyy HH:mm").format(
             DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant),
           ),
-          currency: (denomAbbr[defaultCurrency])!,
+          currency: denomAbbr[defaultCurrency]!,
           price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
           transactionEnum: txHistory.transactionTypeEnum,
           nftType: nftType,

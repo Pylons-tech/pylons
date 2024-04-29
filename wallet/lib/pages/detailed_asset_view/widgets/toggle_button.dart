@@ -3,12 +3,12 @@ import 'package:pylons_wallet/utils/constants.dart';
 
 class ToggleButton extends StatefulWidget {
   final bool enabled;
-  final void Function(bool enabled) onPressed;
+  final void Function({required bool enabled}) onPressed;
   const ToggleButton({
-    Key? key,
+    super.key,
     required this.enabled,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   State<ToggleButton> createState() => _ToggleButtonState();
@@ -35,7 +35,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              widget.onPressed(false);
+              widget.onPressed(enabled: false);
             },
             child: Container(
               alignment: Alignment.center,
@@ -52,7 +52,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              widget.onPressed(false);
+              widget.onPressed(enabled: false);
             },
             child: ClipPath(
               clipper: ToggleClipper(),
@@ -73,7 +73,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              widget.onPressed(true);
+              widget.onPressed(enabled: true);
             },
             child: ClipPath(
               clipper: ToggleClipper(),
@@ -87,7 +87,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              widget.onPressed(true);
+              widget.onPressed(enabled: true);
             },
             child: SizedBox.expand(
               child: Container(

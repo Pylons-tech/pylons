@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../generated/locale_keys.g.dart';
 
 class NoEaselArtWork extends StatelessWidget {
-  const NoEaselArtWork({Key? key}) : super(key: key);
+  const NoEaselArtWork({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -19,7 +19,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:sprintf/sprintf.dart';
 
 class WalletScreen extends StatefulWidget {
-  const WalletScreen({Key? key}) : super(key: key);
+  const WalletScreen({super.key});
 
   @override
   State<WalletScreen> createState() => _WalletScreenState();
@@ -99,7 +99,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           currencyModel: currencyModel,
                           onFaucetPressed: () {
                             if (currencyModel.ibcCoins.getName() == kPylons) {
-                              Navigator.of(context).pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                              Navigator.of(context).pushNamed(Routes.addPylon.name);
                             }
                           },
                         );

@@ -2,14 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:pylons_wallet/utils/time_ago.dart' as time_ago;
 
 class MessageTile extends StatefulWidget {
-  const MessageTile({Key? key, required this.notificationMessage}) : super(key: key);
+  const MessageTile({super.key, required this.notificationMessage});
 
   final NotificationMessage notificationMessage;
 
@@ -31,12 +31,12 @@ class _MessageTileState extends State<MessageTile> {
             const SizedBox()
           else
             SvgPicture.asset(
-              SVGUtil.DOT,
+              Assets.images.icons.dot,
             ),
           Row(
             children: [
               SvgPicture.asset(
-                SVGUtil.PYLONS_LOGO,
+                Assets.images.icons.pylonsLogoSvg,
                 height: 22.h,
               ),
               SizedBox(

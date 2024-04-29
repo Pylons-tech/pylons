@@ -7,10 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../generated/locale_keys.g.dart';
 
@@ -18,7 +18,11 @@ class StripeScreen extends StatefulWidget {
   final String url;
   final VoidCallback onBack;
 
-  const StripeScreen({Key? key, required this.url, required this.onBack}) : super(key: key);
+  const StripeScreen({
+    super.key,
+    required this.url,
+    required this.onBack,
+  });
 
   @override
   State<StripeScreen> createState() => _StripeScreenState();
@@ -55,11 +59,9 @@ class _StripeScreenState extends State<StripeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        backHistory(context);
-        return false;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_) => backHistory(context),
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
@@ -132,7 +134,7 @@ class _StripeScreenState extends State<StripeScreen> {
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: SvgPicture.asset(
-                    SVGUtil.PYLON_STRIPE_VIEW_HEADER,
+                    Assets.images.icons.stripeHeader,
                     height: 40.h,
                     width: 80.w,
                   ),

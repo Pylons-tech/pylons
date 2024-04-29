@@ -8,6 +8,7 @@ import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/models/save_nft.dart';
 import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/repository/repository.dart';
+import 'package:easel_flutter/services/third_party_services/quick_node.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:pylons_sdk/low_level.dart';
 
@@ -131,7 +132,6 @@ class MockRepositoryImp implements Repository {
 
   @override
   Future<bool> saveOnBoardingComplete() {
-    
     throw UnimplementedError();
   }
 
@@ -141,13 +141,10 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  void setCacheString({required String key, required String value}) {
-    
-  }
+  void setCacheString({required String key, required String value}) {}
 
   @override
   Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
-    
     throw UnimplementedError();
   }
 
@@ -169,5 +166,10 @@ class MockRepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> logUserJourney({required String screenName}) async {
     return const Right(true);
+  }
+
+  @override
+  Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) {
+    throw UnimplementedError();
   }
 }

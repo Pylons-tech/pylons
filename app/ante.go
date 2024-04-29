@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -30,13 +31,13 @@ type HandlerOptions struct {
 // NewAnteHandler creates a new ante handler
 func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 	if options.AccountKeeper == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "account keeper is required for AnteHandler")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "account keeper is required for AnteHandler")
 	}
 	if options.BankKeeper == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "bank keeper is required for AnteHandler")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "bank keeper is required for AnteHandler")
 	}
 	if options.SignModeHandler == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for AnteHandler")
+		return nil, errorsmod.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for AnteHandler")
 	}
 
 	anteDecorators := []sdk.AnteDecorator{
@@ -76,13 +77,13 @@ func NewAccountCreationDecorator(ak types.AccountKeeper) AccountCreationDecorato
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 	messages := sigTx.GetMsgs()
 
 	sigTxSignatures, err := sigTx.GetSignaturesV2()
 	if err != nil {
-		return ctx, sdkerrors.Wrap(err, "getting signatures of tx is failed")
+		return ctx, errorsmod.Wrap(err, "getting signatures of tx is failed")
 	}
 
 	msgCreateAccount, ok := messages[0].(*types.MsgCreateAccount)
@@ -92,27 +93,27 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		address := sdk.AccAddress(pubkey.Address().Bytes())
 
 		if address.String() != msgCreateAccount.Creator {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
 		}
 
 		// if the account doesn't exist we set it
 		getAcc := svd.ak.GetAccount(ctx, address)
 		if getAcc == nil {
-			any, err := codectypes.NewAnyWithValue(pubkey)
+			anyKey, err := codectypes.NewAnyWithValue(pubkey)
 			if err != nil {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			acc := &authtypes.BaseAccount{
 				Sequence:      0,
 				AccountNumber: svd.ak.GetNextAccountNumber(ctx),
-				PubKey:        any,
+				PubKey:        anyKey,
 				Address:       address.String(),
 			}
 			svd.ak.SetAccount(ctx, acc)
 			defer telemetry.IncrCounter(1, "new", "account")
 		} else {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already exists")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "account already exists")
 		}
 	}
 	return next(ctx, tx, simulate)
@@ -158,7 +159,7 @@ func GetSignerAcc(ctx sdk.Context, ak types.AccountKeeper, addr sdk.AccAddress) 
 		return acc, nil
 	}
 
-	return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
+	return nil, errorsmod.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
 }
 
 // AnteHandle is a handler for CustomSigVerificationDecorator
@@ -169,7 +170,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 	}
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 
 	// stdSigs contains the sequence number, account number, and signatures.
@@ -183,7 +184,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signerAddrs) {
-		return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signerAddrs), len(sigs))
+		return ctx, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signerAddrs), len(sigs))
 	}
 
 	for i, sig := range sigs {
@@ -195,12 +196,12 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		// retrieve pubkey
 		pubKey := acc.GetPubKey()
 		if !simulate && pubKey == nil {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
 		}
 
 		// Check account sequence number.
 		if sig.Sequence != acc.GetSequence() {
-			return ctx, sdkerrors.Wrapf(
+			return ctx, errorsmod.Wrapf(
 				sdkerrors.ErrWrongSequence,
 				"account sequence mismatch, expected %d, got %d", acc.GetSequence(), sig.Sequence,
 			)
@@ -224,7 +225,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		if len(messages) == 1 && ok {
 			_, err := codectypes.NewAnyWithValue(pubKey)
 			if err != nil {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			// MsgCreateAccount is creating account dynamically and account number and sequence are not registered.
@@ -234,7 +235,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 			err = authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
 			if !simulate && err != nil {
-				return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id: %s", err.Error())
+				return ctx, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id: %s", err.Error())
 			}
 			continue
 		}
@@ -251,7 +252,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 				} else {
 					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
 				}
-				return ctx, sdkerrors.Wrap(err, errMsg)
+				return ctx, errorsmod.Wrap(err, errMsg)
 			}
 		}
 	}

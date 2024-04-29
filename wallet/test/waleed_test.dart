@@ -1,9 +1,9 @@
-import 'package:cosmos_utils/credentials_storage_failure.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
-import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+// import 'package:cosmos_utils/credentials_storage_failure.dart';
+// import 'package:dartz/dartz.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:mockito/mockito.dart';
+// import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
+// import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 void main() {
   // group("Mock TransactionSummary", () {
@@ -70,40 +70,40 @@ void main() {
   // });
 }
 
-typedef KeyInfoRetriever
-    = Future<Either<CredentialsStorageFailure, PrivateAccountCredentials>>
-        Function(
-  String,
-  String,
-  String,
-);
+// typedef KeyInfoRetriever
+//     = Future<Either<CredentialsStorageFailure, PrivateAccountCredentials>>
+//         Function(
+//   String,
+//   String,
+//   String,
+// );
 
-class KeyInfoStorageMock extends Mock implements KeyInfoStorage {
-  KeyInfoRetriever keyInfoRetriever;
+// class KeyInfoStorageMock extends Mock implements KeyInfoStorage {
+//   KeyInfoRetriever keyInfoRetriever;
 
-  KeyInfoStorageMock({
-    KeyInfoRetriever? retriever,
-  }) : keyInfoRetriever = retriever ??
-            ((_, __, ___) async =>
-                left(const CredentialsStorageFailure("not implemented")));
+//   KeyInfoStorageMock({
+//     KeyInfoRetriever? retriever,
+//   }) : keyInfoRetriever = retriever ??
+//             ((_, __, ___) async =>
+//                 left(const CredentialsStorageFailure("not implemented")));
 
-  @override
-  Future<
-      Either<CredentialsStorageFailure,
-          PrivateAccountCredentials>> getPrivateCredentials(
-    AccountLookupKey? walletLookupKey,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #getPrivateCredentials,
-          [
-            walletLookupKey,
-          ],
-          {},
-        ),
-        returnValue: Future<
-            Either<CredentialsStorageFailure, PrivateAccountCredentials>>.value(
-          left(const CredentialsStorageFailure("not mocked")),
-        ),
-      ) as Future<Either<CredentialsStorageFailure, PrivateAccountCredentials>>;
-}
+//   @override
+//   Future<
+//       Either<CredentialsStorageFailure,
+//           PrivateAccountCredentials>> getPrivateCredentials(
+//     AccountLookupKey? walletLookupKey,
+//   ) =>
+//       super.noSuchMethod(
+//         Invocation.method(
+//           #getPrivateCredentials,
+//           [
+//             walletLookupKey,
+//           ],
+//           {},
+//         ),
+//         returnValue: Future<
+//             Either<CredentialsStorageFailure, PrivateAccountCredentials>>.value(
+//           left(const CredentialsStorageFailure("not mocked")),
+//         ),
+//       ) as Future<Either<CredentialsStorageFailure, PrivateAccountCredentials>>;
+// }

@@ -34,7 +34,7 @@ import 'package:pylons_wallet/services/third_party_services/analytics_helper.dar
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/network_info.dart';
+import 'package:pylons_wallet/services/third_party_services/connectivity_info.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -68,20 +68,27 @@ import 'package:video_player/video_player.dart';
 
 import '../../ipc/local_server.dart';
 import '../../services/third_party_services/database/database.dart';
+import '../types.dart';
 
 final sl = GetIt.instance;
 
 /// This method is used for initializing the dependencies
-Future<void> init() async {
+Future<void> init({
+  required OnLogEvent onLogEvent,
+  required OnLogError onLogError,
+  required OnLogMessage onLogMessage,
+}) async {
   /// Services
   sl.registerLazySingleton<InternetConnectionChecker>(
     () => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)),
   );
-  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton<ConnectivityInfoImpl>(() => ConnectivityInfoImpl(sl()));
   sl.registerLazySingleton<IPCEngine>(() => IPCEngine(
         repository: sl(),
         walletsStore: sl(),
         accountProvider: sl<AccountProvider>(),
+        onLogEvent: onLogEvent,
+        onLogError: onLogError,
       ));
   sl.registerLazySingleton<LocalServer>(() => LocalServer(sl<HandlerFactory>()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
@@ -109,7 +116,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseRemoteConfig.instance);
   sl.registerLazySingleton(() => const FlutterSecureStorage());
   sl.registerFactory<AudioPlayer>(() => AudioPlayer());
-  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.network(''));
+  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.networkUrl(Uri(host: "")));
   sl.registerLazySingleton<http.Client>(() => http.Client());
   sl.registerLazySingleton<AlanTransactionSigner>(() => AlanTransactionSigner(sl.get<BaseEnv>().networkInfo));
   sl.registerLazySingleton<AlanTransactionBroadcaster>(() => AlanTransactionBroadcaster(sl.get<BaseEnv>().networkInfo));
@@ -192,12 +199,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton<RemoteDataStore>(() => RemoteDataStoreImp(
         httpClient: sl(),
-        crashlyticsHelper: sl(),
         storePaymentService: sl(),
         firebaseAppCheck: sl(),
         dynamicLinksGenerator: sl(),
         firebaseHelper: sl(),
         analyticsHelper: sl(),
+        onLogError: onLogError,
       ));
 
   sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());
@@ -207,14 +214,16 @@ Future<void> init() async {
   /// Repository
   sl.registerLazySingleton<Repository>(
     () => RepositoryImp(
-        networkInfo: sl(),
-        queryHelper: sl(),
-        remoteDataStore: sl(),
-        localDataSource: sl(),
-        localAuthHelper: sl(),
-        googleDriveApi: sl(),
-        iCloudDriverApi: sl(),
-        crashlyticsHelper: sl()),
+      networkInfo: sl(),
+      queryHelper: sl(),
+      remoteDataStore: sl(),
+      localDataSource: sl(),
+      localAuthHelper: sl(),
+      googleDriveApi: sl(),
+      iCloudDriverApi: sl(),
+      onLogError: onLogError,
+      getBaseEnv: () => sl.get<BaseEnv>(),
+    ),
   );
 
   /// ViewModels
@@ -254,4 +263,6 @@ Future<void> init() async {
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());
+
+  
 }

@@ -13,7 +13,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import '../../../generated/locale_keys.g.dart';
 
 class MessagesScreen extends StatefulWidget {
-  const MessagesScreen({Key? key}) : super(key: key);
+  const MessagesScreen({super.key});
 
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();

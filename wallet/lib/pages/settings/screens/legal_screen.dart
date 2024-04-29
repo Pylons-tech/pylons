@@ -13,7 +13,7 @@ TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalF
 TextStyle kLegalHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class LegalScreen extends StatefulWidget {
-  const LegalScreen({Key? key}) : super(key: key);
+  const LegalScreen({super.key});
 
   @override
   State<LegalScreen> createState() => _LegalScreenState();
@@ -87,7 +87,7 @@ class LegalForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const LegalForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const LegalForwardItem({required this.title, super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

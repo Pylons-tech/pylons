@@ -9,7 +9,7 @@ import 'package:pylons_wallet/utils/extension.dart';
 class TransactionsListView extends StatelessWidget {
   final List<TransactionHistory> transactionsHistoryList;
 
-  const TransactionsListView({Key? key, required this.transactionsHistoryList}) : super(key: key);
+  const TransactionsListView({super.key, required this.transactionsHistoryList});
 
   bool isDateSame({required int index}) {
     if (index == 0) return false;

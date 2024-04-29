@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
@@ -13,7 +14,6 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/latest_transactio
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/what_is_pylon_dialog.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 
@@ -21,9 +21,9 @@ class CurrencyBackgroundCard extends StatelessWidget {
   final bool isDefault;
 
   const CurrencyBackgroundCard({
-    Key? key,
+    super.key,
     required this.isDefault,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class CurrencyCard extends StatelessWidget {
   final Currency currencyModel;
   final VoidCallback onFaucetPressed;
 
-  const CurrencyCard({Key? key, required this.currencyModel, this.color, required this.isDefault, required this.onFaucetPressed}) : super(key: key);
+  const CurrencyCard({super.key, required this.currencyModel, this.color, required this.isDefault, required this.onFaucetPressed});
 
   Widget getHelpIcon(BuildContext context) {
     if (currencyModel.ibcCoins.getName() == kPylons) {
@@ -97,7 +97,7 @@ class CurrencyCard extends StatelessWidget {
             onPressed: () {
               _showWhatIsPylonDialog(context);
             },
-            icon: SvgPicture.asset(SVGUtil.INFO_ICON),
+            icon: SvgPicture.asset(Assets.images.icons.info),
           ),
         ),
       );

@@ -126,11 +126,11 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
 
     try {
       await firebaseRemoteConfig.fetchAndActivate();
-    } on FormatException catch (_) {
+    } on FormatException catch (exception) {
       /// Happens when there is no internet on first launch.
-      crashlyticsHelper.recordFatalError(error: _.message);
-    } on FirebaseException catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.message ?? "");
+      crashlyticsHelper.recordFatalError(error: exception.message);
+    } on FirebaseException catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.message ?? "");
     }
   }
 

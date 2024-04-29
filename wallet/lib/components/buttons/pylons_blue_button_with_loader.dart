@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/gen/fonts.gen.dart';
 
 class PylonsBlueButtonLoading extends StatelessWidget {
   final VoidCallback onTap;
@@ -6,13 +7,13 @@ class PylonsBlueButtonLoading extends StatelessWidget {
   final ValueNotifier<bool> loader;
   final bool enabled;
 
-  const PylonsBlueButtonLoading(
-      {Key? key,
-      required this.onTap,
-      this.text = "",
-      required this.loader,
-      this.enabled = true})
-      : super(key: key);
+  const PylonsBlueButtonLoading({
+    super.key,
+    required this.onTap,
+    this.text = "",
+    required this.loader,
+    this.enabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +28,19 @@ class PylonsBlueButtonLoading extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (loading)
-                    const SizedBox(
-                        width: 40,
-                        height: 30,
-                        child: CircularProgressIndicator.adaptive()),
+                  if (loading) const SizedBox(width: 40, height: 30, child: CircularProgressIndicator.adaptive()),
                   if (!loading)
                     Expanded(
-                      child: Text(text,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white)),
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: FontFamily.inter,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                 ],
               ),

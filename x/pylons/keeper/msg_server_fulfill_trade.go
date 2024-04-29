@@ -8,6 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -15,7 +16,7 @@ import (
 
 func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, itemRefs []types.ItemRef, trade types.Trade) ([]types.Item, error) {
 	if len(itemRefs) != len(trade.ItemInputs) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by trade")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by trade")
 	}
 	matchedInputItems := make([]types.Item, len(trade.ItemInputs))
 
@@ -33,10 +34,10 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			if !found {
 				inputItem, found = k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 				if !found {
-					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", itemRef.ItemId)
+					return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", itemRef.ItemId)
 				}
 				if inputItem.Owner != creatorAddr {
-					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.Id)
+					return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.Id)
 				}
 			}
 			inputItemMap[itemRef] = inputItem
@@ -44,7 +45,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			var ec types.CelEnvCollection
 			ec, err = k.NewCelEnvCollectionFromItem(ctx, "", strconv.FormatUint(trade.Id, 10), inputItem)
 			if err != nil {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			err = recipeItemInput.MatchItem(inputItem, ec)
 			if err == nil {
@@ -54,7 +55,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			}
 		}
 		if err != nil {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot find match for recipe input item ")
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot find match for recipe input item ")
 		}
 	}
 	return matchedInputItems, nil
@@ -65,14 +66,14 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	// get the trade from keeper
 	if !k.HasTrade(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
 	trade := k.GetTrade(ctx, msg.Id)
 	coinInputsIndex := int(msg.CoinInputsIndex)
 	var coinInputs sdk.Coins
 	// nolint: gocritic
 	if coinInputsIndex >= len(trade.CoinInputs) && coinInputsIndex != 0 && len(trade.CoinInputs) != 0 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
 	} else if coinInputsIndex == 0 && len(trade.CoinInputs) == 0 {
 		coinInputs = sdk.Coins{} // empty coins but valid
 	} else {
@@ -84,21 +85,21 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	// check that coinInputs does not contain an unsendable paymentProcessor coin without a receipt
 	err := k.ValidatePaymentInfo(ctx, msg.PaymentInfos, coinInputs)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if len(msg.PaymentInfos) != 0 {
 		// client is providing payments receipts
 		err := k.ProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
 		if err != nil {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
 	// check that sender has enough balance to pay coinInputs
 	balance := k.bankKeeper.SpendableCoins(ctx, addr)
 	if !balance.IsAllGTE(coinInputs) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
 	}
 
 	// match msg items to trade itemInputs
@@ -110,14 +111,14 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	// check coinOutput is GTE amount to pay (from flat fees of itemInputs)
 	for _, item := range matchedInputItems {
 		if !item.Tradeable {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", item.Id, item.CookbookId)
+			return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", item.Id, item.CookbookId)
 		}
 	}
 
 	minItemInputsTransferFees := sdk.NewCoins()
 	itemInputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(matchedInputItems, trade.CoinOutputs)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot use coinOutputs to pay for the items provided")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot use coinOutputs to pay for the items provided")
 	}
 	for i := range matchedInputItems {
 		minItemInputsTransferFees = minItemInputsTransferFees.Add(matchedInputItems[i].TransferFee[itemInputsTransferFeePermutation[i]])
@@ -132,7 +133,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	minItemOutputsTransferFees := sdk.NewCoins()
 	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, coinInputs)
 	if err != nil {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coinInputs not sufficient to pay transfer fees")
+		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "coinInputs not sufficient to pay transfer fees")
 	}
 	for i := range outputItems {
 		minItemOutputsTransferFees = minItemOutputsTransferFees.Add(outputItems[i].TransferFee[itemOutputsTransferFeePermutation[i]])

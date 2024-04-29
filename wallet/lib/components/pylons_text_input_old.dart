@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 class PylonsTextInputOld extends StatelessWidget {
   const PylonsTextInputOld(
-      {Key? key,
+      {super.key,
       required this.controller,
       required this.label,
       this.disabled = false,
       this.inputType = TextInputType.text,
-      this.errorText})
-      : super(key: key);
+      this.errorText});
 
   final TextEditingController controller;
   final String label;

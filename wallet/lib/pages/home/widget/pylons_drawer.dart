@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/generated/locale_keys.g.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PylonsDrawer extends StatelessWidget {
-  const PylonsDrawer({Key? key}) : super(key: key);
+  const PylonsDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,7 @@ class PylonsDrawer extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
+
                 /// Revert when the functionality is added
                 // DrawerTile(
                 //   LocaleKeys.edit_profile.tr(),
@@ -50,11 +51,12 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.general.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_GENERAL,
+                  icon: Assets.images.svg.settingsGeneral,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
+                    Navigator.of(context).pushNamed(Routes.general.name);
                   },
                 ),
+
                 /// Revert when the functionality is added
                 // DrawerTile(
                 //   LocaleKeys.cash_out.tr(),
@@ -74,18 +76,18 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.recovery.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_RECOVERY,
+                  icon: Assets.images.svg.settingsRecovery,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
+                    Navigator.of(context).pushNamed(Routes.recovery.name);
                   },
                 ),
                 DrawerTile(
                   LocaleKeys.legal.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_LEGAL,
+                  icon: Assets.images.svg.settingsLegal,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
+                    Navigator.of(context).pushNamed(Routes.legal.name);
                   },
                 ),
                 const Spacer(),
@@ -93,7 +95,7 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.delete_wallet.tr(),
                   height: 60,
                   width: isTablet ? 70 : 100,
-                  icon: SVGUtil.SETTINGS_DELETE,
+                  icon: Assets.images.svg.settingsDelete,
                   iconColor: AppColors.kDarkRed,
                   onPressed: () {
                     final DeleteDialog deleteDialog = DeleteDialog(context);
@@ -120,14 +122,14 @@ class DrawerTile extends StatelessWidget {
 
   const DrawerTile(
     this.title, {
-    Key? key,
+    super.key,
     required this.onPressed,
     this.height = 45,
     this.width = 85,
     this.icon,
     this.iconColor = AppColors.kWhite,
     this.textAlign = TextAlign.start,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +145,7 @@ class DrawerTile extends StatelessWidget {
             if (icon != null)
               SvgPicture.asset(
                 icon!,
-                color: iconColor,
+                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                 width: 18.r,
                 height: 18.r,
               )

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/latest_transactions.dart';
@@ -13,12 +14,11 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 
 class LocalTransactionsScreen extends StatefulWidget {
-  const LocalTransactionsScreen({Key? key}) : super(key: key);
+  const LocalTransactionsScreen({super.key});
 
   @override
   State<LocalTransactionsScreen> createState() => _LocalTransactionsScreenState();
@@ -42,11 +42,11 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(SVGUtil.TRANSACTION_SUCCESS, height: 15.h),
+            SvgPicture.asset(Assets.images.svg.transactionSuccess, height: 15.h),
           ],
         );
       case TransactionStatus.Failed:
-        return SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h);
+        return SvgPicture.asset(Assets.images.svg.transactionFailed, height: 15.h);
       case TransactionStatus.Undefined:
         return const Icon(Icons.error_outline, color: Colors.redAccent);
     }
@@ -91,7 +91,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
         if (txModel.status.toTransactionStatusEnum() == TransactionStatus.Failed)
           InkWell(
             onTap: () => failureManagerViewModel.handleRetry(txManager: txModel),
-            child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
+            child: SvgPicture.asset(Assets.images.svg.transactionRetry, height: 12.h),
           ),
         const Spacer(),
         SizedBox(width: isTablet ? null : 35.w, child: getTransactionStatusButton(txManager: txModel)),

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -12,7 +13,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 	paymentProcessors := types.DefaultPaymentProcessors
 	for _, pi := range paymentInfos {
 		if k.HasPaymentInfo(ctx, pi.PurchaseId) {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
 		}
 
 		found := false
@@ -22,7 +23,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				addr, _ := sdk.AccAddressFromBech32(pi.PayerAddr)
 				if !addr.Equals(senderAddr) {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseId)
+					return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseId)
 				}
 
 				amt := pi.Amount
@@ -36,13 +37,13 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				err := pp.ValidatePaymentInfo(pi)
 				if err != nil {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", pi.PurchaseId, err.Error())
+					return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", pi.PurchaseId, err.Error())
 				}
 
 				// mint token, pay for fees
 				err = k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 				if err != nil {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+					return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 				}
 
 				k.SetPaymentInfo(ctx, pi)
@@ -50,7 +51,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 			}
 		}
 		if !found {
-			return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
 		}
 	}
 
@@ -67,7 +68,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 	denomsPaymentInfoMap := make(map[string][]types.PaymentInfo)
 	paymentInfoProcessorMap := make(map[string]types.PaymentProcessor)
 	for _, pi := range paymentInfos {
-		err := sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
+		err := errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
 		for _, pp := range allPaymentProcessors {
 			if pi.ProcessorName == pp.Name {
 				err = nil
@@ -110,7 +111,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 			}
 			if mintAmt.LT(coin.Amount) {
 				mintCoin := sdk.NewCoin(coin.Denom, mintAmt)
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "required %s but only provided receipts for %s", coin.String(), mintCoin.String())
+				return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "required %s but only provided receipts for %s", coin.String(), mintCoin.String())
 			}
 		}
 	}
@@ -129,13 +130,13 @@ func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *types.PaymentI
 
 			addr, _ := sdk.AccAddressFromBech32(paymentInfos.PayerAddr)
 			if !addr.Equals(senderAddr) {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", paymentInfos.PurchaseId)
+				return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", paymentInfos.PurchaseId)
 			}
 
 			// validate signature of payment
 			err := pp.ValidatePaymentInfo(*paymentInfos)
 			if err != nil {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", paymentInfos.PurchaseId, err.Error())
+				return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", paymentInfos.PurchaseId, err.Error())
 			}
 
 			// set the payment info so it cannot be used again later
@@ -144,7 +145,7 @@ func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *types.PaymentI
 		}
 	}
 	if !found {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", paymentInfos.ProcessorName)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", paymentInfos.ProcessorName)
 	}
 
 	return nil
