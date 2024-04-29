@@ -40,6 +40,8 @@ import '../../utils/failure/failure.dart';
 import 'widgets/create_trade_bottom_sheet.dart';
 
 import 'widgets/toggle_button.dart';
+import 'package:pylons_wallet/utils/constants.dart' as constants;
+
 
 class OwnerView extends StatefulWidget {
   final NFT nft;
@@ -286,6 +288,9 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
     final viewModel = context.read<OwnerViewViewModel>();
     final ibcEnumCoins = viewModel.nft.ibcCoins;
 
+    /// this change will reflect only for upylon ibcCoins
+    final isPylon = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
+
     return Padding(
       padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
       child: Column(
@@ -328,7 +333,10 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
                 children: [
                   if (viewModel.nft.type != NftType.TYPE_ITEM)
                     Text(
-                      "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                      /// message change request will reflect only if [isPylon] is [true]
+                      isPylon?
+                        "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}":
+                        "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
                       style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
                     )
                 ],
@@ -392,6 +400,8 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
   Widget build(BuildContext context) {
     final viewModel = context.read<OwnerViewViewModel>();
     final ibcEnumCoins = viewModel.nft.ibcCoins;
+
+    final isPylon = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
 
     return Stack(
       key: const ValueKey(kOwnerViewBottomSheetKeyValue),
@@ -656,9 +666,12 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                         children: [
                           if (viewModel.nft.type != NftType.TYPE_ITEM) ...[
                             Text(
+                              /// message change request will reflect only if [isPylon] is [true]
+                              isPylon?
+                              "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}":
                               "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
                               style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                            ),
+                            )
                           ]
                         ],
                       ),

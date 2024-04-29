@@ -16,6 +16,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import 'package:pylons_wallet/utils/constants.dart' as constants;
+
 
 class CurrencyBackgroundCard extends StatelessWidget {
   final bool isDefault;
@@ -109,6 +111,7 @@ class CurrencyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TransactionHistory> denomSpecificTxList = [];
+
     if (isDefault) {
       denomSpecificTxList = context.read<HomeProvider>().getDenomSpecificTxList(
             defaultCurrency: currencyModel.currency,
@@ -198,11 +201,10 @@ class CurrencyCard extends StatelessWidget {
                                     getHelpIcon(context),
                                     const Spacer(),
                                     Text(
-                                      currencyModel.amount,
+                                      "\$${currencyModel.ibcCoins.pylnToCredit(currencyModel.amount)}",
                                       style: kCurrencyStyle,
                                     ),
                                     SizedBox(width: 10.w),
-                                    Text(currencyModel.ibcCoins.getAbbrev(), style: kCurrencyStyle),
                                   ],
                                 ),
                                 Align(

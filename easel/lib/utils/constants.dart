@@ -134,8 +134,8 @@ const kAgoricSymbol = 'urun';
 const kJunoSymbol = 'ujunox';
 const String kEthereumSymbol = "weth-wei";
 
-const kPylonText = 'Pylon';
-const kUSDText = 'USD';
+const kPylonText = 'IAP';
+const kUSDText = 'Stripe';
 const kAtomText = 'Atom';
 const kEurText = 'EEur';
 const kAgoricText = 'Agoric';

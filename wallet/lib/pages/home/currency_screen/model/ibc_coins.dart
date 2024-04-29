@@ -196,6 +196,12 @@ extension IBCCoinsDePar on IBCCoins {
         return "${(double.parse(amount) / kEthIntBase).toStringAsFixed(kCurrencyDecimalLength)} ${getAbbrev()}";
     }
   }
+
+
+  String pylnToCredit(String amount) {
+    return( double.parse(amount)/10).toStringAsFixed(2);
+  }
+
 }
 
 SizedBox getIconFromAsset(String ibcCoinIcon) => SizedBox(
