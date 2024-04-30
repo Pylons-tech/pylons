@@ -42,7 +42,6 @@ import 'widgets/create_trade_bottom_sheet.dart';
 import 'widgets/toggle_button.dart';
 import 'package:pylons_wallet/utils/constants.dart' as constants;
 
-
 class OwnerView extends StatefulWidget {
   final NFT nft;
 
@@ -289,7 +288,9 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
     final ibcEnumCoins = viewModel.nft.ibcCoins;
 
     /// this change will reflect only for upylon ibcCoins
-    final isPylon = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
+    final updatedText =ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
+        ? "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}"
+        : "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}";
 
     return Padding(
       padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
@@ -333,10 +334,9 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
                 children: [
                   if (viewModel.nft.type != NftType.TYPE_ITEM)
                     Text(
-                      /// message change request will reflect only if [isPylon] is [true]
-                      isPylon?
-                        "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}":
-                        "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                      viewModel.nft.price == "0"
+                          ? LocaleKeys.free.tr()
+                          : updatedText,
                       style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
                     )
                 ],
@@ -401,7 +401,10 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
     final viewModel = context.read<OwnerViewViewModel>();
     final ibcEnumCoins = viewModel.nft.ibcCoins;
 
-    final isPylon = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
+    // this change will reflect only for upylon ibcCoins
+    final updatedText =  ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
+        ? "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}"
+        : "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}";
 
     return Stack(
       key: const ValueKey(kOwnerViewBottomSheetKeyValue),
@@ -469,9 +472,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                         width: 10.w,
                       ),
                       Text(
-                        viewModel.viewsCount == 1
-                            ? "${viewModel.viewsCount} ${LocaleKeys.view.tr()}"
-                            : "${viewModel.viewsCount} ${LocaleKeys.views.tr()}",
+                        viewModel.viewsCount == 1 ? "${viewModel.viewsCount} ${LocaleKeys.view.tr()}" : "${viewModel.viewsCount} ${LocaleKeys.views.tr()}",
                         style: TextStyle(color: Colors.white, fontSize: 12.sp),
                       )
                     ],
@@ -592,9 +593,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                                           recipeId: viewModel.nft.recipeID,
                                         );
                                       },
-                                      child: viewModel.isLiking
-                                          ? getLikingLoader()
-                                          : getLikeIcon(likedByMe: viewModel.likedByMe),
+                                      child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
                                     ),
                                   ),
                                   SizedBox(
@@ -629,8 +628,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                               if (viewModel.nft.assetType == AssetType.Image && Platform.isAndroid)
                                 GestureDetector(
                                   onTap: () {
-                                    final WallpaperScreen wallpaperScreen =
-                                        WallpaperScreen(nft: viewModel.nft.url, context: context);
+                                    final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
                                     wallpaperScreen.show();
                                   },
                                   child: SvgPicture.asset(
@@ -666,10 +664,9 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                         children: [
                           if (viewModel.nft.type != NftType.TYPE_ITEM) ...[
                             Text(
-                              /// message change request will reflect only if [isPylon] is [true]
-                              isPylon?
-                              "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}":
-                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                              viewModel.nft.price == "0"
+                                  ? LocaleKeys.free.tr()
+                                  : updatedText,
                               style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
                             )
                           ]

@@ -1201,7 +1201,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
-    final isPylon = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
+    final updateText = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION?
+        "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))}"
+        : "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}";
+
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
@@ -1219,9 +1222,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       socialMetaTagParameters: SocialMetaTagParameters(
         title: nft.name,
         imageUrl: Uri.parse(nft.url),
-        description: '${nft.description}  Price:${isPylon ?
-                                                          "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))}"
-                                                          : "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}"}'
+        description: '${nft.description}  Price:${nft.price == "0" ? LocaleKeys.free.tr() :updateText}'
         ,
       )
     );

@@ -60,7 +60,10 @@ class CreationsCollection extends StatelessWidget {
                           final nft = viewModel.creations[index];
 
                           /// this change will reflect only for upylon ibcCoins
-                          final isPylon = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION;
+                          /// message change request will reflect only if [isPylon] is [true]
+                          final updatedText = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION? "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}"
+                              : "${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}";
+
 
                           return ClipRRect(
                             child: GestureDetector(
@@ -68,10 +71,7 @@ class CreationsCollection extends StatelessWidget {
                               child: Banner(
                                 color: AppColors.kPriceTagColor,
                                 location: BannerLocation.topStart,
-                                /// message change request will reflect only if [isPylon] is [true]
-                                message: isPylon
-                                    ? "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}"
-                                    : "${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}",
+                                message: nft.price == "0" ? LocaleKeys.free.tr() : updatedText,
                                 child: PreviewNFTGrid(
                                   assetType: nft.assetType,
                                   on3dNFT: (BuildContext context) => Container(
