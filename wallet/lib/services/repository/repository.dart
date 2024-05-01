@@ -17,6 +17,7 @@ import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
+import 'package:pylons_wallet/model/pylon_items.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
@@ -578,6 +579,8 @@ abstract class Repository {
   Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
 
   Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address});
+
+  Future<Either<Failure, List<PylonItems>>> getPylonItem({required Address address});
 }
 
 class RepositoryImp implements Repository {
@@ -2445,4 +2448,15 @@ class RepositoryImp implements Repository {
   final ICloudDriverApiImpl iCloudDriverApi;
   final OnLogError onLogError;
   final BaseEnv Function() getBaseEnv;
+
+  @override
+  Future<Either<Failure, List<PylonItems>>> getPylonItem({required Address address}) async{
+    try {
+     final response =  await remoteDataStore.getPylonItem(address: address);
+      return  Right(response);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

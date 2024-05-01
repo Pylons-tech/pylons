@@ -14,6 +14,7 @@ import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
 import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
+import 'package:pylons_wallet/pages/home/blockslayer_screen.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/home/widget/pylons_drawer.dart';
@@ -46,7 +47,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   HomeProvider get homeProvider => GetIt.I.get();
 
   RemoteConfigService get remoteConfigService => GetIt.I.get();
-  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
+  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen(), const BlockSlayerScreen()];
 
   @override
   void initState() {
@@ -247,6 +248,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           WalletTab(
             tabName: provider.tabs[1],
             index: 1,
+          ),
+          WalletTab(
+            tabName: provider.tabs[2],
+            index: 2,
           )
         ]),
         SizedBox(height: 5.h),
@@ -382,6 +387,10 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             WalletTab(
               tabName: provider.tabs[1],
               index: 1,
+            ),
+            WalletTab(
+              tabName: provider.tabs[2],
+              index: 2,
             )
           ],
         ),

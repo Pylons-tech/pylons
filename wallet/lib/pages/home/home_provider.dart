@@ -2,7 +2,9 @@ import 'package:dartz/dartz.dart' as dz;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
+import 'package:pylons_wallet/model/pylon_items.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/model/currency.dart';
@@ -13,7 +15,6 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
-
 class HomeProvider extends ChangeNotifier {
   final Repository repository;
 
@@ -21,7 +22,7 @@ class HomeProvider extends ChangeNotifier {
 
   HomeProvider({required this.repository, required this.accountPublicInfo});
 
-  final tabs = ['collection', 'wallet'];
+  final tabs = ['collection', 'wallet', 'items'];
 
   int _selectedIndex = 0;
 
@@ -58,6 +59,62 @@ class HomeProvider extends ChangeNotifier {
   set showBadge(bool showBadge) {
     _showBadge = showBadge;
     notifyListeners();
+  }
+
+  List<PylonItems> _pylonItemList = [];
+
+  set pylonItemList(List<PylonItems> pylonItemList) {
+    _pylonItemList = pylonItemList;
+    notifyListeners();
+  }
+
+  List<PylonItems> get pylonItemList => _pylonItemList;
+
+  List<PylonItems> getNoEaselPylonList() {
+    return pylonItemList.where((element) => !element.cookBookId.toLowerCase().contains("easel")).toList();
+  }
+
+  List<NonEaselItemModel> getNoNEaselItems() {
+    final List<NonEaselItemModel> nonEaselItems = [];
+
+    final List<PylonItems> pylonsItem = getNoEaselPylonList();
+
+    pylonsItem.map((e) {
+      final Map<String, String> attributeValues = _extractAttributeValues(e.longs);
+
+      final nonEaselItem = NonEaselItemModel(
+        cookBookId: e.cookBookId,
+        coins: attributeValues["coins"] ?? "",
+        currentHp: attributeValues["currentHp"] ?? "",
+        shards: attributeValues["shards"] ?? "",
+        swordLevel: attributeValues["swordLevel"] ?? "",
+        wins: attributeValues["wins"] ?? "",
+        maxHp: attributeValues["maxHp"] ?? "",
+      );
+      nonEaselItems.add(nonEaselItem);
+    }).toList();
+
+    return nonEaselItems.toList();
+  }
+
+  Map<String, String> _extractAttributeValues(List<KeyValue> attributes) {
+    final Map<String, String> attributeValues = {};
+    for (final attribute in attributes) {
+      switch (attribute.key) {
+        case 'coins':
+        case 'currentHp':
+        case 'maxHp':
+        case 'shards':
+        case 'swordLevel':
+        case 'wins':
+          attributeValues[attribute.key] = attribute.value;
+          break;
+        default:
+          continue; // Skip unknown keys
+      }
+    }
+
+    return attributeValues;
   }
 
   Future<List<NotificationMessage>> callGetNotificationApi() async {
@@ -218,5 +275,12 @@ class HomeProvider extends ChangeNotifier {
 
   void refreshScreen() {
     notifyListeners();
+  }
+
+  Future<void> getPylonList() async {
+    final response = await repository.getPylonItem(address: Address(accountPublicInfo.publicAddress));
+    if (response.isRight()) {
+      pylonItemList = response.getOrElse(() => []);
+    }
   }
 }

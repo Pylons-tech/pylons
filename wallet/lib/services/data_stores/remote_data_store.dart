@@ -22,6 +22,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
+import 'package:pylons_wallet/model/pylon_items.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
@@ -352,6 +353,8 @@ abstract class RemoteDataStore {
   Future<TransactionResponse> cancelTrade({required TradeId tradeId, required Address address});
 
   Future<TransactionResponse> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
+
+  Future<List<PylonItems>> getPylonItem({required Address address});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1415,6 +1418,30 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirestoreHelper firebaseHelper;
   final AnalyticsHelper analyticsHelper;
   final OnLogError onLogError;
+
+  @override
+  Future<List<PylonItems>> getPylonItem({required Address address}) async{
+    final baseApiUrl = getBaseEnv().baseApiUrl;
+
+    final uri = Uri.parse("$baseApiUrl/pylons/items/${address.id}");
+
+    final pylonItemsResponse = await httpClient.get(uri).timeout(timeOutDuration);
+
+    if (pylonItemsResponse.statusCode != API_SUCCESS_CODE) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+
+    final pylonItemsMap = jsonDecode(pylonItemsResponse.body);
+
+    final List<PylonItems> pylonListItems= [];
+
+    pylonItemsMap["items"].map((data) {
+     final pylonItems=  PylonItems.fromJson(data as Map<String, dynamic>);
+     pylonListItems.add(pylonItems);
+    }).toList();
+
+    return pylonListItems.toList();
+  }
 }
 
 class AppleInAppPurchaseModel {
