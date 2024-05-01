@@ -401,5 +401,6 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "connected": "연결됨",
-  "no_account_found": "계정을 찾을 수 없습니다."
+  "no_account_found": "계정을 찾을 수 없습니다.",
+  "items": "품목"
 }

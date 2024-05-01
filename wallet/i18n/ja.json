@@ -402,5 +402,6 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "connected": "接続済み",
-  "no_account_found": "アカウントが見つかりません"
+  "no_account_found": "アカウントが見つかりません",
+  "items": "アイテム"
 }
