@@ -59,9 +59,9 @@ class CreationsCollection extends StatelessWidget {
                         (context, index) {
                           final nft = viewModel.creations[index];
 
-                          /// this change will reflect only for upylon ibcCoins
+                          /// This change will reflect only for upylon ibcCoins
                           /// message change request will reflect only if [isPylon] is [true]
-                          final updatedText = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION? "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}"
+                          final coinWithDenom = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION? "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}"
                               : "${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}";
 
 
@@ -71,7 +71,7 @@ class CreationsCollection extends StatelessWidget {
                               child: Banner(
                                 color: AppColors.kPriceTagColor,
                                 location: BannerLocation.topStart,
-                                message: nft.price == "0" ? LocaleKeys.free.tr() : updatedText,
+                                message: nft.price == "0" ? LocaleKeys.free.tr() : coinWithDenom,
                                 child: PreviewNFTGrid(
                                   assetType: nft.assetType,
                                   on3dNFT: (BuildContext context) => Container(

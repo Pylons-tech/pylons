@@ -69,11 +69,15 @@ class LatestTransactions extends StatelessWidget {
   Column getAmountColumn({required TransactionHistory txHistory}) {
     if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
         txHistory.transactionTypeEnum == WalletHistoryTransactionType.RECEIVE) {
+
+      final checkIfKPYLNAbbr = denomAbbr[defaultCurrency] == kPYLN_ABBREVATION;
+      final historyWithDenom = "${getPrefix(txHistory) ? "" : "+"}${checkIfKPYLNAbbr?"\$${IBCCoins.upylon.pylnToCredit(defaultCurrency.convertFromU(txHistory))}":defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}";
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            "${getPrefix(txHistory) ? "" : "+"}${denomAbbr[defaultCurrency] == kPYLN_ABBREVATION?"\$":""}${denomAbbr[defaultCurrency] == kPYLN_ABBREVATION?IBCCoins.upylon.pylnToCredit(defaultCurrency.convertFromU(txHistory)):defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
+            historyWithDenom,
             style: _headingTextStyle,
           ),
           if (defaultCurrency != kUSD)
