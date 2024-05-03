@@ -1,3 +1,4 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
@@ -5,7 +6,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'game_guide');
-  runApp(const MyApp());
+  // runApp(const MyApp());
+
+  final game = FlameGame();
+  runApp(GameWidget(game: game));
 }
 
 class MyApp extends StatelessWidget {
