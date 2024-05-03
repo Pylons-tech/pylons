@@ -40,7 +40,7 @@ class StartPage extends Component {
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
-        text: 'Create Recipe',
+        text: 'Create Free Recipe',
         action: () {
           final game = parent as FlameGame;
           final context = game.buildContext;
@@ -50,11 +50,11 @@ class StartPage extends Component {
         borderColor: const Color(0xfffff4c7),
       ),
       _button3 = RoundedButton(
-        text: 'Create Transactions',
+        text: 'Create Paid Recipe',
         action: () {
           final game = parent as FlameGame;
           final context = game.buildContext;
-          context!.read<SdkProvider>().createTransaction();
+          context!.read<SdkProvider>().createPaidRecipe();
         },
         color: const Color(0xffadde6c),
         borderColor: const Color(0xfffff4c7),

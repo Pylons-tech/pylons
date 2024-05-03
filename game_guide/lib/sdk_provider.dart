@@ -18,8 +18,8 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void createCookBook() async {
     ///* wallet address
     var cookBook = Cookbook(
-      creator: cookBookId,
-      id: "demoGameCookbook",
+      creator: "pylo1ztzpj4v72d5gszpgendqa82erq7msaxc2hdqes",
+      id: cookBookId, //"demoGameCookbook",
       name: "demo game cook book guide",
       description: "this is guide purpose demo game guide for the developer",
       developer: "Ahsan Ali",
@@ -37,7 +37,7 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   ///* method for creating recipe
-  void createRecipe() async{
+  void createRecipe() async {
     var recipe = Recipe(
       cookbookId: cookBookId,
       id: "recipeId",
@@ -59,12 +59,32 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     var response = await PylonsWallet.instance.txCreateRecipe(recipe);
 
-    print(response);
+
   }
 
-  ///* method for creating transaction
-  void createTransaction() {
-    print("createTransaction");
+  ///* method for creating createPaidRecipe
+  void createPaidRecipe() async {
+    var recipe = Recipe(
+      cookbookId: cookBookId,
+      id: "recipeId_paid_2",
+      nodeVersion: Int64(),
+      name: "Paid recipe",
+      description: "this is free receipe",
+      version: "v0.1.3",
+      coinInputs: [
+        CoinInput(coins: [Coin(amount: "10", denom: "upylon")]),
+      ],
+      itemInputs: [],
+      costPerBlock: Coin(denom: "upylon", amount: "0"),
+      entries: EntriesList(),
+      outputs: [],
+      blockInterval: Int64(0),
+      enabled: false,
+      extraInfo: "extraInfo",
+    );
+
+    var response = await PylonsWallet.instance.txCreateRecipe(recipe);
+
   }
 
   /// Makes `Counter` readable inside the devtools by listing all of its properties

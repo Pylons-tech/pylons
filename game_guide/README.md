@@ -27,3 +27,6 @@ you need a public wallet address to run the methods
 
 
 for using Int64 use this import 'package:fixnum/fixnum.dart';
+
+for more details please read through this
+https://github.com/Pylons-tech/pylons/tree/main/dart_sdk/doc/spec
