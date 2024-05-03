@@ -2,24 +2,20 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
+import 'package:game_guide/main.dart';
+import 'package:provider/provider.dart';
 
 class RouterGame extends FlameGame {
   late final RouterComponent router;
 
   @override
   Future<void> onLoad() async {
-    add(
-      router = RouterComponent(
-        routes: {
-          'home': Route(StartPage.new),
-        },
-        initialRoute: 'home',
-      ),
-    );
+    super.onLoad();
+    add(StartPage());
   }
 }
 
-class StartPage extends Component with HasGameReference<RouterGame> {
+class StartPage extends Component {
   StartPage() {
     addAll([
       _logo = TextComponent(
@@ -35,19 +31,31 @@ class StartPage extends Component with HasGameReference<RouterGame> {
       ),
       _button1 = RoundedButton(
         text: 'Cookbook',
-        action: () {},
+        action: () {
+          final game = parent as FlameGame;
+          final context = game.buildContext;
+          context!.read<SdkProvider>().createCookBook();
+        },
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
         text: 'Receipe',
-        action: () => game.router.pushNamed('level2'),
+        action: () {
+          final game = parent as FlameGame;
+          final context = game.buildContext;
+          context!.read<SdkProvider>().createRecipe();
+        },
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
       _button3 = RoundedButton(
         text: 'Transactions',
-        action: () => game.router.pushNamed('level2'),
+        action: () {
+          final game = parent as FlameGame;
+          final context = game.buildContext;
+          context!.read<SdkProvider>().createTransaction();
+        },
         color: const Color(0xffadde6c),
         borderColor: const Color(0xfffff4c7),
       ),
