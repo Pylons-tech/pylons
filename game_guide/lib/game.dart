@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
-import 'package:game_guide/main.dart';
+import 'package:game_guide/sdk_provider.dart';
 import 'package:provider/provider.dart';
 
 class RouterGame extends FlameGame {

@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:game_guide/game.dart';
+import 'package:game_guide/sdk_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
@@ -32,32 +32,3 @@ void main() {
   );
 }
 
-class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  int _count = 0;
-
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
-
-  void createCookBook() {
-    print("createCookBook");
-  }
-
-  void createRecipe() {
-    print("createRecipe");
-  }
-
-  void createTransaction() {
-    print("createTransaction");
-  }
-
-  /// Makes `Counter` readable inside the devtools by listing all of its properties
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(IntProperty('count', count));
-  }
-}
