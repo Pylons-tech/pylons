@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:game_guide/game.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
 void main() {
@@ -8,23 +9,18 @@ void main() {
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'game_guide');
   // runApp(const MyApp());
 
-  final game = FlameGame();
-  runApp(GameWidget(game: game));
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+  final myGame = RouterGame();
+  runApp(
+    GameWidget(
+      game: myGame,
+      backgroundBuilder: (context) => Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      home: Placeholder(),
-    );
-  }
+    ),
+  );
 }
