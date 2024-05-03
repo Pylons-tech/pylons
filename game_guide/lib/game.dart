@@ -30,7 +30,7 @@ class StartPage extends Component {
         anchor: Anchor.center,
       ),
       _button1 = RoundedButton(
-        text: 'Cookbook',
+        text: 'Create Cookbook',
         action: () {
           final game = parent as FlameGame;
           final context = game.buildContext;
@@ -40,7 +40,7 @@ class StartPage extends Component {
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
-        text: 'Receipe',
+        text: 'Create Recipe',
         action: () {
           final game = parent as FlameGame;
           final context = game.buildContext;
@@ -50,7 +50,7 @@ class StartPage extends Component {
         borderColor: const Color(0xfffff4c7),
       ),
       _button3 = RoundedButton(
-        text: 'Transactions',
+        text: 'Create Transactions',
         action: () {
           final game = parent as FlameGame;
           final context = game.buildContext;
@@ -101,7 +101,7 @@ class RoundedButton extends PositionComponent with TapCallbacks {
             fontWeight: FontWeight.w800,
           ),
         ).toTextPainter(text) {
-    size = Vector2(150, 40);
+    size = Vector2(190, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
       (size.y - _textDrawable.height) / 2,

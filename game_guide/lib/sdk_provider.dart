@@ -13,10 +13,10 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  ///* method for creating cookbook
   void createCookBook() async {
 
-    ///* pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc
-
+    ///* wallet address
     var cookBook = Cookbook(
       creator: "pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc",
       id: "demoGameCookbook",
@@ -27,6 +27,9 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
       supportEmail: "support@pylons.tech",
       enabled: true,
     );
+
+    /// From there we can use response.success to see if our cookbook creation was successful!
+    /// Note that a cookbook can only be created once, so be sure to add the proper code logic to keep this action from happening more than once!
 
     try {
       var response = await PylonsWallet.instance.txCreateCookbook(cookBook);
@@ -39,10 +42,18 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
+  ///* method for creating recipe
   void createRecipe() {
+
+    Recipe(
+      cookbookId: "",
+
+    )
+
     print("createRecipe");
   }
 
+  ///* method for creating transaction
   void createTransaction() {
     print("createTransaction");
   }
