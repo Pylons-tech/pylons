@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
@@ -17,7 +16,6 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   ///* method for creating cookbook
   void createCookBook() async {
-
     ///* wallet address
     var cookBook = Cookbook(
       creator: cookBookId,
@@ -33,51 +31,35 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
     /// From there we can use response.success to see if our cookbook creation was successful!
     /// Note that a cookbook can only be created once, so be sure to add the proper code logic to keep this action from happening more than once!
 
-    try {
-      var response = await PylonsWallet.instance.txCreateCookbook(cookBook);
+    var response = await PylonsWallet.instance.txCreateCookbook(cookBook);
 
-      print(response);
-
-      print("createCookBook");
-    } catch (_) {
-      print(_);
-    }
+    print(response);
   }
 
   ///* method for creating recipe
-  void createRecipe() {
+  void createRecipe() async{
     var recipe = Recipe(
-        cookbookId: cookBookId,
-        id: "recipeId",
-        nodeVersion: Int64(),
-        name: "LOUD's Wooden sword lv1 buy recipe",
-        description: "this recipe is used to buy wooden sword lv1.",
-        version: "v0.1.3",
-        coinInputs: [],
-        itemInputs: [],
-        costPerBlock: Coin(denom: "upylon", amount: "1000000"),
-        entries: EntriesList(coinOutputs: [], itemOutputs: [
-          ItemOutput(
-            id: "copper_sword_lv1",
-            doubles: [],
-            longs: [],
-            strings: [],
-            mutableStrings: [],
-            transferFee: [],
-            tradePercentage: DecString.decStringFromDouble(0.1),
-            tradeable: true,
-          ),
-        ], itemModifyOutputs: []),
-        outputs: [
-          WeightedOutputs(entryIds: ["copper_sword_lv1"], weight: Int64(1))
-        ],
-        blockInterval: Int64(0),
-        enabled: false,
-        extraInfo: "extraInfo");
+      cookbookId: cookBookId,
+      id: "recipeId",
+      nodeVersion: Int64(),
+      name: "free recipe",
+      description: "this is free receipe",
+      version: "v0.1.3",
+      coinInputs: [
+        CoinInput(),
+      ],
+      itemInputs: [],
+      costPerBlock: Coin(denom: "upylon", amount: "0"),
+      entries: EntriesList(),
+      outputs: [],
+      blockInterval: Int64(0),
+      enabled: false,
+      extraInfo: "extraInfo",
+    );
 
+    var response = await PylonsWallet.instance.txCreateRecipe(recipe);
 
-
-    print("createRecipe");
+    print(response);
   }
 
   ///* method for creating transaction
