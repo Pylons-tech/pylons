@@ -23,9 +23,6 @@ and transaction on the wallet
 
 please go through the code you will understand how this work
 
-you need a public wallet address to run the methods
-
-
 for using Int64 use this import 'package:fixnum/fixnum.dart';
 
 for more details please read through this
