@@ -1,9 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
-import 'package:flame/rendering.dart';
 import 'package:flutter/rendering.dart';
 
 class RouterGame extends FlameGame {
@@ -14,53 +11,19 @@ class RouterGame extends FlameGame {
     add(
       router = RouterComponent(
         routes: {
-          'splash': Route(SplashScreenPage.new),
           'home': Route(StartPage.new),
-          'level1': Route(Level1Page.new),
-          'level2': Route(Level2Page.new),
-          'pause': PauseRoute(),
         },
-        initialRoute: 'splash',
+        initialRoute: 'home',
       ),
     );
   }
-}
-
-class SplashScreenPage extends Component
-    with TapCallbacks, HasGameReference<RouterGame> {
-
-
-  @override
-  Future<void> onLoad() async {
-    addAll([
-      Background(const Color(0xff282828)),
-      TextBoxComponent(
-        text: 'Demo App',
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            color: Color(0x66ffffff),
-            fontSize: 16,
-          ),
-        ),
-        align: Anchor.center,
-        size: game.canvasSize,
-      ),
-    ]);
-
-  }
-
-  @override
-  bool containsLocalPoint(Vector2 point) => true;
-
-  @override
-  void onTapUp(TapUpEvent event) => game.router.pushNamed('home');
 }
 
 class StartPage extends Component with HasGameReference<RouterGame> {
   StartPage() {
     addAll([
       _logo = TextComponent(
-        text: 'Syzygy',
+        text: 'Demo Game',
         textRenderer: TextPaint(
           style: const TextStyle(
             fontSize: 64,
@@ -71,15 +34,25 @@ class StartPage extends Component with HasGameReference<RouterGame> {
         anchor: Anchor.center,
       ),
       _button1 = RoundedButton(
-        text: 'Level 1',
-        action: () => game.router.pushNamed('level1'),
+        text: 'cookbook',
+        action: () {
+
+
+        },
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
-        text: 'Level 2',
+        text: 'receipe',
         action: () => game.router.pushNamed('level2'),
         color: const Color(0xffdebe6c),
+        borderColor: const Color(0xfffff4c7),
+      ),
+
+      _button3 = RoundedButton(
+        text: 'transactions',
+        action: () => game.router.pushNamed('level2'),
+        color: const Color(0xffadde6c),
         borderColor: const Color(0xfffff4c7),
       ),
     ]);
@@ -88,6 +61,7 @@ class StartPage extends Component with HasGameReference<RouterGame> {
   late final TextComponent _logo;
   late final RoundedButton _button1;
   late final RoundedButton _button2;
+  late final RoundedButton _button3;
 
   @override
   void onGameResize(Vector2 size) {
@@ -116,12 +90,12 @@ class RoundedButton extends PositionComponent with TapCallbacks {
     required Color borderColor,
     super.anchor = Anchor.center,
   }) : _textDrawable = TextPaint(
-    style: const TextStyle(
-      fontSize: 20,
-      color: Color(0xFF000000),
-      fontWeight: FontWeight.w800,
-    ),
-  ).toTextPainter(text) {
+          style: const TextStyle(
+            fontSize: 20,
+            color: Color(0xFF000000),
+            fontWeight: FontWeight.w800,
+          ),
+        ).toTextPainter(text) {
     size = Vector2(150, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
@@ -210,14 +184,14 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
 class BackButton extends SimpleButton with HasGameReference<RouterGame> {
   BackButton()
       : super(
-    Path()
-      ..moveTo(22, 8)
-      ..lineTo(10, 20)
-      ..lineTo(22, 32)
-      ..moveTo(12, 20)
-      ..lineTo(34, 20),
-    position: Vector2.all(10),
-  );
+          Path()
+            ..moveTo(22, 8)
+            ..lineTo(10, 20)
+            ..lineTo(22, 32)
+            ..moveTo(12, 20)
+            ..lineTo(34, 20),
+          position: Vector2.all(10),
+        );
 
   @override
   void action() => game.router.pop();
@@ -226,191 +200,13 @@ class BackButton extends SimpleButton with HasGameReference<RouterGame> {
 class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
   PauseButton()
       : super(
-    Path()
-      ..moveTo(14, 10)
-      ..lineTo(14, 30)
-      ..moveTo(26, 10)
-      ..lineTo(26, 30),
-    position: Vector2(60, 10),
-  );
+          Path()
+            ..moveTo(14, 10)
+            ..lineTo(14, 30)
+            ..moveTo(26, 10)
+            ..lineTo(26, 30),
+          position: Vector2(60, 10),
+        );
   @override
   void action() => game.router.pushNamed('pause');
-}
-
-class Level1Page extends Component {
-  @override
-  Future<void> onLoad() async {
-    final game = findGame()!;
-    addAll([
-      Background(const Color(0xbb2a074f)),
-      BackButton(),
-      PauseButton(),
-      Planet(
-        radius: 25,
-        color: const Color(0xfffff188),
-        position: game.size / 2,
-        children: [
-          Orbit(
-            radius: 110,
-            revolutionPeriod: 6,
-            planet: Planet(
-              radius: 10,
-              color: const Color(0xff54d7b1),
-              children: [
-                Orbit(
-                  radius: 25,
-                  revolutionPeriod: 5,
-                  planet: Planet(radius: 3, color: const Color(0xFFcccccc)),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ]);
-  }
-}
-
-class Level2Page extends Component {
-  @override
-  Future<void> onLoad() async {
-    final game = findGame()!;
-    addAll([
-      Background(const Color(0xff052b44)),
-      BackButton(),
-      PauseButton(),
-      Planet(
-        radius: 30,
-        color: const Color(0xFFFFFFff),
-        position: game.size / 2,
-        children: [
-          Orbit(
-            radius: 60,
-            revolutionPeriod: 5,
-            planet: Planet(radius: 10, color: const Color(0xffc9ce0d)),
-          ),
-          Orbit(
-            radius: 110,
-            revolutionPeriod: 10,
-            planet: Planet(
-              radius: 14,
-              color: const Color(0xfff32727),
-              children: [
-                Orbit(
-                  radius: 26,
-                  revolutionPeriod: 3,
-                  planet: Planet(radius: 5, color: const Color(0xffffdb00)),
-                ),
-                Orbit(
-                  radius: 35,
-                  revolutionPeriod: 4,
-                  planet: Planet(radius: 3, color: const Color(0xffdc00ff)),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ]);
-  }
-}
-
-class Planet extends PositionComponent {
-  Planet({
-    required this.radius,
-    required this.color,
-    super.position,
-    super.children,
-  }) : _paint = Paint()..color = color;
-
-  final double radius;
-  final Color color;
-  final Paint _paint;
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(Offset.zero, radius, _paint);
-  }
-}
-
-class Orbit extends PositionComponent {
-  Orbit({
-    required this.radius,
-    required this.planet,
-    required this.revolutionPeriod,
-    double initialAngle = 0,
-  })  : _paint = Paint()
-    ..style = PaintingStyle.stroke
-    ..color = const Color(0x888888aa),
-        _angle = initialAngle {
-    add(planet);
-  }
-
-  final double radius;
-  final double revolutionPeriod;
-  final Planet planet;
-  final Paint _paint;
-  double _angle;
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(Offset.zero, radius, _paint);
-  }
-
-  @override
-  void update(double dt) {
-    _angle += dt / revolutionPeriod * tau;
-    planet.position = Vector2(radius, 0)..rotate(_angle);
-  }
-}
-
-class PauseRoute extends Route {
-  PauseRoute() : super(PausePage.new, transparent: true);
-
-  @override
-  void onPush(Route? previousRoute) {
-    previousRoute!
-      ..stopTime()
-      ..addRenderEffect(
-        PaintDecorator.grayscale(opacity: 0.5)..addBlur(3.0),
-      );
-  }
-
-  @override
-  void onPop(Route nextRoute) {
-    nextRoute
-      ..resumeTime()
-      ..removeRenderEffect();
-  }
-}
-
-class PausePage extends Component
-    with TapCallbacks, HasGameReference<RouterGame> {
-  @override
-  Future<void> onLoad() async {
-    final game = findGame()!;
-    addAll([
-      TextComponent(
-        text: 'PAUSED',
-        position: game.canvasSize / 2,
-        anchor: Anchor.center,
-        children: [
-          ScaleEffect.to(
-            Vector2.all(1.1),
-            EffectController(
-              duration: 0.3,
-              alternate: true,
-              infinite: true,
-            ),
-          ),
-        ],
-      ),
-    ]);
-  }
-
-  @override
-  bool containsLocalPoint(Vector2 point) => true;
-
-  @override
-  void onTapUp(TapUpEvent event) => game.router.pop();
 }
