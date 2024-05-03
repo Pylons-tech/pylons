@@ -34,23 +34,19 @@ class StartPage extends Component with HasGameReference<RouterGame> {
         anchor: Anchor.center,
       ),
       _button1 = RoundedButton(
-        text: 'cookbook',
-        action: () {
-
-
-        },
+        text: 'Cookbook',
+        action: () {},
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
-        text: 'receipe',
+        text: 'Receipe',
         action: () => game.router.pushNamed('level2'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
-
       _button3 = RoundedButton(
-        text: 'transactions',
+        text: 'Transactions',
         action: () => game.router.pushNamed('level2'),
         color: const Color(0xffadde6c),
         borderColor: const Color(0xfffff4c7),
@@ -69,6 +65,7 @@ class StartPage extends Component with HasGameReference<RouterGame> {
     _logo.position = Vector2(size.x / 2, size.y / 3);
     _button1.position = Vector2(size.x / 2, _logo.y + 80);
     _button2.position = Vector2(size.x / 2, _logo.y + 140);
+    _button3.position = Vector2(size.x / 2, _logo.y + 200);
   }
 }
 
