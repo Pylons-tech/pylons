@@ -1,12 +1,14 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:pylons_sdk/low_level.dart';
+import 'package:fixnum/fixnum.dart';
 
 class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int _count = 0;
 
   int get count => _count;
 
-  String cookBookId = "demo_game_cookbook${DateTime.now()}";
+  String cookBookId = "demo_game_cookbook";
 
   void increment() {
     _count++;
@@ -18,7 +20,7 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     ///* wallet address
     var cookBook = Cookbook(
-      creator: "pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc",
+      creator: cookBookId,
       id: "demoGameCookbook",
       name: "demo game cook book guide",
       description: "this is guide purpose demo game guide for the developer",
@@ -44,11 +46,36 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   ///* method for creating recipe
   void createRecipe() {
+    var recipe = Recipe(
+        cookbookId: cookBookId,
+        id: "recipeId",
+        nodeVersion: Int64(),
+        name: "LOUD's Wooden sword lv1 buy recipe",
+        description: "this recipe is used to buy wooden sword lv1.",
+        version: "v0.1.3",
+        coinInputs: [],
+        itemInputs: [],
+        costPerBlock: Coin(denom: "upylon", amount: "1000000"),
+        entries: EntriesList(coinOutputs: [], itemOutputs: [
+          ItemOutput(
+            id: "copper_sword_lv1",
+            doubles: [],
+            longs: [],
+            strings: [],
+            mutableStrings: [],
+            transferFee: [],
+            tradePercentage: DecString.decStringFromDouble(0.1),
+            tradeable: true,
+          ),
+        ], itemModifyOutputs: []),
+        outputs: [
+          WeightedOutputs(entryIds: ["copper_sword_lv1"], weight: Int64(1))
+        ],
+        blockInterval: Int64(0),
+        enabled: false,
+        extraInfo: "extraInfo");
 
-    Recipe(
-      cookbookId: "",
 
-    )
 
     print("createRecipe");
   }
