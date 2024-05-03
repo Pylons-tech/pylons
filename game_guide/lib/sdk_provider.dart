@@ -14,14 +14,17 @@ class SdkProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void createCookBook() async {
+
+    ///* pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc
+
     var cookBook = Cookbook(
-      creator: "",
-      id: cookBookId,
-      name: "demo game cook book",
-      description: "this is guide purpose demo game guide",
-      developer: "ABC",
+      creator: "pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc",
+      id: "demoGameCookbook",
+      name: "demo game cook book guide",
+      description: "this is guide purpose demo game guide for the developer",
+      developer: "Ahsan Ali",
       version: "v0.0.1",
-      supportEmail: "abc@yopmail.com",
+      supportEmail: "support@pylons.tech",
       enabled: true,
     );
 
