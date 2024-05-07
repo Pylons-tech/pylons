@@ -10,6 +10,7 @@ final List<String> stepLabels = ["overview", "detail", "perks", "price"];
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
   static const kSvgUpload = "assets/images/svg/upload.svg";
+  static const dottedBorder = "assets/images/svg/dotted_border.svg";
 }
 
 /// ```PNG assets
