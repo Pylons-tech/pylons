@@ -1,2 +1,9 @@
 {
+  "eventhub": "Event Hub",
+  "welcome_event": "Welcome to Evently, where you can create custom events and issue NFT tickets with perks attendees can use during the event!",
+  "draft": "Draft",
+  "for_sale" : "For Sale",
+  "history": "History",
+  "no_nft_created": "There is no NFTs created.",
+  "create_event": "Create an event!"
 }
