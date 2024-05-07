@@ -1,19 +1,18 @@
-import 'package:easel_flutter/utils/constants.dart';
-import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/evently_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 class StepLabels extends StatelessWidget {
   final ValueNotifier<int> currentStep;
   final ValueNotifier<int> currentPage;
 
   const StepLabels({
-    Key? key,
+    super.key,
     required this.currentPage,
     required this.currentStep,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +33,7 @@ class StepLabels extends StatelessWidget {
                           fontSize: 8.sp,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
-                          color: currentStep.value >= index
-                              ? EaselAppTheme.kBlue
-                              : EaselAppTheme.kGrey,
+                          color: currentStep.value >= index ? EventlyAppTheme.kBlue : EventlyAppTheme.kGrey,
                         ),
                   ),
                 ],

@@ -9,5 +9,14 @@
   "overview": "Overview",
   "detail": "Detail",
   "perks": "Perks",
-  "price": "Price"
+  "price": "Price",
+  "event_name" : "Event Name",
+  "what_your_event_called": "What is your event called?",
+  "host_name": "Host Name",
+  "who_hosting_it": "Who is hosting it?",
+  "thumbnail" : "Thumbnail",
+  "tap_select": "Tap to select ",
+  "mb_limit": "200MB Limit",
+  "continue": "Continue",
+  "save_draft": "Save as draft"
 }
