@@ -1,3 +1,4 @@
+import 'package:evently/screens/overview_screen.dart';
 import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
@@ -62,7 +63,7 @@ class CreateEventContent extends StatelessWidget {
   }
 
   Widget overview() {
-    return const Text("overview");
+    return const OverViewScreen();
   }
 
   Widget details() {
