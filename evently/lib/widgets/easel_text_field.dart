@@ -1,14 +1,13 @@
-import 'package:easel_flutter/utils/constants.dart';
-import 'package:easel_flutter/utils/easel_app_theme.dart';
+import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/utils/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../utils/screen_responsive.dart';
-
-class EaselTextField extends StatelessWidget {
-  const EaselTextField(
-      {Key? key,
+class EventlyTextField extends StatelessWidget {
+  const EventlyTextField(
+      {super.key,
       required this.label,
       this.hint = "",
       this.controller,
@@ -16,8 +15,7 @@ class EaselTextField extends StatelessWidget {
       this.noOfLines = 1, // default to single line
       this.inputFormatters = const [],
       this.keyboardType = TextInputType.text,
-      this.textCapitalization = TextCapitalization.none})
-      : super(key: key);
+      this.textCapitalization = TextCapitalization.none});
 
   final String label;
   final String hint;
@@ -55,9 +53,7 @@ class EaselTextField extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-            ScreenResponsive(
-                mobileScreen: (_) => buildMobileTextField(),
-                tabletScreen: (_) => buildTabletTextField()),
+            ScreenResponsive(mobileScreen: (_) => buildMobileTextField(), tabletScreen: (_) => buildTabletTextField()),
           ],
         ),
       ],
@@ -69,10 +65,7 @@ class EaselTextField extends StatelessWidget {
       height: noOfLines == 1 ? 40.h : 120.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(
-              fontSize: noOfLines == 1 ? 18.sp : 15.sp,
-              fontWeight: FontWeight.w400,
-              color: EaselAppTheme.kDarkText),
+          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -82,10 +75,7 @@ class EaselTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w400,
-                color: EaselAppTheme.kGrey),
+            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
@@ -100,10 +90,7 @@ class EaselTextField extends StatelessWidget {
       height: noOfLines == 1 ? 32.h : 110.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(
-              fontSize: noOfLines == 1 ? 16.sp : 14.sp,
-              fontWeight: FontWeight.w400,
-              color: EaselAppTheme.kDarkText),
+          style: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -113,9 +100,7 @@ class EaselTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-                fontSize: noOfLines == 1 ? 16.sp : 14.sp,
-                color: EaselAppTheme.kGrey),
+            hintStyle: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, color: EventlyAppTheme.kGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
