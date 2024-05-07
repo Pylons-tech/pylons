@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/screens/create_event.dart';
 import 'package:evently/screens/event_hub/event_hub_screen.dart';
 import 'package:evently/screens/splash_screen.dart';
 import 'package:evently/utils/constants.dart';
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const SplashScreen(),
           RouteUtil.kRouteEventHub: (context) => const EventHubScreen(),
-          RouteUtil.createEvent: (context) => const Placeholder(),
+          RouteUtil.createEvent: (context) => const CreateEvent(),
         },
       ),
     );
