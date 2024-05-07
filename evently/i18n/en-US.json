@@ -18,5 +18,13 @@
   "tap_select": "Tap to select ",
   "mb_limit": "200MB Limit",
   "continue_key": "Continue",
-  "save_draft": "Save as draft"
+  "save_draft": "Save as draft",
+  "start_date": "Start date",
+  "end_date" : "End date",
+  "start_time": "Start time",
+  "end_time": "End time",
+  "location": "Location",
+  "search_location": "Search location",
+  "description": "Description",
+  "what_event_for": "What is the event for? What should guests expect? Is there a dress code? Can they bring a guest?\n\n"
 }
