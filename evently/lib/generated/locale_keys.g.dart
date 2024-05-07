@@ -21,5 +21,13 @@ abstract class  LocaleKeys {
   static const mb_limit = 'mb_limit';
   static const continue_key = 'continue_key';
   static const save_draft = 'save_draft';
+  static const start_date = 'start_date';
+  static const end_date = 'end_date';
+  static const start_time = 'start_time';
+  static const end_time = 'end_time';
+  static const location = 'location';
+  static const search_location = 'search_location';
+  static const description = 'description';
+  static const what_event_for = 'what_event_for';
 
 }
