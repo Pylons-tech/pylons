@@ -150,30 +150,36 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     VerticalSpace(20.h),
-                    DottedBorder(
-                      color: EventlyAppTheme.kLightPurple,
-                      dashPattern: const [10, 2],
-                      strokeWidth: 2,
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 20.w),
-                        child: Column(
-                          children: [
-                            Text(
-                              LocaleKeys.tap_select.tr(),
-                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                            ),
-                            VerticalSpace(10.h),
-                            SvgPicture.asset(SVGUtils.kSvgUpload),
-                            VerticalSpace(10.h),
-                            Text(
-                              LocaleKeys.mb_limit.tr(),
-                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // DottedBorder(
+                    //   borderType: BorderType.RRect,
+                    //   radius: const Radius.circular(10),
+                    //   // borderType: BorderType.Rect,
+                    //   color: EventlyAppTheme.kLightPurple,
+                    //
+                    //   strokeWidth: 2,
+                    //   child: Container(
+                    //     width: double.infinity,
+                    //     padding: EdgeInsets.symmetric(vertical: 20.w),
+                    //     child: Column(
+                    //       children: [
+                    //         Text(
+                    //           LocaleKeys.tap_select.tr(),
+                    //           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                    //         ),
+                    //         VerticalSpace(10.h),
+                    //         SvgPicture.asset(SVGUtils.kSvgUpload),
+                    //         VerticalSpace(10.h),
+                    //         Text(
+                    //           LocaleKeys.mb_limit.tr(),
+                    //           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+
+                    SvgPicture.asset(SVGUtils.dottedBorder),
+
                     VerticalSpace(20.h),
                     ClippedButton(
                       title: LocaleKeys.continue_key.tr(),
@@ -198,6 +204,8 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       ),
                     ),
                     VerticalSpace(5.h),
+
+        
                   ],
                 ),
               ),
