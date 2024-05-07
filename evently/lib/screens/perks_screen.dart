@@ -18,7 +18,6 @@ class PerksScreen extends StatefulWidget {
 }
 
 class _PerksScreenState extends State<PerksScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,51 +25,62 @@ class _PerksScreenState extends State<PerksScreen> {
     final createEventViewModel = context.watch<CreateEventViewModel>();
 
     return Scaffold(
-      body: SingleChildScrollView(
+        body: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: constraints.maxHeight),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const VerticalSpace(20),
-              MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(5),
-              StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(10),
-              const VerticalSpace(20),
-              Stack(
-                alignment: Alignment.center,
+              Column(
                 children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: ValueListenableBuilder(
+                  const VerticalSpace(20),
+                  MyStepsIndicator(currentStep: createEventViewModel.currentStep),
+                  const VerticalSpace(5),
+                  StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
+                  const VerticalSpace(10),
+                  const VerticalSpace(20),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: ValueListenableBuilder(
+                            valueListenable: createEventViewModel.currentPage,
+                            builder: (_, int currentPage, __) => Padding(
+                                padding: EdgeInsets.only(left: 10.sp),
+                                child: IconButton(
+                                  onPressed: () {
+                                    FocusScope.of(context).unfocus();
+                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: EventlyAppTheme.kGrey,
+                                  ),
+                                )),
+                          )),
+                      ValueListenableBuilder(
                         valueListenable: createEventViewModel.currentPage,
-                        builder: (_, int currentPage, __) => Padding(
-                            padding: EdgeInsets.only(left: 10.sp),
-                            child: IconButton(
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: EventlyAppTheme.kGrey,
-                              ),
-                            )),
-                      )),
-                  ValueListenableBuilder(
-                    valueListenable: createEventViewModel.currentPage,
-                    builder: (_, int currentPage, __) {
-                      return Text(
-                        createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkText),
-                      );
-                    },
+                        builder: (_, int currentPage, __) {
+                          return Text(
+                            createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkText),
+                          );
+                        },
+                      ),
+                    ],
                   ),
+                  const VerticalSpace(20),
+
+
+
                 ],
               ),
-              const VerticalSpace(20),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 child: Column(
@@ -105,7 +115,7 @@ class _PerksScreenState extends State<PerksScreen> {
             ],
           ),
         ),
-      ),
-    );
+      )),
+    ));
   }
 }
