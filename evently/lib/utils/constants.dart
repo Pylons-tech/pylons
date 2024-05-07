@@ -10,7 +10,9 @@ final List<String> stepLabels = ["overview", "detail", "perks", "price"];
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
   static const kSvgUpload = "assets/images/svg/upload.svg";
-
+  static const kShirt = "assets/images/svg/shirt.svg";
+  static const kGift = "assets/images/svg/gift.svg";
+  static const kDrinks = "assets/images/svg/drinks.svg";
 }
 
 /// ```PNG assets
