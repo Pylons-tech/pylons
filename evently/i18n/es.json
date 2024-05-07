@@ -26,5 +26,11 @@
   "location": "Location",
   "search_location": "Search location",
   "description": "Description",
-  "what_event_for": "What is the event for? What should guests expect? Is there a dress code? Can they bring a guest?\n\n"
+  "what_event_for": "What is the event for? What should guests expect? Is there a dress code? Can they bring a guest?\n\n",
+  "add_perk": "Add perk",
+  "perk_icon": "Perk icon",
+  "description_optional": "Description (optional)",
+  "claim_free_drink": "Claim your free drink at the bar during the event!",
+  "character_limit": "256 character limit",
+  "there_no_perks_created": "There are no perks created."
 }
