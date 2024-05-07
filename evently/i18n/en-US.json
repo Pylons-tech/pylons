@@ -32,5 +32,6 @@
   "description_optional": "Description (optional)",
   "claim_free_drink": "Claim your free drink at the bar during the event!",
   "character_limit": "256 character limit",
-  "there_no_perks_created": "There are no perks created."
+  "there_no_perks_created": "There are no perks created.",
+  "free_shirt": "1 free t-shirt"
 }

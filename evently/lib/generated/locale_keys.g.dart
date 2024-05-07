@@ -29,5 +29,12 @@ abstract class  LocaleKeys {
   static const search_location = 'search_location';
   static const description = 'description';
   static const what_event_for = 'what_event_for';
+  static const add_perk = 'add_perk';
+  static const perk_icon = 'perk_icon';
+  static const description_optional = 'description_optional';
+  static const claim_free_drink = 'claim_free_drink';
+  static const character_limit = 'character_limit';
+  static const there_no_perks_created = 'there_no_perks_created';
+  static const free_shirt = 'free_shirt';
 
 }
