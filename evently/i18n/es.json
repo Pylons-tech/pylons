@@ -5,5 +5,9 @@
   "for_sale" : "For Sale",
   "history": "History",
   "no_nft_created": "There is no NFTs created.",
-  "create_event": "Create an event!"
+  "create_event": "Create an event!",
+  "overview": "Overview",
+  "detail": "Detail",
+  "perks": "Perks",
+  "price": "Price"
 }
