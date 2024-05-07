@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const SplashScreen(),
           RouteUtil.kRouteEventHub: (context) => const EventHubScreen(),
+          RouteUtil.createEvent: (context) => const Placeholder(),
         },
       ),
     );
