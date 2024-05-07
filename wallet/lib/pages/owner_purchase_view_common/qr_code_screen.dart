@@ -87,9 +87,8 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                   padding: EdgeInsets.zero,
                   data: link,
                   size: 200,
-                  dataModuleStyle: const QrDataModuleStyle(
-                    color: AppColors.kWhite
-                  ),
+                  dataModuleStyle: const QrDataModuleStyle(color: AppColors.kWhite),
+                  eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: AppColors.kWhite),
                 ),
               ),
             ),
