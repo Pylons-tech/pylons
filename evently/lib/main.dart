@@ -1,6 +1,6 @@
 import 'dart:ui';
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/screens/splash_screen.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         theme: EventlyAppTheme.theme(context),
         initialRoute: '/',
         routes: {
-          '/': (context) => const Placeholder(),
+          '/': (context) => const SplashScreen(),
         },
       ),
     );
