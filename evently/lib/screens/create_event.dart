@@ -1,4 +1,8 @@
+import 'package:evently/utils/di/di.dart';
+import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
@@ -8,8 +12,68 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  CreateEventViewModel createEventViewModel = sl<CreateEventViewModel>();
+
+  @override
+  void initState() {
+    createEventViewModel.init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ColoredBox(
+      color: EventlyAppTheme.kWhite,
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          body: ChangeNotifierProvider.value(value: createEventViewModel, child: const CreateEventContent()),
+        ),
+      ),
+    );
+  }
+}
+
+class CreateEventContent extends StatelessWidget {
+  const CreateEventContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final createEventViewModel = context.watch<CreateEventViewModel>();
+    return PageView.builder(
+      controller: createEventViewModel.pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      onPageChanged: (int page) {
+        createEventViewModel.currentPage.value = page;
+        final map = {0: 0, 1: 1, 2: 2, 3: 2};
+        createEventViewModel.currentStep.value = map[page]!;
+      },
+      itemBuilder: (BuildContext context, int index) {
+        final map = {
+          0: overview,
+          1: details,
+          2: perks,
+          3: price,
+        };
+
+        return map[index]?.call() ?? const SizedBox();
+      },
+    );
+  }
+
+  Widget overview() {
+    return const Text("overview");
+  }
+
+  Widget details() {
+    return const Text("details");
+  }
+
+  Widget perks() {
+    return const Text("perks");
+  }
+
+  Widget price() {
+    return const Text("price");
   }
 }

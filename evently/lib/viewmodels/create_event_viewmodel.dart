@@ -20,7 +20,7 @@ class CreateEventViewModel extends ChangeNotifier {
     LocaleKeys.price.tr(),
   ];
 
-  void init({required VoidCallback setTextField}) {
+  void init() {
     currentPage = ValueNotifier(0);
     currentStep = ValueNotifier(0);
     pageController = PageController();

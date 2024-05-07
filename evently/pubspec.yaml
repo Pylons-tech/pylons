@@ -43,6 +43,7 @@ dependencies:
   injectable_generator: ^2.6.1
   build_runner: ^2.4.9
   injectable: ^2.4.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
