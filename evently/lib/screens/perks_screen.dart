@@ -8,6 +8,7 @@ import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
+import 'package:evently/widgets/easel_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -168,7 +169,22 @@ class _PerksScreenState extends State<PerksScreen> {
                         Container(padding: const EdgeInsets.all(7), color: Colors.transparent, child: SvgPicture.asset(SVGUtils.kDrinks)),
                       ],
                     ),
-                  )
+                  ),
+                  const VerticalSpace(20),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.w),
+                    child: EventlyTextField(
+                      noOfLines: 4,
+                      label: LocaleKeys.description_optional.tr(),
+                      hint: LocaleKeys.claim_free_drink.tr(),
+                      controller: TextEditingController(),
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+
                 ],
               ),
               Padding(
