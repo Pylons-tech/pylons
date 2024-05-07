@@ -3,8 +3,8 @@ import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/utils/route_util.dart';
 import 'package:evently/widgets/clipped_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -62,7 +62,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () => {},
+                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.createEvent),
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: EventlyAppTheme.kpurpleDark,
@@ -144,7 +144,9 @@ class _EventHubScreenState extends State<EventHubScreen> {
         title: LocaleKeys.create_event.tr(),
         bgColor: EventlyAppTheme.kBlue,
         textColor: EventlyAppTheme.kWhite,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(RouteUtil.createEvent);
+        },
         cuttingHeight: 15.h,
         clipperType: ClipperType.bottomLeftTopRight,
         isShadow: false,
