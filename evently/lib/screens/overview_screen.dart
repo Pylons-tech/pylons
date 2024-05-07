@@ -9,9 +9,7 @@ import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/easel_text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -150,43 +148,41 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     VerticalSpace(20.h),
-                    // DottedBorder(
-                    //   borderType: BorderType.RRect,
-                    //   radius: const Radius.circular(10),
-                    //   // borderType: BorderType.Rect,
-                    //   color: EventlyAppTheme.kLightPurple,
-                    //
-                    //   strokeWidth: 2,
-                    //   child: Container(
-                    //     width: double.infinity,
-                    //     padding: EdgeInsets.symmetric(vertical: 20.w),
-                    //     child: Column(
-                    //       children: [
-                    //         Text(
-                    //           LocaleKeys.tap_select.tr(),
-                    //           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                    //         ),
-                    //         VerticalSpace(10.h),
-                    //         SvgPicture.asset(SVGUtils.kSvgUpload),
-                    //         VerticalSpace(10.h),
-                    //         Text(
-                    //           LocaleKeys.mb_limit.tr(),
-                    //           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-
-                    SvgPicture.asset(SVGUtils.dottedBorder),
-
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
+                      child: DottedBorder(
+                        borderType: BorderType.Rect,
+                        dashPattern: const [10, 6],
+                        color: EventlyAppTheme.kLightPurple,
+                        strokeWidth: 3.h,
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(vertical: 20.w),
+                          child: Column(
+                            children: [
+                              Text(
+                                LocaleKeys.tap_select.tr(),
+                                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                              ),
+                              VerticalSpace(10.h),
+                              SvgPicture.asset(SVGUtils.kSvgUpload),
+                              VerticalSpace(10.h),
+                              Text(
+                                LocaleKeys.mb_limit.tr(),
+                                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     VerticalSpace(20.h),
                     ClippedButton(
                       title: LocaleKeys.continue_key.tr(),
                       bgColor: EventlyAppTheme.kBlue,
                       textColor: EventlyAppTheme.kWhite,
                       onPressed: () {
-                        // validateAndUpdateDescription(moveNextPage: true);
+                        createEventViewModel.nextPage();
                       },
                       cuttingHeight: 15.h,
                       clipperType: ClipperType.bottomLeftTopRight,
@@ -204,8 +200,6 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       ),
                     ),
                     VerticalSpace(5.h),
-
-        
                   ],
                 ),
               ),

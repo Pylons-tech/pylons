@@ -1,3 +1,4 @@
+import 'package:evently/screens/detail_screen.dart';
 import 'package:evently/screens/overview_screen.dart';
 import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
@@ -67,7 +68,7 @@ class CreateEventContent extends StatelessWidget {
   }
 
   Widget details() {
-    return const Text("details");
+    return const DetailsScreen();
   }
 
   Widget perks() {
