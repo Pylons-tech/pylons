@@ -24,6 +24,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final ValueNotifier<String> _endDateFieldError = ValueNotifier("");
   final ValueNotifier<String> _startTimeFieldError = ValueNotifier("");
   final ValueNotifier<String> _endTimeFieldError = ValueNotifier("");
+  final ValueNotifier<String> _descriptionFieldError = ValueNotifier("");
 
   @override
   void initState() {
@@ -225,7 +226,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       ],
                     ),
                     VerticalSpace(20.h),
-
                     EventlyTextField(
                       label: LocaleKeys.location.tr(),
                       hint: LocaleKeys.search_location.tr(),
@@ -254,10 +254,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       },
                     ),
                     VerticalSpace(20.h),
-
-
                     EventlyTextField(
-
                       label: LocaleKeys.description.tr(),
                       hint: LocaleKeys.what_event_for.tr(),
                       controller: TextEditingController(),
@@ -265,11 +262,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       validator: (value) {
                         return null;
                       },
-
                       noOfLines: 4,
                     ),
                     ValueListenableBuilder<String>(
-                      valueListenable: _startDateFieldError,
+                      valueListenable: _descriptionFieldError,
                       builder: (_, String artNameFieldError, __) {
                         if (artNameFieldError.isEmpty) {
                           return const SizedBox.shrink();
@@ -287,7 +283,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       },
                     ),
                     VerticalSpace(20.h),
-
                     ClippedButton(
                       title: LocaleKeys.continue_key.tr(),
                       bgColor: EventlyAppTheme.kBlue,
