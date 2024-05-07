@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -11,7 +13,12 @@ class CreateEventViewModel extends ChangeNotifier {
   late PageController pageController;
 
   String? from;
-  final List<String> pageTitles = <String>['LocaleKeys.upload.tr()', ' LocaleKeys.nft_detail_text.tr()', ' LocaleKeys.nft_pricing.tr()', ''];
+  final List<String> pageTitles = <String>[
+    LocaleKeys.overview.tr(),
+    LocaleKeys.detail.tr(),
+    LocaleKeys.perks.tr(),
+    LocaleKeys.price.tr(),
+  ];
 
   void init({required VoidCallback setTextField}) {
     currentPage = ValueNotifier(0);

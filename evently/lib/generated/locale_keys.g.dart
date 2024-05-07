@@ -8,5 +8,9 @@ abstract class  LocaleKeys {
   static const history = 'history';
   static const no_nft_created = 'no_nft_created';
   static const create_event = 'create_event';
+  static const overview = 'overview';
+  static const detail = 'detail';
+  static const perks = 'perks';
+  static const price = 'price';
 
 }
