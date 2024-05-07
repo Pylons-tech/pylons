@@ -17,6 +17,6 @@
   "thumbnail" : "Thumbnail",
   "tap_select": "Tap to select ",
   "mb_limit": "200MB Limit",
-  "continue": "Continue",
+  "continue_key": "Continue",
   "save_draft": "Save as draft"
 }

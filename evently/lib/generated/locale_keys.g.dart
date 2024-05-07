@@ -19,5 +19,7 @@ abstract class  LocaleKeys {
   static const thumbnail = 'thumbnail';
   static const tap_select = 'tap_select';
   static const mb_limit = 'mb_limit';
+  static const continue_key = 'continue_key';
+  static const save_draft = 'save_draft';
 
 }
