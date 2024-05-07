@@ -1,11 +1,18 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+bool isTablet = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  isTablet = _getIsCurrentDeviceTablet();
 
   runApp(
     EasyLocalization(
@@ -54,4 +61,9 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _getIsCurrentDeviceTablet() {
+  final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
+  return mediaQuery.size.shortestSide >= tabletMinWidth;
 }
