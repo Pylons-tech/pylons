@@ -67,6 +67,7 @@ flutter:
      - i18n/ru-RU.json
      - i18n/de.json
      - i18n/es.json
+     - assets/images/svg/
 
   fonts:
     - family: UniversalSans
