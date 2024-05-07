@@ -4,16 +4,20 @@ import 'package:evently/screens/create_event.dart';
 import 'package:evently/screens/event_hub/event_hub_screen.dart';
 import 'package:evently/screens/splash_screen.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 bool isTablet = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  configureDependencies();
 
   isTablet = _getIsCurrentDeviceTablet();
 
