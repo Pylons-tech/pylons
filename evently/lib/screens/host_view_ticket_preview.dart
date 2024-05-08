@@ -37,7 +37,7 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                     Padding(
                       padding: const EdgeInsets.only(),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(14),
                           topLeft: Radius.circular(14),
                         ),
