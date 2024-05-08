@@ -10,11 +10,11 @@ class EventlyProvider extends ChangeNotifier {
 
   Denom get selectedDenom => _selectedDenom;
 
-  List<Denom> supportedDenomList = [];
+  List<Denom> supportedDenomList = Denom.availableDenoms;
 
   TextEditingController priceController = TextEditingController();
 
-  FreeDrop isFreeDrop = FreeDrop.unselected;
+  FreeDrop isFreeDrop = FreeDrop.no;
 
   void setSelectedDenom(Denom value) {
     _selectedDenom = value;

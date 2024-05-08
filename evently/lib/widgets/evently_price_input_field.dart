@@ -45,7 +45,7 @@ class EventlyPriceInputField extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         inputFormatters: inputFormatters,
                         decoration: InputDecoration(
-                            hintText: LocaleKeys.network_fee_listed_price_occur_on_chain.tr(),
+                            hintText: "\$21.99",
                             hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kGrey),
                             border: const OutlineInputBorder(borderSide: BorderSide.none),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
