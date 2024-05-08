@@ -8,7 +8,7 @@ import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
-import 'package:evently/widgets/easel_text_field.dart';
+import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
