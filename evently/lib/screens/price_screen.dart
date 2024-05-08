@@ -220,9 +220,7 @@ class _PriceScreenState extends State<PriceScreen> {
                         bgColor: provider.isFreeDrop != FreeDrop.unselected ? EventlyAppTheme.kBlue : EventlyAppTheme.kPurple03,
                         textColor: EventlyAppTheme.kWhite,
                         onPressed: () async {
-                          if (provider.isFreeDrop != FreeDrop.unselected) {
-                            FocusScope.of(context).unfocus();
-                          }
+                          Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
                         },
                         cuttingHeight: 15.h,
                         clipperType: ClipperType.bottomLeftTopRight,
