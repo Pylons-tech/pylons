@@ -29,6 +29,7 @@ class EventlyAppTheme {
   static const Color kPurple03 = Color(0xFFCBC8F3);
   static const Color kLightPurple = Color(0xFFB6B6E8);
   static const Color kDarkGreen = Color(0xFF14FB00);
+  static const Color kLightGreen = Color(0xFF0CAF59);
   static const Color kYellow = Color(0xFFF3BA2F);
   static const Color kLightYellow = Color(0xFFFED564);
   static const Color kLightRed = Color(0xFFEF4421);

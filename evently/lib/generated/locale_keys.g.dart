@@ -43,5 +43,6 @@ abstract class  LocaleKeys {
   static const network_fee_listed_price_occur_on_chain = 'network_fee_listed_price_occur_on_chain';
   static const maximum_1000 = 'maximum_1000';
   static const publish = 'publish';
+  static const enjoy_the_event = 'enjoy_the_event';
 
 }
