@@ -6,7 +6,7 @@ import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
-import 'package:evently/widgets/easel_text_field.dart';
+import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

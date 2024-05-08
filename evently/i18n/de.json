@@ -33,5 +33,10 @@
   "claim_free_drink": "Claim your free drink at the bar during the event!",
   "character_limit": "256 character limit",
   "there_no_perks_created": "There are no perks created.",
-  "free_shirt": "1 free t-shirt"
+  "free_shirt": "1 free t-shirt",
+  "is_free_drop": "Is this a free drop?",
+  "yes": "Yes",
+  "no" : "No",
+  "number_tickets": "Number of Tickets",
+  "network_fee_listed_price_occur_on_chain": "A network fee of 10% the listed price is required for all transactions that occur on-chain"
 }

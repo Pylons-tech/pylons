@@ -36,5 +36,10 @@ abstract class  LocaleKeys {
   static const character_limit = 'character_limit';
   static const there_no_perks_created = 'there_no_perks_created';
   static const free_shirt = 'free_shirt';
+  static const is_free_drop = 'is_free_drop';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const number_tickets = 'number_tickets';
+  static const network_fee_listed_price_occur_on_chain = 'network_fee_listed_price_occur_on_chain';
 
 }
