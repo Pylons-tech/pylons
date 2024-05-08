@@ -34,9 +34,8 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                 ),
                 child: Column(
                   children: [
-                    // SizedBox(height: 20.h,),
                     Padding(
-                      padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 16),
+                      padding: const EdgeInsets.only(),
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(14),
@@ -200,15 +199,13 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                         fontSize: 15.sp,
                       ),
                     ),
+                    VerticalSpace(10.h),
                     Container(
-
                       decoration: BoxDecoration(color: EventlyAppTheme.kBlack),
                       width: 338,
-
                       height: 338,
-
-
-                    )
+                    ),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
