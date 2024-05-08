@@ -9,6 +9,7 @@ import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/evently_price_input_field.dart';
+import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +26,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   final _formKey = GlobalKey<FormState>();
-
+  final ValueNotifier<String> _numberOfTicketsFieldError = ValueNotifier("");
 
   @override
   void dispose() {
@@ -169,20 +170,49 @@ class _PriceScreenState extends State<PriceScreen> {
                                     LocaleKeys.network_fee_listed_price_occur_on_chain.tr(),
                                     style: TextStyle(color: EventlyAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
+                                  VerticalSpace(20.h),
+                                  EventlyTextField(
+                                    label: LocaleKeys.number_tickets.tr(),
+                                    controller: TextEditingController(),
+                                    textCapitalization: TextCapitalization.sentences,
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                  ValueListenableBuilder<String>(
+                                    valueListenable: _numberOfTicketsFieldError,
+                                    builder: (_, String artNameFieldError, __) {
+                                      if (artNameFieldError.isEmpty) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      return Padding(
+                                        padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
+                                        child: Text(
+                                          artNameFieldError,
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      LocaleKeys.maximum_1000.tr(),
+                                      style: TextStyle(color: EventlyAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
                                 ],
                               ),
                           ],
                         ),
-                      if (provider.isFreeDrop == FreeDrop.unselected)
-                        ScreenResponsive(
-                          mobileScreen: (_) => VerticalSpace(0.38.sh),
-                          tabletScreen: (_) => VerticalSpace(0.2.sh),
-                        ),
-                      if (provider.isFreeDrop == FreeDrop.yes)
-                        ScreenResponsive(
-                          mobileScreen: (_) => VerticalSpace(0.1.sh),
-                          tabletScreen: (_) => VerticalSpace(0.05.sh),
-                        ),
+                      ScreenResponsive(
+                        mobileScreen: (_) => VerticalSpace(0.1.sh),
+                        tabletScreen: (_) => VerticalSpace(0.05.sh),
+                      ),
                       VerticalSpace(20.h),
                       ClippedButton(
                         title: LocaleKeys.continue_key.tr(),
