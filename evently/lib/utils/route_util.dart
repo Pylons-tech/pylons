@@ -2,5 +2,6 @@ class RouteUtil {
   RouteUtil();
 
   static String kRouteEventHub = "/eventHub";
-  static String createEvent = "/createEvent";
+  static String kCreateEvent = "/createEvent";
+  static String kHostTicketPreview = "/hostTicketPreview";
 }

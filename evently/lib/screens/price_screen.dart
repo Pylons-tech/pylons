@@ -4,6 +4,7 @@ import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
@@ -231,7 +232,9 @@ class _PriceScreenState extends State<PriceScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
+                          },
                           child: Text(
                             LocaleKeys.save_draft.tr(),
                             style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),

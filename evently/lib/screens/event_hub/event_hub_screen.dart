@@ -62,7 +62,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.createEvent),
+                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: EventlyAppTheme.kpurpleDark,
@@ -145,7 +145,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
         bgColor: EventlyAppTheme.kBlue,
         textColor: EventlyAppTheme.kWhite,
         onPressed: () {
-          Navigator.of(context).pushNamed(RouteUtil.createEvent);
+          Navigator.of(context).pushNamed(RouteUtil.kCreateEvent);
         },
         cuttingHeight: 15.h,
         clipperType: ClipperType.bottomLeftTopRight,

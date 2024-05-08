@@ -49,7 +49,7 @@ class CreateEventContent extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       onPageChanged: (int page) {
         createEventViewModel.currentPage.value = page;
-        final map = {0: 0, 1: 1, 2: 2, 3: 2};
+        final map = {0: 0, 1: 1, 2: 2, 3: 3};
         createEventViewModel.currentStep.value = map[page]!;
       },
       itemBuilder: (BuildContext context, int index) {

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/screens/create_event.dart';
 import 'package:evently/screens/event_hub/event_hub_screen.dart';
+import 'package:evently/screens/host_view_ticket_preview.dart';
 import 'package:evently/screens/splash_screen.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => const SplashScreen(),
             RouteUtil.kRouteEventHub: (context) => const EventHubScreen(),
-            RouteUtil.createEvent: (context) => const CreateEvent(),
+            RouteUtil.kCreateEvent: (context) => const CreateEvent(),
+            RouteUtil.kHostTicketPreview: (context) => const HostTicketPreview(),
           },
         ),
       ),
