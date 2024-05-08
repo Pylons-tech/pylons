@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
+import 'package:evently/screens/buyer_status_screen.dart';
 import 'package:evently/screens/create_event.dart';
 import 'package:evently/screens/event_hub/event_hub_screen.dart';
 import 'package:evently/screens/host_view_ticket_preview.dart';
@@ -54,9 +55,11 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
         minTextAdapt: true,
         builder: (BuildContext context, child) => MaterialApp(
+
           builder: (context, widget) {
             ScreenUtil.init(context);
             return MediaQuery(
+
               data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
               child: widget!,
             );
@@ -73,6 +76,7 @@ class MyApp extends StatelessWidget {
             RouteUtil.kRouteEventHub: (context) => const EventHubScreen(),
             RouteUtil.kCreateEvent: (context) => const CreateEvent(),
             RouteUtil.kHostTicketPreview: (context) => const HostTicketPreview(),
+            RouteUtil.kBuyerResponse: (context) => const BuyerResponseScreen(),
           },
         ),
       ),
