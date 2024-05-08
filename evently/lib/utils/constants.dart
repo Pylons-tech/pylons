@@ -34,6 +34,7 @@ class SVGUtils {
   static const kGift = "assets/images/svg/gift.svg";
   static const kDrinks = "assets/images/svg/drinks.svg";
   static const kMinus = "assets/images/svg/minus.svg";
+  static const kDiamond = "assets/images/svg/diamond.svg";
 }
 
 /// ```PNG assets
@@ -49,4 +50,5 @@ class PngUtils {
   /// will remove this variable for ui dev
   /// i need this variable to be used
   static const kPhantom = "assets/images/phantom.png";
+  static const kDottedLine = "assets/images/dotted_line.png";
 }
