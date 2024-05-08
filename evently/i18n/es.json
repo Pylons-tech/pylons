@@ -39,5 +39,6 @@
   "no" : "No",
   "number_tickets": "Number of Tickets",
   "network_fee_listed_price_occur_on_chain": "A network fee of 10% the listed price is required for all transactions that occur on-chain",
-  "maximum_1000": "1,000 maximum"
+  "maximum_1000": "1,000 maximum",
+  "publish": "Publish"
 }
