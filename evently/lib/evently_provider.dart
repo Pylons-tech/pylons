@@ -1,13 +1,11 @@
-
-
-
 import 'package:evently/models/denom.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:injectable/injectable.dart';
 
 enum FreeDrop { yes, no, unselected }
 
+@lazySingleton
 class EventlyProvider extends ChangeNotifier {
-
   Denom _selectedDenom = Denom.availableDenoms.first;
 
   Denom get selectedDenom => _selectedDenom;
@@ -22,5 +20,4 @@ class EventlyProvider extends ChangeNotifier {
     _selectedDenom = value;
     notifyListeners();
   }
-
 }

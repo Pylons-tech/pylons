@@ -1,9 +1,7 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
-import 'package:evently/utils/amount_formatter.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/screen_responsive.dart';
@@ -11,17 +9,15 @@ import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/evently_price_input_field.dart';
-import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
 
 class PriceScreen extends StatefulWidget {
-  const PriceScreen({Key? key}) : super(key: key);
+  const PriceScreen({super.key});
 
   @override
   State<PriceScreen> createState() => _PriceScreenState();
@@ -29,7 +25,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   final _formKey = GlobalKey<FormState>();
-  final ValueNotifier<String> _priceFieldError = ValueNotifier("");
+
 
   @override
   void dispose() {
@@ -133,9 +129,7 @@ class _PriceScreenState extends State<PriceScreen> {
                           width: 30.w,
                         ),
                         InkWell(
-                          onTap: () {
-
-                          },
+                          onTap: () {},
                           child: Container(
                             width: 140.w,
                             height: 30.h,
@@ -168,17 +162,15 @@ class _PriceScreenState extends State<PriceScreen> {
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(kMaxPriceLength), provider.selectedDenom.getFormatter()],
                                     controller: provider.priceController,
                                     validator: (value) {
-
+                                      return null;
                                     },
                                   ),
-
                                   Text(
                                     LocaleKeys.network_fee_listed_price_occur_on_chain.tr(),
                                     style: TextStyle(color: EventlyAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                 ],
                               ),
-
                           ],
                         ),
                       if (provider.isFreeDrop == FreeDrop.unselected)
@@ -199,7 +191,6 @@ class _PriceScreenState extends State<PriceScreen> {
                         onPressed: () async {
                           if (provider.isFreeDrop != FreeDrop.unselected) {
                             FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(moveNextPage: true);
                           }
                         },
                         cuttingHeight: 15.h,
@@ -210,18 +201,10 @@ class _PriceScreenState extends State<PriceScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
-
-                          onTap: () {
-                            if (provider.isFreeDrop == FreeDrop.unselected) {
-                              Navigator.pop(context);
-                              return;
-                            }
-                            FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(moveNextPage: false);
-                          },
+                          onTap: () {},
                           child: Text(
-                            LocaleKeys.save_as_draft.tr(),
-                            style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
+                            LocaleKeys.save_draft.tr(),
+                            style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
                           ),
                         ),
                       ),
@@ -235,26 +218,5 @@ class _PriceScreenState extends State<PriceScreen> {
         }),
       ),
     );
-  }
-
-  Future<void> validateAndUpdatePrice({required bool moveNextPage}) async {
-    final navigator = Navigator.of(context);
-    final HomeViewModel homeViewModel = context.read<HomeViewModel>();
-
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);
-
-    if (context.read<EaselProvider>().isFreeDrop == FreeDrop.yes) {
-      if (_royaltiesFieldError.value.isNotEmpty || _noOfEditionsFieldError.value.isNotEmpty) return;
-      await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
-      moveNextPage ? homeViewModel.nextPage() : navigator.pop();
-
-      return;
-    }
-    if (_royaltiesFieldError.value.isNotEmpty || _noOfEditionsFieldError.value.isNotEmpty || _priceFieldError.value.isNotEmpty) return;
-    await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
-    moveNextPage ? homeViewModel.nextPage() : navigator.pop();
   }
 }
