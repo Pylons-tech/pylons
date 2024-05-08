@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HostTicketPreview extends StatefulWidget {
   const HostTicketPreview({super.key});
@@ -100,6 +101,7 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                         padding: EdgeInsets.only(left: 10.w, right: 30.h),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,11 +150,48 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                           ],
                         ),
                       ),
-
-
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.w, right: 30.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'PERKS',
+                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                                ),
+                                SizedBox(height: 1.h),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(SVGUtils.kDiamond),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      'x 3',
+                                      style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kWhite, fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      'Redeem',
+                                      style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kDarkGreen, fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      VerticalSpace(13.h),
+                      Image.asset(PngUtils.kDottedLine)
                     ],
                   ),
-                )
+                ),
+
+
               ],
             ),
           ),
