@@ -57,36 +57,11 @@ class _PriceScreenState extends State<PriceScreen> {
                 StepLabels(currentPage: homeViewModel.currentPage, currentStep: homeViewModel.currentStep),
                 const VerticalSpace(10),
                 const VerticalSpace(20),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: ValueListenableBuilder(
-                          valueListenable: homeViewModel.currentPage,
-                          builder: (_, int currentPage, __) => Padding(
-                              padding: EdgeInsets.only(left: 10.sp),
-                              child: IconButton(
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                  homeViewModel.previousPage();
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: EventlyAppTheme.kGrey,
-                                ),
-                              )),
-                        )),
-                    ValueListenableBuilder(
-                      valueListenable: homeViewModel.currentPage,
-                      builder: (_, int currentPage, __) {
-                        return Text(
-                          homeViewModel.pageTitles[homeViewModel.currentPage.value],
-                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkText),
-                        );
-                      },
-                    ),
-                  ],
+                PageAppBar(
+                  onPressBack: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    homeViewModel.previousPage();
+                  },
                 ),
                 ScreenResponsive(
                   mobileScreen: (context) => const VerticalSpace(6),
@@ -169,7 +144,7 @@ class _PriceScreenState extends State<PriceScreen> {
                                   ),
                                   Text(
                                     LocaleKeys.network_fee_listed_price_occur_on_chain.tr(),
-                                    style: TextStyle(color: EventlyAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
+                                    style: TextStyle(color: EventlyAppTheme.kTextDarkPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                   VerticalSpace(20.h),
                                   EventlyTextField(
@@ -202,7 +177,7 @@ class _PriceScreenState extends State<PriceScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       LocaleKeys.maximum_1000.tr(),
-                                      style: TextStyle(color: EventlyAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
+                                      style: TextStyle(color: EventlyAppTheme.kTextDarkPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                       textAlign: TextAlign.right,
                                     ),
                                   ),
@@ -215,31 +190,11 @@ class _PriceScreenState extends State<PriceScreen> {
                         tabletScreen: (_) => VerticalSpace(0.05.sh),
                       ),
                       VerticalSpace(20.h),
-                      ClippedButton(
-                        title: LocaleKeys.continue_key.tr(),
-                        bgColor: provider.isFreeDrop != FreeDrop.unselected ? EventlyAppTheme.kBlue : EventlyAppTheme.kPurple03,
-                        textColor: EventlyAppTheme.kWhite,
-                        onPressed: () async {
-                          Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
-                        },
-                        cuttingHeight: 15.h,
-                        clipperType: ClipperType.bottomLeftTopRight,
-                        isShadow: false,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      VerticalSpace(10.h),
-                      Center(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
-                          },
-                          child: Text(
-                            LocaleKeys.save_draft.tr(),
-                            style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                      VerticalSpace(5.h),
+                      BottomButtons(
+                        onPressContinue: () {},
+                        onPressSaveDraft: () {},
+                        isContinueEnable: false,
+                      )
                     ],
                   ),
                 ),
@@ -248,6 +203,94 @@ class _PriceScreenState extends State<PriceScreen> {
           );
         }),
       ),
+    );
+  }
+}
+
+class BottomButtons extends StatelessWidget {
+  const BottomButtons({
+    super.key,
+    required this.onPressContinue,
+    required this.onPressSaveDraft,
+    required this.isContinueEnable,
+  });
+
+  final VoidCallback onPressContinue;
+  final VoidCallback onPressSaveDraft;
+  final bool isContinueEnable;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ClippedButton(
+          title: LocaleKeys.continue_key.tr(),
+          bgColor: isContinueEnable ? EventlyAppTheme.kBlue : EventlyAppTheme.kGery03,
+          textColor: EventlyAppTheme.kWhite,
+          onPressed: () async {
+            Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
+          },
+          cuttingHeight: 15.h,
+          clipperType: ClipperType.bottomLeftTopRight,
+          isShadow: false,
+          fontWeight: FontWeight.w700,
+        ),
+        VerticalSpace(10.h),
+        Center(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
+            },
+            child: Text(
+              LocaleKeys.save_draft.tr(),
+              style: TextStyle(color: EventlyAppTheme.kTextGrey02, fontSize: 14.sp, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+        VerticalSpace(5.h),
+      ],
+    );
+  }
+}
+
+class PageAppBar extends StatelessWidget {
+  const PageAppBar({
+    super.key,
+    required this.onPressBack,
+  });
+
+  final VoidCallback onPressBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final createEventViewModel = context.watch<CreateEventViewModel>();
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Align(
+            alignment: Alignment.centerLeft,
+            child: ValueListenableBuilder(
+              valueListenable: createEventViewModel.currentPage,
+              builder: (_, int currentPage, __) => Padding(
+                  padding: EdgeInsets.only(left: 10.sp),
+                  child: IconButton(
+                    onPressed: onPressBack,
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: EventlyAppTheme.kGrey02,
+                    ),
+                  )),
+            )),
+        ValueListenableBuilder(
+          valueListenable: createEventViewModel.currentPage,
+          builder: (_, int currentPage, __) {
+            return Text(
+              createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kTextDarkBlue),
+            );
+          },
+        ),
+      ],
     );
   }
 }

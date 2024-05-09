@@ -15,7 +15,7 @@ class _BuyerResponseScreenState extends State<BuyerResponseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EventlyAppTheme.kLightGreen,
+      backgroundColor: EventlyAppTheme.kGreen,
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -36,7 +36,7 @@ class _BuyerResponseScreenState extends State<BuyerResponseScreen> {
               child: const Icon(
                 Icons.check,
                 size: 161,
-                color: EventlyAppTheme.kLightGreen,
+                color: EventlyAppTheme.kGreen,
               ),
             )
           ],

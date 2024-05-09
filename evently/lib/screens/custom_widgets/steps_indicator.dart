@@ -21,11 +21,11 @@ class MyStepsIndicator extends StatelessWidget {
             nbSteps: 4,
             lineLength: 0.68.sw / 4,
             doneLineColor: EventlyAppTheme.kBlue,
-            undoneLineColor: EventlyAppTheme.kLightGrey,
+            undoneLineColor: EventlyAppTheme.kGery03,
             doneLineThickness: 1.5,
             undoneLineThickness: 1.5,
-            unselectedStepColorIn: EventlyAppTheme.kLightGrey,
-            unselectedStepColorOut: EventlyAppTheme.kLightGrey,
+            unselectedStepColorIn: EventlyAppTheme.kGery03,
+            unselectedStepColorOut: EventlyAppTheme.kGery03,
             doneStepColor: EventlyAppTheme.kBlue,
             selectedStepColorIn: EventlyAppTheme.kBlue,
             selectedStepColorOut: EventlyAppTheme.kBlue,
@@ -33,7 +33,7 @@ class MyStepsIndicator extends StatelessWidget {
             enableStepAnimation: true,
             lineLengthCustomStep: const [],
             doneStepWidget: Container(width: 10.w, height: 10.h, decoration: const BoxDecoration(color: EventlyAppTheme.kBlue)),
-            unselectedStepWidget: Container(width: 10.w, height: 10.h, decoration: const BoxDecoration(color: EventlyAppTheme.kLightGrey)),
+            unselectedStepWidget: Container(width: 10.w, height: 10.h, decoration: const BoxDecoration(color: EventlyAppTheme.kGery03)),
             selectedStepWidget: Container(width: 15.w, height: 15.h, decoration: const BoxDecoration(color: EventlyAppTheme.kBlue)),
           );
         });

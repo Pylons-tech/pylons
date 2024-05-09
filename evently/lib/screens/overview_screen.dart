@@ -1,15 +1,14 @@
-import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
+import 'package:evently/screens/price_screen.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
-import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,39 +44,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
             children: [
               MyStepsIndicator(currentStep: createEventViewModel.currentStep),
               StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: ValueListenableBuilder(
-                      valueListenable: createEventViewModel.currentPage,
-                      builder: (_, int currentPage, __) => Padding(
-                          padding: EdgeInsets.only(left: 10.sp),
-                          child: IconButton(
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.arrow_back_ios,
-                              color: EventlyAppTheme.kGrey,
-                            ),
-                          )),
-                    ),
-                  ),
-                  ValueListenableBuilder(
-                    valueListenable: createEventViewModel.currentPage,
-                    builder: (_, int currentPage, __) {
-                      return Text(
-                        createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkText),
-                      );
-                    },
-                  ),
-                ],
-              ),
+              PageAppBar(onPressBack: () {}),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 child: Column(
@@ -109,7 +76,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                         child: DottedBorder(
                           borderType: BorderType.Rect,
                           dashPattern: const [10, 6],
-                          color: EventlyAppTheme.kLightPurple,
+                          color: EventlyAppTheme.kTextDarkPurple,
                           strokeWidth: 3.h,
                           child: provider.thumbnail != null
                               ? Stack(
@@ -128,14 +95,14 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                       children: [
                                         Text(
                                           LocaleKeys.tap_select.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
                                         ),
                                         VerticalSpace(10.h),
                                         SvgPicture.asset(SVGUtils.kSvgUpload),
                                         VerticalSpace(10.h),
                                         Text(
                                           LocaleKeys.mb_limit.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
                                         ),
                                       ],
                                     ),
@@ -144,30 +111,11 @@ class _OverViewScreenState extends State<OverViewScreen> {
                         ),
                       ),
                     ),
-                    VerticalSpace(20.h),
-                    ClippedButton(
-                      title: LocaleKeys.continue_key.tr(),
-                      bgColor: EventlyAppTheme.kBlue,
-                      textColor: EventlyAppTheme.kWhite,
-                      onPressed: () {
-                        createEventViewModel.nextPage();
-                      },
-                      cuttingHeight: 15.h,
-                      clipperType: ClipperType.bottomLeftTopRight,
-                      isShadow: false,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    VerticalSpace(10.h),
-                    Center(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          LocaleKeys.save_draft.tr(),
-                          style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ),
-                    VerticalSpace(5.h),
+                    BottomButtons(
+                      onPressContinue: () {},
+                      onPressSaveDraft: () {},
+                      isContinueEnable: false,
+                    )
                   ],
                 ),
               ),

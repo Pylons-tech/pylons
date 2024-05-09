@@ -33,7 +33,7 @@ class StepLabels extends StatelessWidget {
                           fontSize: 8.sp,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
-                          color: currentStep.value >= index ? EventlyAppTheme.kBlue : EventlyAppTheme.kGrey,
+                          color: currentStep.value >= index ? EventlyAppTheme.kBlue : EventlyAppTheme.kGery03,
                         ),
                   ),
                 ],
