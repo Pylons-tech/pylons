@@ -26,6 +26,9 @@ const kMaxPriceLength = 14;
 const int kBigIntBase = 1000000;
 const int kEthIntBase = 1000000000000000000;
 
+final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "heif"];
+const kPylons = "Pylons";
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
@@ -48,6 +51,7 @@ class PngUtils {
   static const kIconDenomUsd = 'assets/images/denom_usd.png';
   static const kIconDenomPylon = 'assets/images/denom_pylon.png';
   static const kHostPreview = "assets/images/host_preview.png";
+
   /// will remove this variable for ui dev
   /// i need this variable to be used
   static const kPhantom = "assets/images/phantom.png";
