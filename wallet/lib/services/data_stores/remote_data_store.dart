@@ -913,13 +913,13 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
         final response = await queryClient.recipe(request);
         return response;
-      }, retryIf: (_) => true );
+      }, retryIf: (_) => true ,);
 
       if (response.hasRecipe()) {
         return response.recipe;
       }
       throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
-    }catch(_){
+    } catch (_) {
       throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
     }
   }
@@ -984,7 +984,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
       throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
 
-    }catch(_){
+    } catch (_) {
       throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
     }
   }
