@@ -45,5 +45,9 @@ abstract class  LocaleKeys {
   static const publish = 'publish';
   static const enjoy_the_event = 'enjoy_the_event';
   static const picking_file_error = 'picking_file_error';
+  static const enter_event_name = 'enter_event_name';
+  static const event_name_remaining_characters = 'event_name_remaining_characters';
+  static const enter_host_name = 'enter_host_name';
+  static const host_name_remaining_characters = 'host_name_remaining_characters';
 
 }

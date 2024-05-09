@@ -42,5 +42,9 @@
   "maximum_1000": "1,000 maximum",
   "publish": "Publish",
   "enjoy_the_event": "Enjoy the event!",
-  "picking_file_error": "Ошибка при выборе файла"
+  "picking_file_error": "Fehler beim Auswählen der Datei",
+  "enter_event_name": "Enter event name",
+  "event_name_remaining_characters": "Event name should have {} characters or more",
+  "enter_host_name": "Enter host name",
+  "host_name_remaining_characters": "Host name should have {} characters or more"
 }

@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 
 enum FreeDrop { yes, no, unselected }
 
-@lazySingleton
+@LazySingleton()
 class EventlyProvider extends ChangeNotifier {
   EventlyProvider({
     required this.repository,
