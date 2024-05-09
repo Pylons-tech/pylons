@@ -6,16 +6,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventlyTextField extends StatelessWidget {
-  const EventlyTextField(
-      {super.key,
-      required this.label,
-      this.hint = "",
-      this.controller,
-      this.validator,
-      this.noOfLines = 1, // default to single line
-      this.inputFormatters = const [],
-      this.keyboardType = TextInputType.text,
-      this.textCapitalization = TextCapitalization.none});
+  const EventlyTextField({
+    super.key,
+    required this.label,
+    this.hint = "",
+    this.controller,
+    this.validator,
+    this.noOfLines = 1, // default to single line
+    this.inputFormatters = const [],
+    this.keyboardType = TextInputType.text,
+    this.textCapitalization = TextCapitalization.none,
+    this.onChanged,
+    this.enable,
+  });
 
   final String label;
   final String hint;
@@ -25,6 +28,9 @@ class EventlyTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final List<TextInputFormatter> inputFormatters;
   final TextCapitalization textCapitalization;
+
+  final ValueChanged<String>? onChanged;
+  final bool? enable;
 
   @override
   Widget build(BuildContext context) {
@@ -53,18 +59,20 @@ class EventlyTextField extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
-            ScreenResponsive(mobileScreen: (_) => buildMobileTextField(), tabletScreen: (_) => buildTabletTextField()),
+            ScreenResponsive(mobileScreen: (_) => buildMobileTextField(enable), tabletScreen: (_) => buildTabletTextField(enable)),
           ],
         ),
       ],
     );
   }
 
-  SizedBox buildMobileTextField() {
+  SizedBox buildMobileTextField(bool? enable) {
     return SizedBox(
       height: noOfLines == 1 ? 40.h : 120.h,
       child: Align(
         child: TextFormField(
+          enabled: enable,
+          onChanged: onChanged,
           style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
           controller: controller,
           validator: validator,
@@ -85,11 +93,12 @@ class EventlyTextField extends StatelessWidget {
     );
   }
 
-  SizedBox buildTabletTextField() {
+  SizedBox buildTabletTextField(bool? enable) {
     return SizedBox(
       height: noOfLines == 1 ? 32.h : 110.h,
       child: Align(
         child: TextFormField(
+          enabled: enable,
           style: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
           controller: controller,
           validator: validator,

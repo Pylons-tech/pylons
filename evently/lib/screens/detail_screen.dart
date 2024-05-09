@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/evently_provider.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
@@ -20,11 +21,6 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final _formKey = GlobalKey<FormState>();
-  final ValueNotifier<String> _startDateFieldError = ValueNotifier("");
-  final ValueNotifier<String> _endDateFieldError = ValueNotifier("");
-  final ValueNotifier<String> _startTimeFieldError = ValueNotifier("");
-  final ValueNotifier<String> _endTimeFieldError = ValueNotifier("");
-  final ValueNotifier<String> _descriptionFieldError = ValueNotifier("");
 
   @override
   void initState() {
@@ -37,7 +33,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Form(
+          child: Consumer<EventlyProvider>(
+        builder: (_, provider, __) => Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,68 +86,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Column(
-                            children: [
-                              EventlyTextField(
-                                label: LocaleKeys.start_date.tr(),
-                                controller: TextEditingController(),
-                                textCapitalization: TextCapitalization.sentences,
-                                validator: (value) {
-                                  return null;
-                                },
-                              ),
-                              ValueListenableBuilder<String>(
-                                valueListenable: _startDateFieldError,
-                                builder: (_, String artNameFieldError, __) {
-                                  if (artNameFieldError.isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return Padding(
-                                    padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                                    child: Text(
-                                      artNameFieldError,
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.start_date.tr(),
+                            controller: TextEditingController(),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
+                            },
                           ),
                         ),
                         HorizontalSpace(20.w),
                         Expanded(
-                          child: Column(
-                            children: [
-                              EventlyTextField(
-                                label: LocaleKeys.end_date.tr(),
-                                controller: TextEditingController(),
-                                textCapitalization: TextCapitalization.sentences,
-                                validator: (value) {
-                                  return null;
-                                },
-                              ),
-                              ValueListenableBuilder<String>(
-                                valueListenable: _endDateFieldError,
-                                builder: (_, String artNameFieldError, __) {
-                                  if (artNameFieldError.isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return Padding(
-                                    padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                                    child: Text(
-                                      artNameFieldError,
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.end_date.tr(),
+                            controller: TextEditingController(),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
+                            },
                           ),
                         ),
                       ],
@@ -159,68 +114,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Column(
-                            children: [
-                              EventlyTextField(
-                                label: LocaleKeys.start_time.tr(),
-                                controller: TextEditingController(),
-                                textCapitalization: TextCapitalization.sentences,
-                                validator: (value) {
-                                  return null;
-                                },
-                              ),
-                              ValueListenableBuilder<String>(
-                                valueListenable: _startTimeFieldError,
-                                builder: (_, String artNameFieldError, __) {
-                                  if (artNameFieldError.isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return Padding(
-                                    padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                                    child: Text(
-                                      artNameFieldError,
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.start_time.tr(),
+                            controller: TextEditingController(),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
+                            },
                           ),
                         ),
                         HorizontalSpace(20.w),
                         Expanded(
-                          child: Column(
-                            children: [
-                              EventlyTextField(
-                                label: LocaleKeys.end_time.tr(),
-                                controller: TextEditingController(),
-                                textCapitalization: TextCapitalization.sentences,
-                                validator: (value) {
-                                  return null;
-                                },
-                              ),
-                              ValueListenableBuilder<String>(
-                                valueListenable: _endTimeFieldError,
-                                builder: (_, String artNameFieldError, __) {
-                                  if (artNameFieldError.isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  return Padding(
-                                    padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                                    child: Text(
-                                      artNameFieldError,
-                                      style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.end_time.tr(),
+                            controller: TextEditingController(),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
+                            },
                           ),
                         ),
                       ],
@@ -235,24 +148,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         return null;
                       },
                     ),
-                    ValueListenableBuilder<String>(
-                      valueListenable: _startDateFieldError,
-                      builder: (_, String artNameFieldError, __) {
-                        if (artNameFieldError.isEmpty) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                          child: Text(
-                            artNameFieldError,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.red,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
                     VerticalSpace(20.h),
                     EventlyTextField(
                       label: LocaleKeys.description.tr(),
@@ -263,24 +158,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         return null;
                       },
                       noOfLines: 4,
-                    ),
-                    ValueListenableBuilder<String>(
-                      valueListenable: _descriptionFieldError,
-                      builder: (_, String artNameFieldError, __) {
-                        if (artNameFieldError.isEmpty) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
-                          child: Text(
-                            artNameFieldError,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.red,
-                            ),
-                          ),
-                        );
-                      },
                     ),
                     VerticalSpace(20.h),
                     ClippedButton(
@@ -312,7 +189,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
