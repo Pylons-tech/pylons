@@ -73,7 +73,7 @@ class EventlyTextField extends StatelessWidget {
         child: TextFormField(
           enabled: enable,
           onChanged: onChanged,
-          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
+          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -83,7 +83,7 @@ class EventlyTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kGrey),
+            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
@@ -99,7 +99,7 @@ class EventlyTextField extends StatelessWidget {
       child: Align(
         child: TextFormField(
           enabled: enable,
-          style: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
+          style: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -109,7 +109,7 @@ class EventlyTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, color: EventlyAppTheme.kGrey),
+            hintStyle: TextStyle(fontSize: noOfLines == 1 ? 16.sp : 14.sp, color: EventlyAppTheme.kTextGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),

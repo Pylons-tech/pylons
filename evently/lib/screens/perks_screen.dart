@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
+import 'package:evently/screens/price_screen.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/screen_responsive.dart';
@@ -47,37 +48,11 @@ class _PerksScreenState extends State<PerksScreen> {
                   const VerticalSpace(5),
                   StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
                   const VerticalSpace(20),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: ValueListenableBuilder(
-                            valueListenable: createEventViewModel.currentPage,
-                            builder: (_, int currentPage, __) => Padding(
-                                padding: EdgeInsets.only(left: 10.sp),
-                                child: IconButton(
-                                  onPressed: () {
-                                    FocusScope.of(context).unfocus();
-                                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.arrow_back_ios,
-                                    color: EventlyAppTheme.kGrey,
-                                  ),
-                                )),
-                          )),
-                      ValueListenableBuilder(
-                        valueListenable: createEventViewModel.currentPage,
-                        builder: (_, int currentPage, __) {
-                          return Text(
-                            createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkText),
-                          );
-                        },
-                      ),
-                    ],
+                  PageAppBar(
+                    onPressBack: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      createEventViewModel.previousPage();
+                    },
                   ),
                   const VerticalSpace(20),
                   Padding(
@@ -93,7 +68,7 @@ class _PerksScreenState extends State<PerksScreen> {
                           onTap: () {},
                           child: DecoratedBox(
                             decoration: const BoxDecoration(
-                              color: EventlyAppTheme.kpurpleDark,
+                              color: EventlyAppTheme.kBlue,
                             ),
                             child: Icon(Icons.add, size: 16.h, color: EventlyAppTheme.kWhite),
                           ),
@@ -106,7 +81,7 @@ class _PerksScreenState extends State<PerksScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Text(
                       LocaleKeys.there_no_perks_created.tr(),
-                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kDarkGrey02),
+                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kGrey01),
                     ),
                   ),
                   Padding(
@@ -162,7 +137,7 @@ class _PerksScreenState extends State<PerksScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(padding: const EdgeInsets.all(7), color: EventlyAppTheme.kPurple03, child: SvgPicture.asset(SVGUtils.kShirt)),
+                        Container(padding: const EdgeInsets.all(7), color: EventlyAppTheme.kTextLightPurple, child: SvgPicture.asset(SVGUtils.kShirt)),
                         Container(padding: const EdgeInsets.all(7), color: Colors.transparent, child: SvgPicture.asset(SVGUtils.kGift)),
                         Container(padding: const EdgeInsets.all(7), color: Colors.transparent, child: SvgPicture.asset(SVGUtils.kDrinks)),
                       ],
@@ -182,40 +157,13 @@ class _PerksScreenState extends State<PerksScreen> {
                       },
                     ),
                   ),
-
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClippedButton(
-                      title: LocaleKeys.continue_key.tr(),
-                      bgColor: EventlyAppTheme.kBlue,
-                      textColor: EventlyAppTheme.kWhite,
-                      onPressed: () {
-                        createEventViewModel.nextPage();
-                      },
-                      cuttingHeight: 15.h,
-                      clipperType: ClipperType.bottomLeftTopRight,
-                      isShadow: false,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    VerticalSpace(10.h),
-                    Center(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          LocaleKeys.save_draft.tr(),
-                          style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                    ),
-                    VerticalSpace(5.h),
-                  ],
-                ),
-              ),
+              BottomButtons(
+                onPressContinue: () {},
+                onPressSaveDraft: () {},
+                isContinueEnable: false,
+              )
             ],
           ),
         ),

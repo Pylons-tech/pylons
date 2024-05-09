@@ -38,7 +38,7 @@ class EventlyPriceInputField extends StatelessWidget {
               children: [
                 Expanded(
                     child: TextFormField(
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kDarkText),
+                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
                         controller: controller,
                         validator: validator,
                         minLines: 1,
@@ -46,7 +46,7 @@ class EventlyPriceInputField extends StatelessWidget {
                         inputFormatters: inputFormatters,
                         decoration: InputDecoration(
                             hintText: "\$21.99",
-                            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kGrey),
+                            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
                             border: const OutlineInputBorder(borderSide: BorderSide.none),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h)))),
@@ -82,7 +82,7 @@ class _CurrencyDropDown extends StatelessWidget {
                         iconSize: 0,
                         elevation: 0,
                         underline: const SizedBox(),
-                        dropdownColor: EventlyAppTheme.kPurple03,
+                        dropdownColor: EventlyAppTheme.kTextLightPurple,
                         style: TextStyle(color: EventlyAppTheme.kWhite, fontSize: 18.sp, fontWeight: FontWeight.w400),
                         onChanged: (String? data) {
                           if (data != null) {

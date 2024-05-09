@@ -17,14 +17,14 @@ class EventHubScreen extends StatefulWidget {
 
 class _EventHubScreenState extends State<EventHubScreen> {
   TextStyle headingStyle = TextStyle(
-    fontSize: isTablet ? 20.sp : 20.sp,
-    fontWeight: FontWeight.w800,
-    color: EventlyAppTheme.kLightPurple,
+    fontSize: isTablet ? 20.sp : 25,
+    fontWeight: FontWeight.bold,
+    color: EventlyAppTheme.kTextLightPurple,
     fontFamily: kUniversalFontFamily,
   );
   TextStyle titleStyle = TextStyle(
-    fontSize: isTablet ? 14.sp : 14.sp,
-    fontWeight: FontWeight.w700,
+    fontSize: isTablet ? 14.sp : 15,
+    fontWeight: FontWeight.bold,
     color: EventlyAppTheme.kWhite,
     fontFamily: kUniversalFontFamily,
   );
@@ -38,7 +38,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
   TextStyle subTitleStyle = TextStyle(
     fontSize: isTablet ? 12.sp : 12.sp,
     fontWeight: FontWeight.w700,
-    color: EventlyAppTheme.kLightText,
+    color: EventlyAppTheme.kGrey01,
     fontFamily: kUniversalFontFamily,
   );
 
@@ -64,10 +64,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
                       InkWell(
                         onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
                         child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: EventlyAppTheme.kpurpleDark,
-                            boxShadow: [BoxShadow(color: EventlyAppTheme.kpurpleDark.withOpacity(0.6), blurRadius: 8.0)],
-                          ),
+                          decoration: const BoxDecoration(color: EventlyAppTheme.kTextLightBlue),
                           child: Icon(Icons.add, size: 27.h, color: EventlyAppTheme.kWhite),
                         ),
                       ),

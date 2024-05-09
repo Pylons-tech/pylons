@@ -1,10 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:evently/generated/locale_keys.g.dart';
+import 'package:evently/screens/price_screen.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
-import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/space_utils.dart';
-import 'package:evently/widgets/clipped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,34 +23,10 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             height: 110.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ClippedButton(
-                  title: LocaleKeys.publish.tr(),
-                  bgColor: EventlyAppTheme.kBlue,
-                  textColor: EventlyAppTheme.kWhite,
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(RouteUtil.kRouteEventHub);
-                  },
-                  cuttingHeight: 15.h,
-                  clipperType: ClipperType.bottomLeftTopRight,
-                  isShadow: false,
-                  fontWeight: FontWeight.w700,
-                ),
-                VerticalSpace(10.h),
-                Center(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Text(
-                      LocaleKeys.save_draft.tr(),
-                      style: TextStyle(color: EventlyAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-                VerticalSpace(5.h),
-              ],
+            child: BottomButtons(
+              onPressContinue: () {},
+              onPressSaveDraft: () {},
+              isContinueEnable: false,
             ),
           ),
           body: SingleChildScrollView(
@@ -212,7 +185,7 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                                   SizedBox(width: 5.w),
                                   Text(
                                     'Redeem',
-                                    style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kDarkGreen, fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kGreenText, fontWeight: FontWeight.bold),
                                   )
                                 ],
                               )
