@@ -44,5 +44,6 @@ abstract class  LocaleKeys {
   static const maximum_1000 = 'maximum_1000';
   static const publish = 'publish';
   static const enjoy_the_event = 'enjoy_the_event';
+  static const picking_file_error = 'picking_file_error';
 
 }
