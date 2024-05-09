@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
 abstract class FileUtilsHelper {
   /// This function picks a file with the given format from device storage
   /// Input: [format] it is the file format which needs to be picked from local storage
@@ -14,6 +13,7 @@ abstract class FileUtilsHelper {
   Future<PickedFileModel> pickFile();
 }
 
+@LazySingleton(as: FileUtilsHelper)
 class FileUtilsHelperImpl implements FileUtilsHelper {
   ImageCropper imageCropper;
   FilePicker filePicker;
