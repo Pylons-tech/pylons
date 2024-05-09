@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
@@ -10,6 +12,7 @@ import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/evently_text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +29,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
   final _formKey = GlobalKey<FormState>();
   final ValueNotifier<String> _eventNameFieldError = ValueNotifier("");
   final ValueNotifier<String> _hostNameFieldError = ValueNotifier("");
+  final ValueNotifier<String> _thumbnailError = ValueNotifier("");
 
   @override
   void initState() {
@@ -163,45 +167,76 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     VerticalSpace(10.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
-                      child: Center(
-                        child: DottedBorder(
-                          borderType: BorderType.Rect,
-                          dashPattern: const [10, 6],
-                          color: EventlyAppTheme.kLightPurple,
-                          strokeWidth: 3.h,
-                          child: provider.thumbnail != null
-                              ? Stack(
-                                  children: [
-                                    Image.file(provider.thumbnail!),
-                                    SvgPicture.asset(SVGUtils.kSvgUpload),
-                                  ],
-                                )
-                              : GestureDetector(
-                                  onTap: () => provider.pickThumbnail(),
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.symmetric(vertical: 20.w),
-                                    child: Column(
+                    FormField<File>(
+                      validator: (_) {
+                        if (provider.thumbnail == null) {
+                          _thumbnailError.value = LocaleKeys.please_select_thumbnail.tr();
+                          return;
+                        }
+                        _thumbnailError.value = '';
+                        return null;
+                      },
+                      builder: (FormFieldState<File> field) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
+                          child: Center(
+                            child: DottedBorder(
+                              borderType: BorderType.Rect,
+                              dashPattern: const [10, 6],
+                              color: EventlyAppTheme.kLightPurple,
+                              strokeWidth: 3.h,
+                              child: provider.thumbnail != null
+                                  ? Stack(
+                                      alignment: Alignment.center,
                                       children: [
-                                        Text(
-                                          LocaleKeys.tap_select.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                                        ),
-                                        VerticalSpace(10.h),
-                                        SvgPicture.asset(SVGUtils.kSvgUpload),
-                                        VerticalSpace(10.h),
-                                        Text(
-                                          LocaleKeys.mb_limit.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                                        ),
+                                        Image.file(provider.thumbnail!),
+                                        GestureDetector(onTap: () => provider.pickThumbnail(), child: SvgPicture.asset(SVGUtils.kSvgUpload)),
                                       ],
+                                    )
+                                  : GestureDetector(
+                                      onTap: () => provider.pickThumbnail(),
+                                      child: Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.symmetric(vertical: 20.w),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              LocaleKeys.tap_select.tr(),
+                                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                            ),
+                                            VerticalSpace(10.h),
+                                            SvgPicture.asset(SVGUtils.kSvgUpload),
+                                            VerticalSpace(10.h),
+                                            Text(
+                                              LocaleKeys.mb_limit.tr(),
+                                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                        ),
-                      ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder<String>(
+                      valueListenable: _thumbnailError,
+                      builder: (_, String thumbnailError, __) {
+                        if (thumbnailError.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Padding(
+                          padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
+                          child: Text(
+                            thumbnailError,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.red,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     VerticalSpace(20.h),
                     ClippedButton(
