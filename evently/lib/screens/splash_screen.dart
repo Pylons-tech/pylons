@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: kSplashScreenDuration), () {
-      navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kBuyerResponse);
+      navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kRouteEventHub);
     });
     super.initState();
   }
