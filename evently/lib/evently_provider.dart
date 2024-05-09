@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
@@ -18,14 +17,71 @@ class EventlyProvider extends ChangeNotifier {
 
   final Repository repository;
 
-  TextEditingController eventNameController = TextEditingController();
-  TextEditingController hostNameController = TextEditingController();
+  ///* overview screen variable
+  String _eventName = '';
+  String _hostName = '';
   File? _thumbnail;
-
   File? get thumbnail => _thumbnail;
+  String get eventName => _eventName;
+  String get hostName => _hostName;
 
-  void setThumbnail(File? file) {
+  set setEventName(String value) {
+    _eventName = value;
+    notifyListeners();
+  }
+
+  set setHostName(String value) {
+    _hostName = value;
+    notifyListeners();
+  }
+
+  set setThumbnail(File? file) {
     _thumbnail = file;
+    notifyListeners();
+  }
+
+  ///* detail screen
+  String _startDate = "";
+  String _endDate = "";
+  String _startTime = "";
+  String _endTime = "";
+  String _location = "";
+  String _description = "";
+
+  String get startDate => _startDate;
+  String get endDate => _endDate;
+  String get startTime => _startTime;
+  String get endTime => _endTime;
+  String get location => _location;
+  String get description => _description;
+
+  set setStartDate(String value) {
+    _startDate = value;
+    notifyListeners();
+  }
+
+  set setEndDate(String value) {
+    _endDate = value;
+    notifyListeners();
+  }
+
+  set setStartTime(String value) {
+    _startTime = value;
+    notifyListeners();
+  }
+
+  set setEndTime(String value) {
+    _endTime = value;
+    notifyListeners();
+  }
+
+  set setLocation (String value) {
+    _location = value;
+    notifyListeners();
+  }
+
+  set setDescription(String value) {
+    _description = value;
     notifyListeners();
   }
 
@@ -56,6 +112,6 @@ class EventlyProvider extends ChangeNotifier {
     );
 
     if (result.path.isEmpty) return;
-    setThumbnail(File(result.path));
+    setThumbnail = File(result.path);
   }
 }
