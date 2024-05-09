@@ -49,5 +49,6 @@ abstract class  LocaleKeys {
   static const event_name_remaining_characters = 'event_name_remaining_characters';
   static const enter_host_name = 'enter_host_name';
   static const host_name_remaining_characters = 'host_name_remaining_characters';
+  static const please_select_thumbnail = 'please_select_thumbnail';
 
 }

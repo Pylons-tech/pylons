@@ -46,5 +46,6 @@
   "enter_event_name": "Enter event name",
   "event_name_remaining_characters": "Event name should have {} characters or more",
   "enter_host_name": "Enter host name",
-  "host_name_remaining_characters": "Host name should have {} characters or more"
+  "host_name_remaining_characters": "Host name should have {} characters or more",
+  "please_select_thumbnail" : "please select thumbnail"
 }
