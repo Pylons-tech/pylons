@@ -401,5 +401,6 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "connected": "Conectada",
-  "no_account_found": "No se encontró ninguna cuenta"
+  "no_account_found": "No se encontró ninguna cuenta",
+  "items": "Elementos"
 }

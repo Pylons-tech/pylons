@@ -402,5 +402,6 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "connected": "Terhubung",
-  "no_account_found": "Tidak ada akun yang ditemukan"
+  "no_account_found": "Tidak ada akun yang ditemukan",
+  "items": "Barang"
 }
