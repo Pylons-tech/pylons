@@ -976,7 +976,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
         final response = await queryClient.cookbook(request);
         return response;
-      }, retryIf: (_) => true);
+     }, retryIf: (_) => true,);
 
       if (response.hasCookbook()) {
         return response.cookbook;
