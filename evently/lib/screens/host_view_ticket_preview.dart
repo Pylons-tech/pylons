@@ -1,4 +1,4 @@
-import 'package:evently/screens/price_screen.dart';
+import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/space_utils.dart';

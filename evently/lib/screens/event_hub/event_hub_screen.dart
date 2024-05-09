@@ -36,7 +36,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
   );
 
   TextStyle subTitleStyle = TextStyle(
-    fontSize: isTablet ? 12.sp : 12.sp,
+    fontSize: isTablet ? 12.sp : 15,
     fontWeight: FontWeight.w700,
     color: EventlyAppTheme.kGrey01,
     fontFamily: kUniversalFontFamily,
@@ -50,46 +50,38 @@ class _EventHubScreenState extends State<EventHubScreen> {
         child: Scaffold(
           backgroundColor: EventlyAppTheme.kBlack,
           body: Padding(
-            padding: EdgeInsets.only(top: 20.h),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: 40.h,
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(color: EventlyAppTheme.kTextLightBlue),
-                          child: Icon(Icons.add, size: 27.h, color: EventlyAppTheme.kWhite),
-                        ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
+                      child: const DecoratedBox(
+                        decoration: BoxDecoration(color: EventlyAppTheme.kTextLightBlue),
+                        child: Icon(Icons.add, size: 21, color: EventlyAppTheme.kWhite),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text(
-                    LocaleKeys.eventhub.tr(),
-                    style: headingStyle,
-                    textAlign: TextAlign.center,
-                  ),
+                Text(
+                  LocaleKeys.eventhub.tr(),
+                  style: headingStyle,
+                  textAlign: TextAlign.center,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     LocaleKeys.welcome_event.tr(),
                     style: titleStyle,
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20.h),
+                const SizedBox(height: 40),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50.w),
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -99,6 +91,7 @@ class _EventHubScreenState extends State<EventHubScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 40),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Align(

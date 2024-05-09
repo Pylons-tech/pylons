@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
+import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
+import 'package:evently/screens/custom_widgets/page_app_bar.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
-import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
-import 'package:evently/widgets/clipped_button.dart';
 import 'package:evently/widgets/evently_price_input_field.dart';
 import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
@@ -203,94 +203,6 @@ class _PriceScreenState extends State<PriceScreen> {
           );
         }),
       ),
-    );
-  }
-}
-
-class BottomButtons extends StatelessWidget {
-  const BottomButtons({
-    super.key,
-    required this.onPressContinue,
-    required this.onPressSaveDraft,
-    required this.isContinueEnable,
-  });
-
-  final VoidCallback onPressContinue;
-  final VoidCallback onPressSaveDraft;
-  final bool isContinueEnable;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClippedButton(
-          title: LocaleKeys.continue_key.tr(),
-          bgColor: isContinueEnable ? EventlyAppTheme.kBlue : EventlyAppTheme.kGery03,
-          textColor: EventlyAppTheme.kWhite,
-          onPressed: () async {
-            Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
-          },
-          cuttingHeight: 15.h,
-          clipperType: ClipperType.bottomLeftTopRight,
-          isShadow: false,
-          fontWeight: FontWeight.w700,
-        ),
-        VerticalSpace(10.h),
-        Center(
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).pushNamed(RouteUtil.kHostTicketPreview);
-            },
-            child: Text(
-              LocaleKeys.save_draft.tr(),
-              style: TextStyle(color: EventlyAppTheme.kTextGrey02, fontSize: 14.sp, fontWeight: FontWeight.w700),
-            ),
-          ),
-        ),
-        VerticalSpace(5.h),
-      ],
-    );
-  }
-}
-
-class PageAppBar extends StatelessWidget {
-  const PageAppBar({
-    super.key,
-    required this.onPressBack,
-  });
-
-  final VoidCallback onPressBack;
-
-  @override
-  Widget build(BuildContext context) {
-    final createEventViewModel = context.watch<CreateEventViewModel>();
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: ValueListenableBuilder(
-              valueListenable: createEventViewModel.currentPage,
-              builder: (_, int currentPage, __) => Padding(
-                  padding: EdgeInsets.only(left: 10.sp),
-                  child: IconButton(
-                    onPressed: onPressBack,
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: EventlyAppTheme.kGrey02,
-                    ),
-                  )),
-            )),
-        ValueListenableBuilder(
-          valueListenable: createEventViewModel.currentPage,
-          builder: (_, int currentPage, __) {
-            return Text(
-              createEventViewModel.pageTitles[createEventViewModel.currentPage.value],
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kTextDarkBlue),
-            );
-          },
-        ),
-      ],
     );
   }
 }
