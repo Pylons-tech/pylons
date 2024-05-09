@@ -22,7 +22,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
 
   @override
   Future<PickedFileModel> pickFile() async {
-    final FilePickerResult? result = await filePicker.pickFiles(type: FileType.image, allowedExtensions: imageAllowedExts);
+    final FilePickerResult? result = await filePicker.pickFiles(type: FileType.image);
 
     if (result == null) {
       return PickedFileModel(

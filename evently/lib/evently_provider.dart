@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:evently/models/denom.dart';
+import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,5 +42,20 @@ class EventlyProvider extends ChangeNotifier {
   void setSelectedDenom(Denom value) {
     _selectedDenom = value;
     notifyListeners();
+  }
+
+  void pickThumbnail() async {
+    final pickedFile = await repository.pickFile();
+
+    final result = pickedFile.getOrElse(
+      () => PickedFileModel(
+        path: "",
+        fileName: "",
+        extension: "",
+      ),
+    );
+
+    if (result.path.isEmpty) return;
+    setThumbnail(File(result.path));
   }
 }
