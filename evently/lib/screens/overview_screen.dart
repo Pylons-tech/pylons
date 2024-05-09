@@ -165,29 +165,41 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     VerticalSpace(10.h),
                     ClipRRect(
                       borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
-                      child: DottedBorder(
-                        borderType: BorderType.Rect,
-                        dashPattern: const [10, 6],
-                        color: EventlyAppTheme.kLightPurple,
-                        strokeWidth: 3.h,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(vertical: 20.w),
-                          child: Column(
-                            children: [
-                              Text(
-                                LocaleKeys.tap_select.tr(),
-                                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                              ),
-                              VerticalSpace(10.h),
-                              SvgPicture.asset(SVGUtils.kSvgUpload),
-                              VerticalSpace(10.h),
-                              Text(
-                                LocaleKeys.mb_limit.tr(),
-                                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
-                              ),
-                            ],
-                          ),
+                      child: Center(
+                        child: DottedBorder(
+                          borderType: BorderType.Rect,
+                          dashPattern: const [10, 6],
+                          color: EventlyAppTheme.kLightPurple,
+                          strokeWidth: 3.h,
+                          child: provider.thumbnail != null
+                              ? Stack(
+                                  children: [
+                                    Image.file(provider.thumbnail!),
+                                    SvgPicture.asset(SVGUtils.kSvgUpload),
+                                  ],
+                                )
+                              : GestureDetector(
+                                  onTap: () => provider.pickThumbnail(),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.symmetric(vertical: 20.w),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          LocaleKeys.tap_select.tr(),
+                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                        ),
+                                        VerticalSpace(10.h),
+                                        SvgPicture.asset(SVGUtils.kSvgUpload),
+                                        VerticalSpace(10.h),
+                                        Text(
+                                          LocaleKeys.mb_limit.tr(),
+                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kLightPurple),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ),
