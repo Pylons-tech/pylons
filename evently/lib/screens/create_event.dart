@@ -36,6 +36,12 @@ class _CreateEventState extends State<CreateEvent> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    createEventViewModel.disposeControllers();
+    super.dispose();
+  }
 }
 
 class CreateEventContent extends StatelessWidget {
