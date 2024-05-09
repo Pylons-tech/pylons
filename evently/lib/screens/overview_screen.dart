@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/evently_provider.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
@@ -37,7 +38,8 @@ class _OverViewScreenState extends State<OverViewScreen> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Form(
+          child: Consumer<EventlyProvider>(
+        builder: (_, provider, __) => Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,9 +89,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EventlyTextField(
+
                       label: LocaleKeys.event_name.tr(),
                       hint: LocaleKeys.what_your_event_called.tr(),
-                      controller: TextEditingController(),
+                      controller: provider.eventNameController,
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
                         return null;
@@ -117,7 +120,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     EventlyTextField(
                       label: LocaleKeys.host_name.tr(),
                       hint: LocaleKeys.who_hosting_it.tr(),
-                      controller: TextEditingController(),
+                      controller: provider.hostNameController,
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
                         return null;
@@ -147,7 +150,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       textAlign: TextAlign.start,
                       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
-                    VerticalSpace(20.h),
+                    VerticalSpace(10.h),
                     ClipRRect(
                       borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
                       child: DottedBorder(
@@ -206,7 +209,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 }
