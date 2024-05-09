@@ -39,9 +39,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const VerticalSpace(20),
               MyStepsIndicator(currentStep: createEventViewModel.currentStep),
               StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              PageAppBar(onPressBack: () {}),
+              const VerticalSpace(20),
+              PageAppBar(onPressBack: () {
+                createEventViewModel.previousPage();
+              }),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 child: Column(
@@ -104,9 +108,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     VerticalSpace(20.h),
                     EventlyTextField(
+                      onChanged: (_) => provider.setLocation = _,
                       label: LocaleKeys.location.tr(),
                       hint: LocaleKeys.search_location.tr(),
-                      controller: TextEditingController(),
+                      controller: TextEditingController(text: provider.location)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.location.length),
+                        ),
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
                         return null;
@@ -116,13 +124,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     EventlyTextField(
                       label: LocaleKeys.description.tr(),
                       hint: LocaleKeys.what_event_for.tr(),
-                      controller: TextEditingController(),
+                      controller: TextEditingController(text: provider.description)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.description.length),
+                        ),
                       textCapitalization: TextCapitalization.sentences,
-                      validator: (value) {
-                        return null;
-                      },
                       noOfLines: 4,
                     ),
+                    const VerticalSpace(80),
                     BottomButtons(
                       onPressContinue: () {},
                       onPressSaveDraft: () {},

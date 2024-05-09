@@ -63,6 +63,7 @@ class EventlyProvider extends ChangeNotifier {
   String _endTime = "";
   String _location = "";
   String _description = "";
+  bool _isDetailEnable = false;
 
   String get startDate => _startDate;
   String get endDate => _endDate;
@@ -70,6 +71,7 @@ class EventlyProvider extends ChangeNotifier {
   String get endTime => _endTime;
   String get location => _location;
   String get description => _description;
+  bool get detailEnable => _isDetailEnable;
 
   set setStartDate(String value) {
     _startDate = value;
@@ -98,6 +100,11 @@ class EventlyProvider extends ChangeNotifier {
 
   set setDescription(String value) {
     _description = value;
+    notifyListeners();
+  }
+
+  set isDetailEnable(bool value) {
+    _isDetailEnable = value;
     notifyListeners();
   }
 

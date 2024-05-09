@@ -136,7 +136,9 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     ),
                     const VerticalSpace(80),
                     BottomButtons(
-                      onPressContinue: () {},
+                      onPressContinue: () {
+                        createEventViewModel.nextPage();
+                      },
                       onPressSaveDraft: () {},
                       isContinueEnable: provider.isOverviewEnable,
                     )
