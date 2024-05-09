@@ -53,13 +53,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => sl<EventlyProvider>()),
       ],
       child: ScreenUtilInit(
+        designSize: const Size(428, 932),
         minTextAdapt: true,
         builder: (BuildContext context, child) => MaterialApp(
-
           builder: (context, widget) {
             ScreenUtil.init(context);
             return MediaQuery(
-
               data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
               child: widget!,
             );
