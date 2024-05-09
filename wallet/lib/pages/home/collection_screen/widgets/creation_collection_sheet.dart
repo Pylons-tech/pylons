@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ import '../../easel_section/no_easel_art_work.dart';
 import '../collection_screen.dart';
 import '../collection_view_model.dart';
 import '../preview_nft_grid.dart';
+import 'package:pylons_wallet/utils/constants.dart' as constants;
 
 class CreationsCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
@@ -58,14 +58,20 @@ class CreationsCollection extends StatelessWidget {
                       childrenDelegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final nft = viewModel.creations[index];
+
+                          /// This change will reflect only for upylon ibcCoins
+                          /// message change request will reflect only if [isPylon] is [true]
+                          final coinWithDenom = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION? "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}"
+                              : "${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))} ${nft.ibcCoins.getAbbrev()}";
+
+
                           return ClipRRect(
                             child: GestureDetector(
                               onTap: () => onNFTSelected(nft),
                               child: Banner(
                                 color: AppColors.kPriceTagColor,
                                 location: BannerLocation.topStart,
-                                message:
-                                    "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
+                                message: nft.price == "0" ? LocaleKeys.free.tr() : coinWithDenom,
                                 child: PreviewNFTGrid(
                                   assetType: nft.assetType,
                                   on3dNFT: (BuildContext context) => Container(

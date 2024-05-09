@@ -8,6 +8,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -68,11 +69,15 @@ class LatestTransactions extends StatelessWidget {
   Column getAmountColumn({required TransactionHistory txHistory}) {
     if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
         txHistory.transactionTypeEnum == WalletHistoryTransactionType.RECEIVE) {
+
+      final checkIfKPYLNAbbr = denomAbbr[defaultCurrency] == kPYLN_ABBREVATION;
+      final historyWithDenom = "${getPrefix(txHistory) ? "" : "+"}${checkIfKPYLNAbbr?"\$${IBCCoins.upylon.pylnToCredit(defaultCurrency.convertFromU(txHistory))}":defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}";
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            "${getPrefix(txHistory) ? "" : "+"}${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
+            historyWithDenom,
             style: _headingTextStyle,
           ),
           if (defaultCurrency != kUSD)
