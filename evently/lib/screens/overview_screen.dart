@@ -56,7 +56,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EventlyTextField(
-                      controller: TextEditingController(text: provider.eventName),
+                      controller: TextEditingController(text: provider.eventName)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.eventName.length),
+                        ),
                       onChanged: (_) => provider.setEventName = _,
                       label: LocaleKeys.event_name.tr(),
                       hint: LocaleKeys.what_your_event_called.tr(),
@@ -64,7 +67,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     ),
                     VerticalSpace(20.h),
                     EventlyTextField(
-                      controller: TextEditingController(text: provider.hostName),
+                      controller: TextEditingController(text: provider.hostName)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.hostName.length),
+                        ),
                       onChanged: (String _) => provider.setHostName = _,
                       label: LocaleKeys.host_name.tr(),
                       hint: LocaleKeys.who_hosting_it.tr(),
@@ -86,17 +92,27 @@ class _OverViewScreenState extends State<OverViewScreen> {
                           color: EventlyAppTheme.kTextDarkPurple,
                           strokeWidth: 3.h,
                           child: provider.thumbnail != null
-                              ? Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Image.file(provider.thumbnail!),
-                                    GestureDetector(onTap: () => provider.pickThumbnail(), child: SvgPicture.asset(SVGUtils.kSvgUpload)),
-                                  ],
+                              ? SizedBox(
+                                  height: 176,
+                                  width: double.infinity,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image.file(
+                                        provider.thumbnail!,
+                                        fit: BoxFit.cover,
+                                        height: 176,
+                                        width: double.infinity,
+                                      ),
+                                      GestureDetector(onTap: () => provider.pickThumbnail(), child: SvgPicture.asset(SVGUtils.kSvgUpload)),
+                                    ],
+                                  ),
                                 )
                               : GestureDetector(
                                   onTap: () => provider.pickThumbnail(),
                                   child: Container(
                                     width: double.infinity,
+                                    height: 176,
                                     padding: EdgeInsets.symmetric(vertical: 20.w),
                                     child: Column(
                                       children: [
