@@ -44,12 +44,8 @@ class _OverViewScreenState extends State<OverViewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const VerticalSpace(20),
               MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(5),
               StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(10),
-              const VerticalSpace(20),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -82,32 +78,39 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   ),
                 ],
               ),
-              const VerticalSpace(20),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EventlyTextField(
-
                       label: LocaleKeys.event_name.tr(),
                       hint: LocaleKeys.what_your_event_called.tr(),
                       controller: provider.eventNameController,
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
+                        if (value!.isEmpty) {
+                          _eventNameFieldError.value = LocaleKeys.enter_event_name.tr();
+                          return;
+                        }
+                        if (value.length <= kMinEventName) {
+                          _eventNameFieldError.value = LocaleKeys.event_name_remaining_characters.tr(args: [kMinEventName.toString()]);
+                          return;
+                        }
+                        _eventNameFieldError.value = '';
                         return null;
                       },
                     ),
                     ValueListenableBuilder<String>(
                       valueListenable: _eventNameFieldError,
-                      builder: (_, String artNameFieldError, __) {
-                        if (artNameFieldError.isEmpty) {
+                      builder: (_, String eventNameFieldError, __) {
+                        if (eventNameFieldError.isEmpty) {
                           return const SizedBox.shrink();
                         }
                         return Padding(
                           padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
                           child: Text(
-                            artNameFieldError,
+                            eventNameFieldError,
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.red,
@@ -123,19 +126,28 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       controller: provider.hostNameController,
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
+                        if (value!.isEmpty) {
+                          _hostNameFieldError.value = LocaleKeys.enter_host_name.tr();
+                          return;
+                        }
+                        if (value.length <= kMinEventName) {
+                          _hostNameFieldError.value = LocaleKeys.host_name_remaining_characters.tr(args: [kMinHostName.toString()]);
+                          return;
+                        }
+                        _hostNameFieldError.value = '';
                         return null;
                       },
                     ),
                     ValueListenableBuilder<String>(
                       valueListenable: _hostNameFieldError,
-                      builder: (_, String artNameFieldError, __) {
-                        if (artNameFieldError.isEmpty) {
+                      builder: (_, String hostNameFieldError, __) {
+                        if (hostNameFieldError.isEmpty) {
                           return const SizedBox.shrink();
                         }
                         return Padding(
                           padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
                           child: Text(
-                            artNameFieldError,
+                            hostNameFieldError,
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.red,
@@ -185,7 +197,8 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       bgColor: EventlyAppTheme.kBlue,
                       textColor: EventlyAppTheme.kWhite,
                       onPressed: () {
-                        createEventViewModel.nextPage();
+                        // createEventViewModel.nextPage();
+                        validateAndUpdateDescription(moveNextPage: true);
                       },
                       cuttingHeight: 15.h,
                       clipperType: ClipperType.bottomLeftTopRight,
@@ -211,5 +224,15 @@ class _OverViewScreenState extends State<OverViewScreen> {
         ),
       )),
     );
+  }
+
+  void validateAndUpdateDescription({required bool moveNextPage}) {
+    FocusScope.of(context).unfocus();
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    if (_eventNameFieldError.value.isNotEmpty || _hostNameFieldError.value.isNotEmpty) {
+      return;
+    }
   }
 }
