@@ -26,7 +26,11 @@ class BottomButtons extends StatelessWidget {
           title: LocaleKeys.continue_key.tr(),
           bgColor: isContinueEnable ? EventlyAppTheme.kBlue : EventlyAppTheme.kGery03,
           textColor: EventlyAppTheme.kWhite,
-          onPressed: onPressContinue,
+          onPressed: () {
+            if (isContinueEnable) {
+              onPressContinue();
+            }
+          },
           cuttingHeight: 15.h,
           clipperType: ClipperType.bottomLeftTopRight,
           isShadow: false,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
+import 'package:evently/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,23 +22,38 @@ class EventlyProvider extends ChangeNotifier {
   String _eventName = '';
   String _hostName = '';
   File? _thumbnail;
+  bool _isOverviewEnable = false;
+
   File? get thumbnail => _thumbnail;
   String get eventName => _eventName;
   String get hostName => _hostName;
+  bool get isOverviewEnable => _isOverviewEnable;
 
   set setEventName(String value) {
     _eventName = value;
+    checkIsOverEnable();
     notifyListeners();
   }
 
   set setHostName(String value) {
     _hostName = value;
+    checkIsOverEnable();
     notifyListeners();
   }
 
   set setThumbnail(File? file) {
     _thumbnail = file;
+    checkIsOverEnable();
     notifyListeners();
+  }
+
+  set setOverviewEnable(bool value) {
+    _isOverviewEnable = value;
+    notifyListeners();
+  }
+
+  checkIsOverEnable() {
+    setOverviewEnable = thumbnail != null && eventName.length >= kMinEventName && hostName.length >= kMinHostName;
   }
 
   ///* detail screen
@@ -75,7 +91,7 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setLocation (String value) {
+  set setLocation(String value) {
     _location = value;
     notifyListeners();
   }

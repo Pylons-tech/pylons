@@ -40,7 +40,7 @@ class EventlyTextField extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
         SizedBox(height: 4.h),
         Stack(
@@ -73,7 +73,7 @@ class EventlyTextField extends StatelessWidget {
         child: TextFormField(
           enabled: enable,
           onChanged: onChanged,
-          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -83,7 +83,7 @@ class EventlyTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+            hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
