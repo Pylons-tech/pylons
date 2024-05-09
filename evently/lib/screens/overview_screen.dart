@@ -43,15 +43,20 @@ class _OverViewScreenState extends State<OverViewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const VerticalSpace(20),
               MyStepsIndicator(currentStep: createEventViewModel.currentStep),
               StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              PageAppBar(onPressBack: () {}),
+              const VerticalSpace(20),
+              PageAppBar(onPressBack: () {
+                Navigator.of(context).pop();
+              }),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EventlyTextField(
+                      controller: TextEditingController(text: provider.eventName),
                       onChanged: (_) => provider.setEventName = _,
                       label: LocaleKeys.event_name.tr(),
                       hint: LocaleKeys.what_your_event_called.tr(),
@@ -59,6 +64,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                     ),
                     VerticalSpace(20.h),
                     EventlyTextField(
+                      controller: TextEditingController(text: provider.hostName),
                       onChanged: (String _) => provider.setHostName = _,
                       label: LocaleKeys.host_name.tr(),
                       hint: LocaleKeys.who_hosting_it.tr(),
@@ -70,7 +76,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       textAlign: TextAlign.start,
                       style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
-                    VerticalSpace(10.h),
+                    SizedBox(height: 4.h),
                     ClipRRect(
                       borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
                       child: Center(
@@ -112,10 +118,11 @@ class _OverViewScreenState extends State<OverViewScreen> {
                         ),
                       ),
                     ),
+                    const VerticalSpace(80),
                     BottomButtons(
                       onPressContinue: () {},
                       onPressSaveDraft: () {},
-                      isContinueEnable: false,
+                      isContinueEnable: provider.isOverviewEnable,
                     )
                   ],
                 ),
