@@ -28,6 +28,7 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
@@ -48,6 +49,7 @@ import '../../model/common.dart';
 import '../../model/update_recipe_model.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 import '../../utils/types.dart';
+import 'package:pylons_wallet/utils/constants.dart' as constants;
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
@@ -1199,6 +1201,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    final updateText = nft.ibcCoins.getAbbrev() == constants.kPYLN_ABBREVATION?
+        "\$${nft.ibcCoins.pylnToCredit(nft.ibcCoins.getCoinWithProperDenomination(nft.price))}"
+        : "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}";
+
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
@@ -1213,6 +1219,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
             Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       ),
       navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        title: nft.name,
+        imageUrl: Uri.parse(nft.url),
+        description: '${nft.description}  Price:${nft.price == "0" ? LocaleKeys.free.tr() :updateText}'
+        ,
+      )
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(

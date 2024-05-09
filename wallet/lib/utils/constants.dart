@@ -187,7 +187,7 @@ const String kAgoric = "Agoric";
 const String kJuno = "Juno";
 const String kNone = "None";
 const String kEmoney = "eMoney Euro";
-const String kPylons = "Pylons";
+const String kPylons = "Pylons Credit";
 const String kDollar = "U.S. Dollar";
 const String kPoints = "Points";
 const String kAtom = "ATOM";
@@ -217,7 +217,7 @@ List<Color> colorListForPracticeTest = [
 /// Currency ABRR
 const String kEmoneyAbb = "EEUR";
 const String kAGoricAbb = "run";
-const String kPYLN_ABBREVATION = 'PYLN';
+const String kPYLN_ABBREVATION = 'credit';
 const String kStripeUSD_ABR = 'USD';
 const String kAgoricAbr = "RUN";
 const String kAtomAbr = "ATOM";
