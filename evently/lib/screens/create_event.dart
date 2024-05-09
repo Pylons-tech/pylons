@@ -20,8 +20,9 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   void initState() {
-    createEventViewModel.init();
     super.initState();
+
+    createEventViewModel.init();
   }
 
   @override
