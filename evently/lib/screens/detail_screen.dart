@@ -57,7 +57,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           child: EventlyTextField(
                             enable: false,
                             label: LocaleKeys.start_date.tr(),
-                            controller: TextEditingController(),
+                            controller: TextEditingController(text: provider.startDate),
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
                               return null;
@@ -69,7 +69,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           child: EventlyTextField(
                             enable: false,
                             label: LocaleKeys.end_date.tr(),
-                            controller: TextEditingController(),
+                            controller: TextEditingController(text: provider.endDate),
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
                               return null;
@@ -85,7 +85,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           child: EventlyTextField(
                             enable: false,
                             label: LocaleKeys.start_time.tr(),
-                            controller: TextEditingController(),
+                            controller: TextEditingController(text: provider.startTime),
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
                               return null;
@@ -97,7 +97,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           child: EventlyTextField(
                             enable: false,
                             label: LocaleKeys.end_time.tr(),
-                            controller: TextEditingController(),
+                            controller: TextEditingController(text: provider.endTime),
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
                               return null;
@@ -135,7 +135,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     BottomButtons(
                       onPressContinue: () {},
                       onPressSaveDraft: () {},
-                      isContinueEnable: false,
+                      isContinueEnable: provider.isDetailEnable,
                     ),
                   ],
                 ),
