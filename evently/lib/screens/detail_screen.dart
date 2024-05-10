@@ -54,26 +54,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.start_date.tr(),
-                            controller: TextEditingController(text: provider.startDate),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
+                          child: GestureDetector(
+                            onTap: () async {
+                              _showDatePicker(onSelected: (DateTime? val) {
+                                if (val == null) return;
+                                provider.setStartDate = DateFormat("dd-MM-yyyy").format(val);
+                              });
                             },
+                            child: EventlyTextField(
+                              enable: false,
+                              label: LocaleKeys.start_date.tr(),
+                              controller: TextEditingController(text: provider.startDate),
+                              textCapitalization: TextCapitalization.sentences,
+                            ),
                           ),
                         ),
                         HorizontalSpace(20.w),
                         Expanded(
-                          child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.end_date.tr(),
-                            controller: TextEditingController(text: provider.endDate),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
+                          child: GestureDetector(
+                            onTap: () {
+                              _showDatePicker(onSelected: (DateTime? val) {
+                                if (val == null) return;
+                                provider.setEndDate = DateFormat("dd-MM-yyyy").format(val);
+                              });
                             },
+                            child: EventlyTextField(
+                              enable: false,
+                              label: LocaleKeys.end_date.tr(),
+                              controller: TextEditingController(text: provider.endDate),
+                              textCapitalization: TextCapitalization.sentences,
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -82,26 +95,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.start_time.tr(),
-                            controller: TextEditingController(text: provider.startTime),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
+                          child: GestureDetector(
+                            onTap: () {
+                              _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
+                                if (timeOfDay == null) return;
+                                provider.setStartTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                              });
                             },
+                            child: EventlyTextField(
+                              enable: false,
+                              label: LocaleKeys.start_time.tr(),
+                              controller: TextEditingController(text: provider.startTime),
+                              textCapitalization: TextCapitalization.sentences,
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
                           ),
                         ),
                         HorizontalSpace(20.w),
                         Expanded(
-                          child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.end_time.tr(),
-                            controller: TextEditingController(text: provider.endTime),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
+                          child: GestureDetector(
+                            onTap: () {
+                              _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
+                                if (timeOfDay == null) return;
+                                provider.setEndTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                              });
                             },
+                            child: EventlyTextField(
+                              enable: false,
+                              label: LocaleKeys.end_time.tr(),
+                              controller: TextEditingController(text: provider.endTime),
+                              textCapitalization: TextCapitalization.sentences,
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -145,5 +174,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       )),
     );
+  }
+
+  _showTimerPicker({required ValueChanged<TimeOfDay?> onSelected}) {
+    showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    ).then((value) => onSelected(value!));
+  }
+
+  _showDatePicker({required ValueChanged<DateTime?> onSelected}) {
+    showDatePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now(),
+    ).then((value) => onSelected(value!));
   }
 }
