@@ -35,6 +35,15 @@ const kMinHostName = 9;
 
 const kErrProfileNotExist = 'profileDoesNotExist';
 
+const cookbookName = "Evently Cookbook";
+const cookbookDesc = "Cookbook for Evenlty Event";
+const kVersionCookboox = "v0.0.1";
+const supportedEmail = "support@pylons.tech";
+
+/// ````Reserved words, symbols, IDs etc
+const kCookbookId = 'cookbook_id';
+const kUsername = 'username';
+const kHostName = 'artistName';
 
 /// ```SVG assets
 class SVGUtils {

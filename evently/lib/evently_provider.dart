@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:evently/main.dart';
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/extension_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -141,15 +143,11 @@ class EventlyProvider extends ChangeNotifier {
     setThumbnail = File(result.path);
   }
 
-  Future<bool> createRecipe({required Event event}) {
-    return Future.value(true);
-  }
-
-  void onPublishPress() {}
-
-  String currentUseName = "";
+  String currentUserName = "";
   bool stripeAccountExists = false;
   late Event event;
+  String? _cookbookId;
+  String _recipeId = "";
 
   bool showStripeDialog() => !stripeAccountExists && _selectedDenom.symbol == kUsdSymbol && isFreeDrop == FreeDrop.no;
 
@@ -158,7 +156,7 @@ class EventlyProvider extends ChangeNotifier {
     final sdkResponse = await PylonsWallet.instance.getProfile();
 
     if (sdkResponse.success) {
-      currentUseName = sdkResponse.data!.username;
+      currentUserName = sdkResponse.data!.username;
       stripeAccountExists = sdkResponse.data!.stripeExists;
 
       supportedDenomList = Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
@@ -167,8 +165,64 @@ class EventlyProvider extends ChangeNotifier {
         _selectedDenom = supportedDenomList.first;
       }
     }
-    setHostName = currentUseName;
+    setHostName = currentUserName;
 
     return sdkResponse;
   }
+
+  Future<bool> createRecipe({required Event event}) async {
+    final scaffoldMessengerState = navigatorKey.getState();
+
+    _cookbookId = repository.getCookbookId();
+
+    final String savedUserName = repository.getCookBookGeneratorUsername();
+
+    if (_cookbookId == null || isDifferentUserName(savedUserName)) {
+      // create cookbook
+      final isCookBookCreated = await createCookbook();
+
+      if (isCookBookCreated) {
+        // this delay is added to wait the transaction is settle
+        // on the blockchain
+        Future.delayed(const Duration(milliseconds: 800));
+        // get device cookbook id
+        _cookbookId = repository.getCookbookId();
+        notifyListeners();
+      } else {
+        return false;
+      }
+    }
+
+    _recipeId = repository.autoGenerateEventlyId();
+
+
+    return Future.value(true);
+  }
+
+  /// send createCookBook tx message to the wallet app
+  /// return true or false depending on the response from the wallet app
+  Future<bool> createCookbook() async {
+    _cookbookId = repository.autoGenerateEventlyId();
+    final cookBook1 = Cookbook(
+      creator: "",
+      id: _cookbookId,
+      name: cookbookName,
+      description: cookbookDesc,
+      developer: hostName,
+      version: kVersionCookboox,
+      supportEmail: supportedEmail,
+      enabled: true,
+    );
+
+    final response = await PylonsWallet.instance.txCreateCookbook(cookBook1);
+    if (response.success) {
+      repository.saveCookBookGeneratorUsername(currentUserName);
+      return true;
+    }
+
+    navigatorKey.showMsg(message: response.error);
+    return false;
+  }
+
+  bool isDifferentUserName(String savedUserName) => currentUserName.isNotEmpty && savedUserName != currentUserName;
 }
