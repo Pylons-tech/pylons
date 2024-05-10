@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
             '/': (context) => const SplashScreen(),
             RouteUtil.kRouteEventHub: (context) => const EventHubScreen(),
             RouteUtil.kCreateEvent: (context) => const CreateEvent(),
-            RouteUtil.kHostTicketPreview: (context) => const HostTicketPreview(),
             RouteUtil.kBuyerResponse: (context) => const BuyerResponseScreen(),
           },
         ),

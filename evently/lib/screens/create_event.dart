@@ -1,4 +1,5 @@
 import 'package:evently/screens/detail_screen.dart';
+import 'package:evently/screens/host_view_ticket_preview.dart';
 import 'package:evently/screens/overview_screen.dart';
 import 'package:evently/screens/perks_screen.dart';
 import 'package:evently/screens/price_screen.dart';
@@ -56,7 +57,7 @@ class CreateEventContent extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       onPageChanged: (int page) {
         createEventViewModel.currentPage.value = page;
-        final map = {0: 0, 1: 1, 2: 2, 3: 3};
+        final map = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4};
         createEventViewModel.currentStep.value = map[page]!;
       },
       itemBuilder: (BuildContext context, int index) {
@@ -65,6 +66,7 @@ class CreateEventContent extends StatelessWidget {
           1: details,
           2: perks,
           3: price,
+          4: ticketPreview,
         };
 
         return map[index]?.call() ?? const SizedBox();
@@ -86,5 +88,9 @@ class CreateEventContent extends StatelessWidget {
 
   Widget price() {
     return const PriceScreen();
+  }
+
+  Widget ticketPreview() {
+    return const HostTicketPreview();
   }
 }

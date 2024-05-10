@@ -47,5 +47,11 @@
   "event_name_remaining_characters": "Event name should have {} characters or more",
   "enter_host_name": "Enter host name",
   "host_name_remaining_characters": "Host name should have {} characters or more",
-  "please_select_thumbnail" : "please select thumbnail"
+  "please_select_thumbnail" : "please select thumbnail",
+  "download_pylons_description": "Please download the Pylons app and create a username to publish a Event with Evently.",
+  "download_pylons_app": "Download Pylons app",
+  "create_username_description": "Please Open Pylons app and create a username to publish a Event with Evently.",
+  "open_pylons_app": "Open Pylons app",
+  "create_stripe_description": "Please register with Stripe in the Pylons app to list your NFT for USD.",
+  "start": "Start"
 }
