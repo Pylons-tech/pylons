@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:evently/main.dart';
 import 'package:evently/models/denom.dart';
+import 'package:evently/models/events.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/utils/constants.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
 
-import 'models/events.dart';
 
 enum FreeDrop { yes, no, unselected }
 
@@ -195,14 +195,13 @@ class EventlyProvider extends ChangeNotifier {
 
     _recipeId = repository.autoGenerateEventlyId();
 
-
     return Future.value(true);
   }
 
   /// send createCookBook tx message to the wallet app
   /// return true or false depending on the response from the wallet app
   Future<bool> createCookbook() async {
-    _cookbookId = repository.autoGenerateEventlyId();
+    _cookbookId = repository.autoGenerateCookbookId();
     final cookBook1 = Cookbook(
       creator: "",
       id: _cookbookId,

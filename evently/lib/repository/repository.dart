@@ -15,7 +15,7 @@ abstract class Repository {
 
   /// This method will generate evently Id for the event
   /// Output: [String] the id of the Event that is going to be added in the recipe
-  String autoGenerateEventlyId();
+  String autoGenerateCookbookId();
 
   /// This method will save the username of the cookbook generator
   /// Input: [username] the username of the user who created the cookbook
@@ -29,6 +29,10 @@ abstract class Repository {
   /// This method will get the username of the cookbook generator
   /// Output: [String] returns whether the operation is successful or not
   String getCookBookGeneratorUsername();
+
+  /// This method will generate easel Id for the NFT
+  /// Output: [String] the id of the NFT that is going to be added in the recipe
+  String autoGenerateEventlyId();
 }
 
 @LazySingleton(as: Repository)
@@ -53,7 +57,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String autoGenerateEventlyId() => localDataSource.autoGenerateEventlyId();
+  String autoGenerateCookbookId() => localDataSource.autoGenerateCookbookId();
 
   @override
   Future<bool> saveCookBookGeneratorUsername(String username) {
@@ -68,6 +72,11 @@ class RepositoryImp implements Repository {
   @override
   String getCookBookGeneratorUsername() {
     return localDataSource.getCookBookGeneratorUsername();
+  }
+
+  @override
+  String autoGenerateEventlyId() {
+    return localDataSource.autoGenerateEventlyId();
   }
 
 }
