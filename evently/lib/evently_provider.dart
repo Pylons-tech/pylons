@@ -141,12 +141,17 @@ class EventlyProvider extends ChangeNotifier {
     setThumbnail = File(result.path);
   }
 
-  void createRecipe({required Event event}) {}
+  Future<bool> createRecipe({required Event event}) {
+    return Future.value(true);
+  }
 
   void onPublishPress() {}
 
   String currentUseName = "";
   bool stripeAccountExists = false;
+  late Event event;
+
+  bool showStripeDialog() => !stripeAccountExists && _selectedDenom.symbol == kUsdSymbol && isFreeDrop == FreeDrop.no;
 
   ///* this method is used to get the profile
   Future<SDKIPCResponse<Profile>> getProfile() async {

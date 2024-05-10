@@ -33,6 +33,9 @@ const kPylons = "Pylons";
 const kMinEventName = 9;
 const kMinHostName = 9;
 
+const kErrProfileNotExist = 'profileDoesNotExist';
+
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
@@ -43,6 +46,7 @@ class SVGUtils {
   static const kMinus = "assets/images/svg/minus.svg";
   static const kDiamond = "assets/images/svg/diamond.svg";
   static const kCamera = "assets/images/svg/camera.svg";
+  static const kAlertIcon = 'assets/images/svg/i_icon.svg';
 }
 
 /// ```PNG assets

@@ -50,5 +50,11 @@ abstract class  LocaleKeys {
   static const enter_host_name = 'enter_host_name';
   static const host_name_remaining_characters = 'host_name_remaining_characters';
   static const please_select_thumbnail = 'please_select_thumbnail';
+  static const download_pylons_description = 'download_pylons_description';
+  static const download_pylons_app = 'download_pylons_app';
+  static const create_username_description = 'create_username_description';
+  static const open_pylons_app = 'open_pylons_app';
+  static const create_stripe_description = 'create_stripe_description';
+  static const start = 'start';
 
 }
