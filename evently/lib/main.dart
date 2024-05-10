@@ -13,11 +13,15 @@ import 'package:evently/utils/route_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_sdk/pylons_sdk.dart';
 
 bool isTablet = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  PylonsWallet.setup(mode: PylonsMode.prod, host: 'evently');
+
   await EasyLocalization.ensureInitialized();
 
   configureDependencies();
