@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class LocalDataSource {
   /// This method will generate Evently Id for the Event
   /// Output: [String] the id of the Event that is going to be added in the recipe
-  String autoGenerateEventlyId();
+  String autoGenerateCookbookId();
 
   /// This method will save the username of the cookbook generator
   /// Input: [username] the username of the user who created the cookbook
@@ -20,6 +20,10 @@ abstract class LocalDataSource {
   /// This method will get the username of the cookbook generator
   /// Output: [String] returns whether the operation is successful or not
   String getCookBookGeneratorUsername();
+
+  /// This method will generate easel Id for the NFT
+  /// Output: [String] the id of the NFT that is going to be added in the recipe
+  String autoGenerateEventlyId();
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -29,8 +33,8 @@ class LocalDataSourceImpl extends LocalDataSource {
   final SharedPreferences sharedPreferences;
 
   @override
-  String autoGenerateEventlyId() {
-    final String cookbookId = "Event_Recipe_auto_recipe_${getFullDateTime()}";
+  String autoGenerateCookbookId() {
+    final String cookbookId = "Evently_CookBook_auto_cookbook_${getFullDateTime()}";
     return cookbookId;
   }
 
@@ -52,4 +56,11 @@ class LocalDataSourceImpl extends LocalDataSource {
     return sharedPreferences.getString(kUsername) ?? '';
   }
 
+  /// auto generates easelID string
+  /// returns easelId
+  @override
+  String autoGenerateEventlyId() {
+    final String cookbookId = "Evently_Recipe_auto_recipe_${getFullDateTime()}";
+    return cookbookId;
+  }
 }
