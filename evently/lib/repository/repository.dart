@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/picked_file_model.dart';
+import 'package:evently/services/datasources/local_datasource.dart';
 import 'package:evently/utils/failure/failure.dart';
 import 'package:evently/utils/file_utils_helper.dart';
 import 'package:injectable/injectable.dart';
@@ -19,9 +20,13 @@ abstract class Repository {
 
 @LazySingleton(as: Repository)
 class RepositoryImp implements Repository {
-  RepositoryImp({required this.fileUtilsHelper});
+  RepositoryImp({
+    required this.fileUtilsHelper,
+    required this.localDataSource,
+  });
 
   final FileUtilsHelper fileUtilsHelper;
+  final LocalDataSource localDataSource;
 
   @override
   Future<Either<Failure, PickedFileModel>> pickFile() async {
@@ -35,8 +40,5 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String autoGenerateEventlyId() {
-    // TODO: implement autoGenerateEaselId
-    throw UnimplementedError();
-  }
+  String autoGenerateEventlyId() => localDataSource.autoGenerateEventlyId();
 }

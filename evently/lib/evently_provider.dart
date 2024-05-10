@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 
+import 'models/events.dart';
+
 enum FreeDrop { yes, no, unselected }
 
 @LazySingleton()
@@ -136,5 +138,11 @@ class EventlyProvider extends ChangeNotifier {
 
     if (result.path.isEmpty) return;
     setThumbnail = File(result.path);
+  }
+
+  void createRecipe({required Event event}) {
+
+
+
   }
 }
