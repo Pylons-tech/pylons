@@ -71,7 +71,7 @@ class EventlyProvider extends ChangeNotifier {
   String get endTime => _endTime;
   String get location => _location;
   String get description => _description;
-  bool get detailEnable => _isDetailEnable;
+  bool get isDetailEnable => _isDetailEnable;
 
   set setStartDate(String value) {
     _startDate = value;

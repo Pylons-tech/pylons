@@ -93,7 +93,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                           strokeWidth: 3.h,
                           child: provider.thumbnail != null
                               ? SizedBox(
-                                  height: 176,
+                                  height: 180,
                                   width: double.infinity,
                                   child: Stack(
                                     alignment: Alignment.center,
@@ -104,7 +104,12 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                         height: 176,
                                         width: double.infinity,
                                       ),
-                                      GestureDetector(onTap: () => provider.pickThumbnail(), child: SvgPicture.asset(SVGUtils.kSvgUpload)),
+                                      GestureDetector(
+                                          onTap: () => provider.pickThumbnail(),
+                                          child: SvgPicture.asset(
+                                            SVGUtils.kSvgUpload,
+                                            colorFilter: const ColorFilter.mode(EventlyAppTheme.kWhite, BlendMode.srcIn),
+                                          )),
                                     ],
                                   ),
                                 )
@@ -112,7 +117,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                   onTap: () => provider.pickThumbnail(),
                                   child: Container(
                                     width: double.infinity,
-                                    height: 176,
+                                    height: 180,
                                     padding: EdgeInsets.symmetric(vertical: 20.w),
                                     child: Column(
                                       children: [
