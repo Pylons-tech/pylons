@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 import 'models/events.dart';
 
@@ -140,9 +141,29 @@ class EventlyProvider extends ChangeNotifier {
     setThumbnail = File(result.path);
   }
 
-  void createRecipe({required Event event}) {
+  void createRecipe({required Event event}) {}
 
+  void onPublishPress() {}
 
+  String currentUseName = "";
+  bool stripeAccountExists = false;
 
+  ///* this method is used to get the profile
+  Future<SDKIPCResponse<Profile>> getProfile() async {
+    final sdkResponse = await PylonsWallet.instance.getProfile();
+
+    if (sdkResponse.success) {
+      currentUseName = sdkResponse.data!.username;
+      stripeAccountExists = sdkResponse.data!.stripeExists;
+
+      supportedDenomList = Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
+
+      if (supportedDenomList.isNotEmpty && selectedDenom.symbol.isEmpty) {
+        _selectedDenom = supportedDenomList.first;
+      }
+    }
+    setHostName = currentUseName;
+
+    return sdkResponse;
   }
 }
