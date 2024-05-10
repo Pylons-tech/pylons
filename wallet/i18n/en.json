@@ -404,5 +404,6 @@
   "discord": "Discord",
   "twitter": "Twitter",
   "connected": "Connected",
-  "no_account_found": "No account found"
+  "no_account_found": "No account found",
+  "items": "Items"
 }

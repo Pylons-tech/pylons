@@ -22,6 +22,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
+import 'package:pylons_wallet/model/pylon_items.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
@@ -41,6 +42,7 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:retry/retry.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
@@ -354,6 +356,8 @@ abstract class RemoteDataStore {
   Future<TransactionResponse> cancelTrade({required TradeId tradeId, required Address address});
 
   Future<TransactionResponse> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
+
+  Future<List<PylonItems>> getPylonItem({required Address address});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -903,18 +907,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<pylons.Recipe> getRecipe({required CookbookId cookBookId, required RecipeId recipeId}) async {
-    final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryGetRecipeRequest.create()
-      ..cookbookId = cookBookId.toString()
-      ..id = recipeId.toString();
 
-    final response = await queryClient.recipe(request);
+    try{
+      const retry = RetryOptions();
+      final response = await retry.retry(()async {
+        final pylons.QueryClient queryClient = getQueryClient();
+        final request = pylons.QueryGetRecipeRequest.create()
+          ..cookbookId = cookBookId.toString()
+          ..id = recipeId.toString();
 
-    if (response.hasRecipe()) {
-      return response.recipe;
+        final response = await queryClient.recipe(request);
+        return response;
+      }, retryIf: (_) => true ,);
+
+      if (response.hasRecipe()) {
+        return response.recipe;
+      }
+      throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
+    } catch (_) {
+      throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
     }
-
-    throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
   }
 
   @override
@@ -960,15 +972,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<pylons.Cookbook> getCookbookBasedOnId({required String cookBookId}) async {
-    final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryGetCookbookRequest.create()..id = cookBookId;
+    try{
+      const retry = RetryOptions();
 
-    final response = await queryClient.cookbook(request);
-    if (response.hasCookbook()) {
-      return response.cookbook;
+     final response = await retry.retry(()async {
+        final pylons.QueryClient queryClient = getQueryClient();
+        final request = pylons.QueryGetCookbookRequest.create()..id = cookBookId;
+
+        final response = await queryClient.cookbook(request);
+        return response;
+     }, retryIf: (_) => true,);
+
+      if (response.hasCookbook()) {
+        return response.cookbook;
+      }
+
+      throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
+
+    } catch (_) {
+      throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
     }
-
-    throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
   }
 
   @override
@@ -1427,6 +1450,30 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirestoreHelper firebaseHelper;
   final AnalyticsHelper analyticsHelper;
   final OnLogError onLogError;
+
+  @override
+  Future<List<PylonItems>> getPylonItem({required Address address}) async{
+    final baseApiUrl = getBaseEnv().baseApiUrl;
+
+    final uri = Uri.parse("$baseApiUrl/pylons/items/${address.id}");
+
+    final pylonItemsResponse = await httpClient.get(uri).timeout(timeOutDuration);
+
+    if (pylonItemsResponse.statusCode != API_SUCCESS_CODE) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+
+    final pylonItemsMap = jsonDecode(pylonItemsResponse.body);
+
+    final List<PylonItems> pylonListItems= [];
+
+    pylonItemsMap["items"].map((data) {
+     final pylonItems=  PylonItems.fromJson(data as Map<String, dynamic>);
+     pylonListItems.add(pylonItems);
+    }).toList();
+
+    return pylonListItems.toList();
+  }
 }
 
 class AppleInAppPurchaseModel {
