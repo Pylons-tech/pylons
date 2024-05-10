@@ -16,6 +16,19 @@ abstract class Repository {
   /// This method will generate evently Id for the event
   /// Output: [String] the id of the Event that is going to be added in the recipe
   String autoGenerateEventlyId();
+
+  /// This method will save the username of the cookbook generator
+  /// Input: [username] the username of the user who created the cookbook
+  /// Output: [bool] returns whether the operation is successful or not
+  Future<bool> saveCookBookGeneratorUsername(String username);
+
+  /// This method will get the already created cookbook from the local database
+  /// Output: [String] if the cookbook already exists return cookbook else return null
+  String? getCookbookId();
+
+  /// This method will get the username of the cookbook generator
+  /// Output: [String] returns whether the operation is successful or not
+  String getCookBookGeneratorUsername();
 }
 
 @LazySingleton(as: Repository)
@@ -41,4 +54,20 @@ class RepositoryImp implements Repository {
 
   @override
   String autoGenerateEventlyId() => localDataSource.autoGenerateEventlyId();
+
+  @override
+  Future<bool> saveCookBookGeneratorUsername(String username) {
+    return localDataSource.saveCookBookGeneratorUsername(username);
+  }
+
+  @override
+  String? getCookbookId() {
+    return localDataSource.getCookbookId();
+  }
+
+  @override
+  String getCookBookGeneratorUsername() {
+    return localDataSource.getCookBookGeneratorUsername();
+  }
+
 }
