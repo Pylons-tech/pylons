@@ -53,5 +53,8 @@
   "create_username_description": "Please Open Pylons app and create a username to publish a Event with Evently.",
   "open_pylons_app": "Open Pylons app",
   "create_stripe_description": "Please register with Stripe in the Pylons app to list your NFT for USD.",
-  "start": "Start"
+  "start": "Start",
+  "free_shirt": "1 free t-shirt",
+  "free_gift": "Free Gift",
+  "free_drink": "1 free drink"
 }

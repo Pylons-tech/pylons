@@ -45,6 +45,12 @@ const kCookbookId = 'cookbook_id';
 const kUsername = 'username';
 const kHostName = 'artistName';
 
+
+///perks
+const kFreeShirt = "free_shirt";
+const kFreeGift = "free_gift";
+const kFreeDrink = "free_drink";
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';

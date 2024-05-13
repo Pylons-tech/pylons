@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:evently/main.dart';
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/events.dart';
+import 'package:evently/models/perks_model.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/utils/constants.dart';
@@ -77,37 +78,59 @@ class EventlyProvider extends ChangeNotifier {
 
   set setStartDate(String value) {
     _startDate = value;
-
     notifyListeners();
   }
 
   set setEndDate(String value) {
     _endDate = value;
-
     notifyListeners();
   }
 
   set setStartTime(String value) {
     _startTime = value;
-
     notifyListeners();
   }
 
   set setEndTime(String value) {
     _endTime = value;
-
     notifyListeners();
   }
 
   set setLocation(String value) {
     _location = value;
-
     notifyListeners();
   }
 
   set setDescription(String value) {
     _description = value;
+    notifyListeners();
+  }
 
+  /// perks screen
+  final List<PerksModel> _perks = [];
+  int _selectedPerk = 0;
+
+  List<PerksModel> get perks => _perks;
+
+  int get selectedPerk => _selectedPerk;
+
+  set setSelectedPerks(int val) {
+    _selectedPerk = val;
+    notifyListeners();
+  }
+
+  set setPerks(PerksModel perksModel) {
+    _perks.add(perksModel);
+    notifyListeners();
+  }
+
+  updatePerks(PerksModel perksModel, int index) {
+    _perks[index] = perksModel;
+    notifyListeners();
+  }
+
+  removePerks(int index) {
+    _perks.removeAt(index);
     notifyListeners();
   }
 
