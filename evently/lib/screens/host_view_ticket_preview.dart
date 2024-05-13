@@ -37,7 +37,9 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BottomButtons(
-                  onPressContinue: () {},
+                  onPressContinue: () {
+                    onPublishPressed();
+                  },
                   onPressSaveDraft: () {},
                   isContinueEnable: true,
                   clipBtnTxt: LocaleKeys.publish.tr(),
