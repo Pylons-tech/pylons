@@ -12,18 +12,20 @@ class BottomButtons extends StatelessWidget {
     required this.onPressContinue,
     required this.onPressSaveDraft,
     required this.isContinueEnable,
+    this.clipBtnTxt,
   });
 
   final VoidCallback onPressContinue;
   final VoidCallback onPressSaveDraft;
   final bool isContinueEnable;
+  final String? clipBtnTxt;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ClippedButton(
-          title: LocaleKeys.continue_key.tr(),
+          title: clipBtnTxt ?? LocaleKeys.continue_key.tr(),
           bgColor: isContinueEnable ? EventlyAppTheme.kBlue : EventlyAppTheme.kGery03,
           textColor: EventlyAppTheme.kWhite,
           onPressed: () {
