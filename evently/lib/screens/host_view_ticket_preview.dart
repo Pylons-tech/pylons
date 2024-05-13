@@ -32,10 +32,17 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 30.w),
             height: 110.h,
-            child: BottomButtons(
-              onPressContinue: () {},
-              onPressSaveDraft: () {},
-              isContinueEnable: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BottomButtons(
+                  onPressContinue: () {},
+                  onPressSaveDraft: () {},
+                  isContinueEnable: true,
+                  clipBtnTxt: LocaleKeys.publish.tr(),
+                ),
+              ],
             ),
           ),
           body: SingleChildScrollView(

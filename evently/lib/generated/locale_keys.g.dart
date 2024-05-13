@@ -56,5 +56,7 @@ abstract class  LocaleKeys {
   static const open_pylons_app = 'open_pylons_app';
   static const create_stripe_description = 'create_stripe_description';
   static const start = 'start';
+  static const free_gift = 'free_gift';
+  static const free_drink = 'free_drink';
 
 }
