@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/evently_provider.dart';
 import 'package:evently/generated/locale_keys.g.dart';
+import 'package:evently/models/perks_model.dart';
 import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
 import 'package:evently/screens/custom_widgets/page_app_bar.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
@@ -10,6 +12,7 @@ import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/evently_text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,142 +35,236 @@ class _PerksScreenState extends State<PerksScreen> {
     return Scaffold(
         body: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
-          child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: constraints.maxHeight),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Consumer<EventlyProvider>(
+            builder: (_, provider, __) => Form(
+              key: _formKey,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const VerticalSpace(20),
-                  MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-                  const VerticalSpace(5),
-                  StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-                  const VerticalSpace(20),
-                  PageAppBar(
-                    onPressBack: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      createEventViewModel.previousPage();
-                    },
-                  ),
-                  const VerticalSpace(20),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          LocaleKeys.add_perk.tr(),
-                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: DecoratedBox(
-                            decoration: const BoxDecoration(
-                              color: EventlyAppTheme.kBlue,
-                            ),
-                            child: Icon(Icons.add, size: 16.h, color: EventlyAppTheme.kWhite),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const VerticalSpace(10),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Text(
-                      LocaleKeys.there_no_perks_created.tr(),
-                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kGrey01),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ScreenResponsive(
-                          mobileScreen: (context) => Image.asset(
-                            PngUtils.kLightPurpleSingleLine,
-                            height: 40.h,
-                            width: 1.sw,
-                            fit: BoxFit.fill,
-                          ),
-                          tabletScreen: (context) => Image.asset(
-                            PngUtils.kLightPurpleSingleLine,
-                            height: 32.h,
-                            width: 1.sw,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(SVGUtils.kMinus),
-                              HorizontalSpace(10.w),
-                              Text(
-                                LocaleKeys.free_shirt.tr(),
-                                style: TextStyle(color: EventlyAppTheme.kWhite, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const VerticalSpace(10),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: Text(
-                      LocaleKeys.perk_icon.tr(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13.sp,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const VerticalSpace(20),
+                      MyStepsIndicator(currentStep: createEventViewModel.currentStep),
+                      const VerticalSpace(5),
+                      StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
+                      const VerticalSpace(20),
+                      PageAppBar(
+                        onPressBack: () {
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          createEventViewModel.previousPage();
+                        },
                       ),
-                    ),
-                  ),
-                  const VerticalSpace(6),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(padding: const EdgeInsets.all(7), color: EventlyAppTheme.kTextLightPurple, child: SvgPicture.asset(SVGUtils.kShirt)),
-                        Container(padding: const EdgeInsets.all(7), color: Colors.transparent, child: SvgPicture.asset(SVGUtils.kGift)),
-                        Container(padding: const EdgeInsets.all(7), color: Colors.transparent, child: SvgPicture.asset(SVGUtils.kDrinks)),
-                      ],
-                    ),
+                      const VerticalSpace(20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              LocaleKeys.add_perk.tr(),
+                              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                            ),
+                            InkWell(
+                              onTap: () => provider.setPerks = PerksModel(name: kFreeShirt, description: ''),
+                              child: DecoratedBox(
+                                decoration: const BoxDecoration(
+                                  color: EventlyAppTheme.kBlue,
+                                ),
+                                child: Icon(Icons.add, size: 16.h, color: EventlyAppTheme.kWhite),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const VerticalSpace(10),
+                      if (provider.perks.isEmpty)
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Text(
+                            LocaleKeys.there_no_perks_created.tr(),
+                            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: EventlyAppTheme.kGrey01),
+                          ),
+                        ),
+                      if (provider.perks.isNotEmpty)
+                        PerksView(
+                          perksModel: provider.perks[provider.selectedPerk],
+                          onChangeDescription: (String value) => provider.updatePerks(
+                            PerksModel.updateDescription(
+                              description: value,
+                              perksModel: provider.perks[provider.selectedPerk],
+                            ),
+                            provider.selectedPerk,
+                          ),
+                          onChangeName: (String value) => provider.updatePerks(
+                            PerksModel.updateName(
+                              name: value,
+                              perksModel: provider.perks[provider.selectedPerk],
+                            ),
+                            provider.selectedPerk,
+                          ),
+                          removePerk: () {
+                            provider.removePerks(provider.selectedPerk);
+                          },
+                        ),
+                    ],
                   ),
                   const VerticalSpace(20),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: EventlyTextField(
-                      noOfLines: 4,
-                      label: LocaleKeys.description_optional.tr(),
-                      hint: LocaleKeys.claim_free_drink.tr(),
-                      controller: TextEditingController(),
-                      textCapitalization: TextCapitalization.sentences,
-                      validator: (value) {
-                        return null;
-                      },
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: BottomButtons(
+                      onPressContinue: () {},
+                      onPressSaveDraft: () {},
+                      isContinueEnable: true,
                     ),
-                  ),
+                  )
                 ],
               ),
-              BottomButtons(
-                onPressContinue: () {},
-                onPressSaveDraft: () {},
-                isContinueEnable: false,
+            ),
+          ),
+        ),
+      ),
+    ));
+  }
+}
+
+class PerksView extends StatelessWidget {
+  const PerksView({
+    super.key,
+    required this.perksModel,
+    required this.onChangeDescription,
+    required this.onChangeName,
+    required this.removePerk,
+  });
+
+  final PerksModel perksModel;
+
+  final ValueChanged<String> onChangeName;
+  final ValueChanged<String> onChangeDescription;
+  final VoidCallback removePerk;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ScreenResponsive(
+                mobileScreen: (context) => Image.asset(
+                  PngUtils.kLightPurpleSingleLine,
+                  height: 40.h,
+                  width: 1.sw,
+                  fit: BoxFit.fill,
+                ),
+                tabletScreen: (context) => Image.asset(
+                  PngUtils.kLightPurpleSingleLine,
+                  height: 32.h,
+                  width: 1.sw,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      child: SvgPicture.asset(SVGUtils.kMinus),
+                      onTap: () => removePerk(),
+                    ),
+                    HorizontalSpace(10.w),
+                    Text(
+                      perksModel.name.tr(),
+                      style: TextStyle(color: EventlyAppTheme.kWhite, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
         ),
-      )),
-    ));
+        const VerticalSpace(10),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
+          child: Text(
+            LocaleKeys.perk_icon.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13.sp,
+            ),
+          ),
+        ),
+        const VerticalSpace(6),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PerksIconSelection(
+                icon: SVGUtils.kShirt,
+                isSelected: perksModel.name == kFreeShirt,
+                onTap: () => onChangeName(kFreeShirt),
+              ),
+              PerksIconSelection(
+                icon: SVGUtils.kGift,
+                isSelected: perksModel.name == kFreeGift,
+                onTap: () => onChangeName(kFreeGift),
+              ),
+              PerksIconSelection(
+                icon: SVGUtils.kDrinks,
+                isSelected: perksModel.name == kFreeDrink,
+                onTap: () => onChangeName(kFreeDrink),
+              ),
+            ],
+          ),
+        ),
+        const VerticalSpace(20),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 50.w),
+          child: EventlyTextField(
+            onChanged: (_) => onChangeDescription(_),
+            noOfLines: 4,
+            label: LocaleKeys.description_optional.tr(),
+            hint: LocaleKeys.claim_free_drink.tr(),
+            controller: TextEditingController(text: perksModel.description),
+            textCapitalization: TextCapitalization.sentences,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PerksIconSelection extends StatelessWidget {
+  const PerksIconSelection({
+    super.key,
+    required this.icon,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String icon;
+  final bool isSelected;
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        padding: const EdgeInsets.all(7),
+        color: isSelected ? EventlyAppTheme.kTextLightPurple : Colors.transparent,
+        child: SvgPicture.asset(icon),
+      ),
+    );
   }
 }
