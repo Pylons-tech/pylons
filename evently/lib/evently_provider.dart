@@ -134,15 +134,39 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///* price screen
+
   Denom _selectedDenom = Denom.availableDenoms.first;
 
   Denom get selectedDenom => _selectedDenom;
 
   List<Denom> supportedDenomList = Denom.availableDenoms;
 
-  TextEditingController priceController = TextEditingController();
+  FreeDrop _isFreeDrop = FreeDrop.unselected;
 
-  FreeDrop isFreeDrop = FreeDrop.no;
+  int _numberOfTickets = 0;
+  int _price = 0;
+
+  set setNumberOfTickets(int numberOfTickets) {
+    _numberOfTickets = numberOfTickets;
+    notifyListeners();
+  }
+
+  get numberOfTickets => _numberOfTickets;
+
+  get isFreeDrop => _isFreeDrop;
+
+  set setFreeDrop(FreeDrop freeDrop) {
+    _isFreeDrop = freeDrop;
+    notifyListeners();
+  }
+
+  set setPrice(int price) {
+    _price = price;
+    notifyListeners();
+  }
+
+  get price => _price;
 
   void setSelectedDenom(Denom value) {
     _selectedDenom = value;

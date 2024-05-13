@@ -25,21 +25,17 @@ class PerksScreen extends StatefulWidget {
 }
 
 class _PerksScreenState extends State<PerksScreen> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final createEventViewModel = context.watch<CreateEventViewModel>();
 
     return Scaffold(
-        body: LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: constraints.maxHeight),
-          child: Consumer<EventlyProvider>(
-            builder: (_, provider, __) => Form(
-              key: _formKey,
-              child: Column(
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Consumer<EventlyProvider>(
+              builder: (_, provider, __) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -115,7 +111,9 @@ class _PerksScreenState extends State<PerksScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: BottomButtons(
-                      onPressContinue: () {},
+                      onPressContinue: () {
+                        createEventViewModel.nextPage();
+                      },
                       onPressSaveDraft: () {},
                       isContinueEnable: true,
                     ),
@@ -126,7 +124,7 @@ class _PerksScreenState extends State<PerksScreen> {
           ),
         ),
       ),
-    ));
+    );
   }
 }
 

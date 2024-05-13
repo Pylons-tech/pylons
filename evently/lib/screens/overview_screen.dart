@@ -24,8 +24,6 @@ class OverViewScreen extends StatefulWidget {
 }
 
 class _OverViewScreenState extends State<OverViewScreen> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -38,120 +36,117 @@ class _OverViewScreenState extends State<OverViewScreen> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Consumer<EventlyProvider>(
-        builder: (_, provider, __) => Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const VerticalSpace(20),
-              MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-              StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(20),
-              PageAppBar(onPressBack: () {
-                Navigator.of(context).pop();
-              }),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EventlyTextField(
-                      controller: TextEditingController(text: provider.eventName)
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: provider.eventName.length),
-                        ),
-                      onChanged: (_) => provider.setEventName = _,
-                      label: LocaleKeys.event_name.tr(),
-                      hint: LocaleKeys.what_your_event_called.tr(),
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                    VerticalSpace(20.h),
-                    EventlyTextField(
-                      controller: TextEditingController(text: provider.hostName)
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: provider.hostName.length),
-                        ),
-                      onChanged: (String _) => provider.setHostName = _,
-                      label: LocaleKeys.host_name.tr(),
-                      hint: LocaleKeys.who_hosting_it.tr(),
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                    VerticalSpace(20.h),
-                    Text(
-                      LocaleKeys.thumbnail.tr(),
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(height: 4.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
-                      child: Center(
-                        child: DottedBorder(
-                          borderType: BorderType.Rect,
-                          dashPattern: const [10, 6],
-                          color: EventlyAppTheme.kTextDarkPurple,
-                          strokeWidth: 3.h,
-                          child: provider.thumbnail != null
-                              ? SizedBox(
-                                  height: 180,
+        builder: (_, provider, __) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const VerticalSpace(20),
+            MyStepsIndicator(currentStep: createEventViewModel.currentStep),
+            StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
+            const VerticalSpace(20),
+            PageAppBar(onPressBack: () {
+              Navigator.of(context).pop();
+            }),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  EventlyTextField(
+                    controller: TextEditingController(text: provider.eventName)
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: provider.eventName.length),
+                      ),
+                    onChanged: (_) => provider.setEventName = _,
+                    label: LocaleKeys.event_name.tr(),
+                    hint: LocaleKeys.what_your_event_called.tr(),
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  VerticalSpace(20.h),
+                  EventlyTextField(
+                    controller: TextEditingController(text: provider.hostName)
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: provider.hostName.length),
+                      ),
+                    onChanged: (String _) => provider.setHostName = _,
+                    label: LocaleKeys.host_name.tr(),
+                    hint: LocaleKeys.who_hosting_it.tr(),
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                  VerticalSpace(20.h),
+                  Text(
+                    LocaleKeys.thumbnail.tr(),
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(height: 4.h),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), topLeft: Radius.circular(8.r)),
+                    child: Center(
+                      child: DottedBorder(
+                        borderType: BorderType.Rect,
+                        dashPattern: const [10, 6],
+                        color: EventlyAppTheme.kTextDarkPurple,
+                        strokeWidth: 3.h,
+                        child: provider.thumbnail != null
+                            ? SizedBox(
+                                height: 180,
+                                width: double.infinity,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.file(
+                                      provider.thumbnail!,
+                                      fit: BoxFit.cover,
+                                      height: 176,
+                                      width: double.infinity,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () => provider.pickThumbnail(),
+                                        child: SvgPicture.asset(
+                                          SVGUtils.kSvgUpload,
+                                          colorFilter: const ColorFilter.mode(EventlyAppTheme.kWhite, BlendMode.srcIn),
+                                        )),
+                                  ],
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () => provider.pickThumbnail(),
+                                child: Container(
                                   width: double.infinity,
-                                  child: Stack(
-                                    alignment: Alignment.center,
+                                  height: 180,
+                                  padding: EdgeInsets.symmetric(vertical: 20.w),
+                                  child: Column(
                                     children: [
-                                      Image.file(
-                                        provider.thumbnail!,
-                                        fit: BoxFit.cover,
-                                        height: 176,
-                                        width: double.infinity,
+                                      Text(
+                                        LocaleKeys.tap_select.tr(),
+                                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
                                       ),
-                                      GestureDetector(
-                                          onTap: () => provider.pickThumbnail(),
-                                          child: SvgPicture.asset(
-                                            SVGUtils.kSvgUpload,
-                                            colorFilter: const ColorFilter.mode(EventlyAppTheme.kWhite, BlendMode.srcIn),
-                                          )),
+                                      VerticalSpace(10.h),
+                                      SvgPicture.asset(SVGUtils.kSvgUpload),
+                                      VerticalSpace(10.h),
+                                      Text(
+                                        LocaleKeys.mb_limit.tr(),
+                                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
+                                      ),
                                     ],
                                   ),
-                                )
-                              : GestureDetector(
-                                  onTap: () => provider.pickThumbnail(),
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 180,
-                                    padding: EdgeInsets.symmetric(vertical: 20.w),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          LocaleKeys.tap_select.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
-                                        ),
-                                        VerticalSpace(10.h),
-                                        SvgPicture.asset(SVGUtils.kSvgUpload),
-                                        VerticalSpace(10.h),
-                                        Text(
-                                          LocaleKeys.mb_limit.tr(),
-                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kTextDarkPurple),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ),
-                        ),
+                              ),
                       ),
                     ),
-                    const VerticalSpace(80),
-                    BottomButtons(
-                      onPressContinue: () {
-                        createEventViewModel.nextPage();
-                      },
-                      onPressSaveDraft: () {},
-                      isContinueEnable: provider.isOverviewEnable,
-                    )
-                  ],
-                ),
+                  ),
+                  const VerticalSpace(80),
+                  BottomButtons(
+                    onPressContinue: () {
+                      createEventViewModel.nextPage();
+                    },
+                    onPressSaveDraft: () {},
+                    isContinueEnable: provider.isOverviewEnable,
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       )),
     );
