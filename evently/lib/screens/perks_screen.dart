@@ -12,7 +12,6 @@ import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/evently_text_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -91,7 +90,7 @@ class _PerksScreenState extends State<PerksScreen> {
                         ),
                       if (provider.perks.isNotEmpty)
                         PerksView(
-                          perksModel: provider.perks[provider.selectedPerk],
+                          perksModel: provider.perks,
                           onChangeDescription: (String value) => provider.updatePerks(
                             PerksModel.updateDescription(
                               description: value,
@@ -106,9 +105,9 @@ class _PerksScreenState extends State<PerksScreen> {
                             ),
                             provider.selectedPerk,
                           ),
-                          removePerk: () {
-                            provider.removePerks(provider.selectedPerk);
-                          },
+                          removePerk: () => provider.removePerks(provider.selectedPerk),
+                          selectedIndex: provider.selectedPerk,
+                          setSelectedPerk: (_) => provider.setSelectedPerks = _,
                         ),
                     ],
                   ),
@@ -138,13 +137,16 @@ class PerksView extends StatelessWidget {
     required this.onChangeDescription,
     required this.onChangeName,
     required this.removePerk,
+    required this.selectedIndex,
+    required this.setSelectedPerk,
   });
 
-  final PerksModel perksModel;
-
+  final List<PerksModel> perksModel;
+  final int selectedIndex;
   final ValueChanged<String> onChangeName;
   final ValueChanged<String> onChangeDescription;
   final VoidCallback removePerk;
+  final ValueChanged<int> setSelectedPerk;
 
   @override
   Widget build(BuildContext context) {
@@ -152,44 +154,55 @@ class PerksView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              ScreenResponsive(
-                mobileScreen: (context) => Image.asset(
-                  PngUtils.kLightPurpleSingleLine,
-                  height: 40.h,
-                  width: 1.sw,
-                  fit: BoxFit.fill,
-                ),
-                tabletScreen: (context) => Image.asset(
-                  PngUtils.kLightPurpleSingleLine,
-                  height: 32.h,
-                  width: 1.sw,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      child: SvgPicture.asset(SVGUtils.kMinus),
-                      onTap: () => removePerk(),
+        Column(
+          children: perksModel
+              .asMap()
+              .entries
+              .map(
+                (e) => GestureDetector(
+                  onTap: () => setSelectedPerk(e.key),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 10.h),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ScreenResponsive(
+                          mobileScreen: (context) => Image.asset(
+                            selectedIndex == e.key ? PngUtils.kLightPurpleSingleLine : PngUtils.kDarkPurpleSingleLine,
+                            height: 40.h,
+                            width: 1.sw,
+                            fit: BoxFit.fill,
+                          ),
+                          tabletScreen: (context) => Image.asset(
+                            selectedIndex == e.key ? PngUtils.kLightPurpleSingleLine : PngUtils.kDarkPurpleSingleLine,
+                            height: 32.h,
+                            width: 1.sw,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                child: SvgPicture.asset(SVGUtils.kMinus),
+                                onTap: () => removePerk(),
+                              ),
+                              HorizontalSpace(10.w),
+                              Text(
+                                e.value.name.tr(),
+                                style: TextStyle(color: EventlyAppTheme.kWhite, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                    HorizontalSpace(10.w),
-                    Text(
-                      perksModel.name.tr(),
-                      style: TextStyle(color: EventlyAppTheme.kWhite, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                  ),
                 ),
               )
-            ],
-          ),
+              .toList(),
         ),
         const VerticalSpace(10),
         Padding(
@@ -210,17 +223,17 @@ class PerksView extends StatelessWidget {
             children: [
               PerksIconSelection(
                 icon: SVGUtils.kShirt,
-                isSelected: perksModel.name == kFreeShirt,
+                isSelected: perksModel[selectedIndex].name == kFreeShirt,
                 onTap: () => onChangeName(kFreeShirt),
               ),
               PerksIconSelection(
                 icon: SVGUtils.kGift,
-                isSelected: perksModel.name == kFreeGift,
+                isSelected: perksModel[selectedIndex].name == kFreeGift,
                 onTap: () => onChangeName(kFreeGift),
               ),
               PerksIconSelection(
                 icon: SVGUtils.kDrinks,
-                isSelected: perksModel.name == kFreeDrink,
+                isSelected: perksModel[selectedIndex].name == kFreeDrink,
                 onTap: () => onChangeName(kFreeDrink),
               ),
             ],
@@ -234,7 +247,10 @@ class PerksView extends StatelessWidget {
             noOfLines: 4,
             label: LocaleKeys.description_optional.tr(),
             hint: LocaleKeys.claim_free_drink.tr(),
-            controller: TextEditingController(text: perksModel.description),
+            controller: TextEditingController(text: perksModel[selectedIndex].description)
+              ..selection = TextSelection.fromPosition(
+                TextPosition(offset: perksModel[selectedIndex].description.length),
+              ),
             textCapitalization: TextCapitalization.sentences,
           ),
         ),
