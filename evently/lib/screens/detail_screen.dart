@@ -151,6 +151,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     VerticalSpace(20.h),
                     EventlyTextField(
+                      onChanged: (_) => provider.setDescription = _,
                       label: LocaleKeys.description.tr(),
                       hint: LocaleKeys.what_event_for.tr(),
                       controller: TextEditingController(text: provider.description)
@@ -162,9 +163,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     const VerticalSpace(80),
                     BottomButtons(
-                      onPressContinue: () {},
+                      onPressContinue: () {
+                        createEventViewModel.nextPage();
+                      },
                       onPressSaveDraft: () {},
-                      isContinueEnable: provider.isDetailEnable,
+                      isContinueEnable: provider.startDate.isNotEmpty &&
+                          provider.endDate.isNotEmpty &&
+                          provider.startTime.isNotEmpty &&
+                          provider.endTime.isNotEmpty &&
+                          provider.description.isNotEmpty &&
+                          provider.location.isNotEmpty,
                     ),
                   ],
                 ),

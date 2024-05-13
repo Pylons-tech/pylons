@@ -12,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
 
-
 enum FreeDrop { yes, no, unselected }
 
 @LazySingleton()
@@ -68,7 +67,6 @@ class EventlyProvider extends ChangeNotifier {
   String _endTime = "";
   String _location = "";
   String _description = "";
-  bool _isDetailEnable = false;
 
   String get startDate => _startDate;
   String get endDate => _endDate;
@@ -76,40 +74,40 @@ class EventlyProvider extends ChangeNotifier {
   String get endTime => _endTime;
   String get location => _location;
   String get description => _description;
-  bool get isDetailEnable => _isDetailEnable;
 
   set setStartDate(String value) {
     _startDate = value;
+
     notifyListeners();
   }
 
   set setEndDate(String value) {
     _endDate = value;
+
     notifyListeners();
   }
 
   set setStartTime(String value) {
     _startTime = value;
+
     notifyListeners();
   }
 
   set setEndTime(String value) {
     _endTime = value;
+
     notifyListeners();
   }
 
   set setLocation(String value) {
     _location = value;
+
     notifyListeners();
   }
 
   set setDescription(String value) {
     _description = value;
-    notifyListeners();
-  }
 
-  set isDetailEnable(bool value) {
-    _isDetailEnable = value;
     notifyListeners();
   }
 
