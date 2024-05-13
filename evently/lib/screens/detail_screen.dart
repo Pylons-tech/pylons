@@ -20,8 +20,6 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -34,151 +32,148 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return Scaffold(
       body: SingleChildScrollView(
           child: Consumer<EventlyProvider>(
-        builder: (_, provider, __) => Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const VerticalSpace(20),
-              MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-              StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-              const VerticalSpace(20),
-              PageAppBar(onPressBack: () {
-                createEventViewModel.previousPage();
-              }),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () async {
-                              _showDatePicker(onSelected: (DateTime? val) {
-                                if (val == null) return;
-                                provider.setStartDate = DateFormat("dd-MM-yyyy").format(val);
-                              });
-                            },
-                            child: EventlyTextField(
-                              enable: false,
-                              label: LocaleKeys.start_date.tr(),
-                              controller: TextEditingController(text: provider.startDate),
-                              textCapitalization: TextCapitalization.sentences,
-                            ),
+        builder: (_, provider, __) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const VerticalSpace(20),
+            MyStepsIndicator(currentStep: createEventViewModel.currentStep),
+            StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
+            const VerticalSpace(20),
+            PageAppBar(onPressBack: () {
+              createEventViewModel.previousPage();
+            }),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            _showDatePicker(onSelected: (DateTime? val) {
+                              if (val == null) return;
+                              provider.setStartDate = DateFormat("dd-MM-yyyy").format(val);
+                            });
+                          },
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.start_date.tr(),
+                            controller: TextEditingController(text: provider.startDate),
+                            textCapitalization: TextCapitalization.sentences,
                           ),
                         ),
-                        HorizontalSpace(20.w),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              _showDatePicker(onSelected: (DateTime? val) {
-                                if (val == null) return;
-                                provider.setEndDate = DateFormat("dd-MM-yyyy").format(val);
-                              });
+                      ),
+                      HorizontalSpace(20.w),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showDatePicker(onSelected: (DateTime? val) {
+                              if (val == null) return;
+                              provider.setEndDate = DateFormat("dd-MM-yyyy").format(val);
+                            });
+                          },
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.end_date.tr(),
+                            controller: TextEditingController(text: provider.endDate),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
                             },
-                            child: EventlyTextField(
-                              enable: false,
-                              label: LocaleKeys.end_date.tr(),
-                              controller: TextEditingController(text: provider.endDate),
-                              textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                return null;
-                              },
-                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    VerticalSpace(20.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
-                                if (timeOfDay == null) return;
-                                provider.setStartTime = '${timeOfDay.hour}:${timeOfDay.minute}';
-                              });
+                      ),
+                    ],
+                  ),
+                  VerticalSpace(20.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
+                              if (timeOfDay == null) return;
+                              provider.setStartTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                            });
+                          },
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.start_time.tr(),
+                            controller: TextEditingController(text: provider.startTime),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
                             },
-                            child: EventlyTextField(
-                              enable: false,
-                              label: LocaleKeys.start_time.tr(),
-                              controller: TextEditingController(text: provider.startTime),
-                              textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                return null;
-                              },
-                            ),
                           ),
                         ),
-                        HorizontalSpace(20.w),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
-                                if (timeOfDay == null) return;
-                                provider.setEndTime = '${timeOfDay.hour}:${timeOfDay.minute}';
-                              });
+                      ),
+                      HorizontalSpace(20.w),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
+                              if (timeOfDay == null) return;
+                              provider.setEndTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                            });
+                          },
+                          child: EventlyTextField(
+                            enable: false,
+                            label: LocaleKeys.end_time.tr(),
+                            controller: TextEditingController(text: provider.endTime),
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              return null;
                             },
-                            child: EventlyTextField(
-                              enable: false,
-                              label: LocaleKeys.end_time.tr(),
-                              controller: TextEditingController(text: provider.endTime),
-                              textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                return null;
-                              },
-                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    VerticalSpace(20.h),
-                    EventlyTextField(
-                      onChanged: (_) => provider.setLocation = _,
-                      label: LocaleKeys.location.tr(),
-                      hint: LocaleKeys.search_location.tr(),
-                      controller: TextEditingController(text: provider.location)
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: provider.location.length),
-                        ),
-                      textCapitalization: TextCapitalization.sentences,
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
-                    VerticalSpace(20.h),
-                    EventlyTextField(
-                      onChanged: (_) => provider.setDescription = _,
-                      label: LocaleKeys.description.tr(),
-                      hint: LocaleKeys.what_event_for.tr(),
-                      controller: TextEditingController(text: provider.description)
-                        ..selection = TextSelection.fromPosition(
-                          TextPosition(offset: provider.description.length),
-                        ),
-                      textCapitalization: TextCapitalization.sentences,
-                      noOfLines: 4,
-                    ),
-                    const VerticalSpace(80),
-                    BottomButtons(
-                      onPressContinue: () {
-                        createEventViewModel.nextPage();
-                      },
-                      onPressSaveDraft: () {},
-                      isContinueEnable: provider.startDate.isNotEmpty &&
-                          provider.endDate.isNotEmpty &&
-                          provider.startTime.isNotEmpty &&
-                          provider.endTime.isNotEmpty &&
-                          provider.description.isNotEmpty &&
-                          provider.location.isNotEmpty,
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  VerticalSpace(20.h),
+                  EventlyTextField(
+                    onChanged: (_) => provider.setLocation = _,
+                    label: LocaleKeys.location.tr(),
+                    hint: LocaleKeys.search_location.tr(),
+                    controller: TextEditingController(text: provider.location)
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: provider.location.length),
+                      ),
+                    textCapitalization: TextCapitalization.sentences,
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                  VerticalSpace(20.h),
+                  EventlyTextField(
+                    onChanged: (_) => provider.setDescription = _,
+                    label: LocaleKeys.description.tr(),
+                    hint: LocaleKeys.what_event_for.tr(),
+                    controller: TextEditingController(text: provider.description)
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: provider.description.length),
+                      ),
+                    textCapitalization: TextCapitalization.sentences,
+                    noOfLines: 4,
+                  ),
+                  const VerticalSpace(80),
+                  BottomButtons(
+                    onPressContinue: () {
+                      createEventViewModel.nextPage();
+                    },
+                    onPressSaveDraft: () {},
+                    isContinueEnable: provider.startDate.isNotEmpty &&
+                        provider.endDate.isNotEmpty &&
+                        provider.startTime.isNotEmpty &&
+                        provider.endTime.isNotEmpty &&
+                        provider.description.isNotEmpty &&
+                        provider.location.isNotEmpty,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       )),
     );

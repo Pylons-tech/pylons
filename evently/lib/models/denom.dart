@@ -26,7 +26,7 @@ class Denom {
     if (symbol == kPylonSymbol) {
       return AmountFormatter(maxDigits: kMaxPriceLength);
     }
-    return AmountFormatter(maxDigits: kMaxPriceLength, isDecimal: true);
+    return AmountFormatter(maxDigits: kMaxPriceLength, isDecimal: false);
   }
 
   @override

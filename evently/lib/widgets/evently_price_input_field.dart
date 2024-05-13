@@ -11,11 +11,18 @@ import '../main.dart';
 import '../models/denom.dart';
 
 class EventlyPriceInputField extends StatelessWidget {
-  const EventlyPriceInputField({super.key, this.controller, this.validator, this.inputFormatters = const []});
+  const EventlyPriceInputField({
+    super.key,
+    this.controller,
+    this.validator,
+    this.inputFormatters = const [],
+    required this.onChange,
+  });
 
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final List<TextInputFormatter> inputFormatters;
+  final ValueChanged<String> onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +44,28 @@ class EventlyPriceInputField extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: TextFormField(
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
-                        controller: controller,
-                        validator: validator,
-                        minLines: 1,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: inputFormatters,
-                        decoration: InputDecoration(
-                            hintText: "\$21.99",
-                            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
-                            border: const OutlineInputBorder(borderSide: BorderSide.none),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h)))),
+                  child: TextFormField(
+                    onChanged: (_) => onChange(_),
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+                    controller: controller,
+                    validator: validator,
+                    minLines: 1,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: inputFormatters,
+                    decoration: InputDecoration(
+                      hintText: "\$21.99",
+                      hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+                      border: const OutlineInputBorder(borderSide: BorderSide.none),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.fromLTRB(
+                        10.w,
+                        0.h,
+                        10.w,
+                        0.h,
+                      ),
+                    ),
+                  ),
+                ),
                 const _CurrencyDropDown()
               ],
             ),
@@ -87,7 +103,6 @@ class _CurrencyDropDown extends StatelessWidget {
                         onChanged: (String? data) {
                           if (data != null) {
                             final value = provider.supportedDenomList.firstWhere((denom) => denom.symbol == data);
-                            provider.priceController.clear();
                             provider.setSelectedDenom(value);
                           }
                         },
