@@ -203,7 +203,9 @@ class _PriceScreenState extends State<PriceScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: BottomButtons(
-                    onPressContinue: () {},
+                    onPressContinue: () {
+                      homeViewModel.nextPage();
+                    },
                     onPressSaveDraft: () {},
                     isContinueEnable: provider.isFreeDrop == FreeDrop.unselected
                         ? false
