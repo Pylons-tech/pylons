@@ -270,14 +270,14 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
       return;
     }
 
-    final bool isRecipeCreated = await viewModel.createRecipe(event: viewModel.event);
-    pylonsLoadingAnimation.hide();
-    if (!isRecipeCreated) {
-      return;
-    }
+    // final bool isRecipeCreated = await viewModel.createRecipe(event: viewModel.event);
+    // pylonsLoadingAnimation.hide();
+    // if (!isRecipeCreated) {
+    //   return;
+    // }
 
     navigator.popUntil((route) {
-      return route.settings.name == RouteUtil.kCreateEvent;
+      return route.settings.name == RouteUtil.kRouteEventHub;
     });
   }
 
