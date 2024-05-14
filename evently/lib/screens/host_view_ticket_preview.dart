@@ -7,7 +7,6 @@ import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/space_utils.dart';
-import 'package:evently/widgets/pylon_loading_animation.dart';
 import 'package:evently/widgets/show_wallet_install_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
