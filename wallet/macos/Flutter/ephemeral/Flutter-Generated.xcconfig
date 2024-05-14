@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/jawad/Downloads/flutter
-FLUTTER_APPLICATION_PATH=/Users/jawad/Desktop/pylons/pylons/wallet
+FLUTTER_ROOT=/Users/ahsanali/flutter
+FLUTTER_APPLICATION_PATH=/Users/ahsanali/Desktop/pylons/wallet
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.1
