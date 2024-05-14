@@ -101,11 +101,12 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                       width: double.infinity,
                                     ),
                                     GestureDetector(
-                                        onTap: () => provider.pickThumbnail(),
-                                        child: SvgPicture.asset(
-                                          SVGUtils.kSvgUpload,
-                                          colorFilter: const ColorFilter.mode(EventlyAppTheme.kWhite, BlendMode.srcIn),
-                                        )),
+                                      onTap: () => provider.pickThumbnail(),
+                                      child: SvgPicture.asset(
+                                        SVGUtils.kSvgUpload,
+                                        color: EventlyAppTheme.kWhite,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )
