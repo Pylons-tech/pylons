@@ -54,7 +54,7 @@ extension CreateRecipe on Event {
     required String recipeId,
     required FreeDrop isFreeDrop,
     required String symbol,
-    required List<PerksModel> hashtagsList,
+    required List<PerksModel> perksList,
     required String price,
   }) {
     return Recipe(

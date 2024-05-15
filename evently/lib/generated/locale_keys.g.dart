@@ -58,5 +58,6 @@ abstract class  LocaleKeys {
   static const start = 'start';
   static const free_gift = 'free_gift';
   static const free_drink = 'free_drink';
+  static const recipe_created = 'recipe_created';
 
 }

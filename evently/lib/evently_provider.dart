@@ -190,7 +190,7 @@ class EventlyProvider extends ChangeNotifier {
 
   String currentUserName = "";
   bool stripeAccountExists = false;
-  late Event event;
+
   String? _cookbookId;
   String _recipeId = "";
 
@@ -215,8 +215,8 @@ class EventlyProvider extends ChangeNotifier {
     return sdkResponse;
   }
 
-  Future<bool> createRecipe({required Event event}) async {
-    final scaffoldMessengerState = navigatorKey.getState();
+  Future<bool> createRecipe() async {
+    // final scaffoldMessengerState = navigatorKey.getState();
 
     _cookbookId = repository.getCookbookId();
 
@@ -235,16 +235,42 @@ class EventlyProvider extends ChangeNotifier {
     }
 
     _recipeId = repository.autoGenerateEventlyId();
-    event.createRecipe(
+
+    final event = Event(
+        eventName: eventName,
+        hostName: hostName,
+        thumbnail: thumbnail!.path,
+        startDate: startDate,
+        endDate: endDate,
+        startTime: startTime,
+        endTime: endTime,
+        location: location,
+        description: description,
+        isFreeDrop: isFreeDrop,
+        numberOfTickets: numberOfTickets,
+        price: price,
+        listOfPerks: perks.map((e) => e.toString()).toList());
+
+    final recipe = event.createRecipe(
       cookbookId: _cookbookId!,
       recipeId: _recipeId,
       isFreeDrop: isFreeDrop,
       symbol: selectedDenom.symbol,
-      hashtagsList: perks,
+      perksList: perks,
       price: price,
     );
 
-    return Future.value(true);
+    final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
+
+    if (!response.success) {
+      // scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
+      return false;
+    }
+    // scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
+    // final nftFromRecipe = NFT.fromRecipe(recipe);
+    // GetIt.I.get<>().updatePublishedNFTList(nft: nftFromRecipe);
+    // deleteNft(nft.id);
+    return false;
   }
 
   /// send createCookBook tx message to the wallet app
