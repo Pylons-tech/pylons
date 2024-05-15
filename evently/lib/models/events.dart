@@ -1,6 +1,5 @@
-
-
 import 'package:evently/evently_provider.dart';
+import 'package:evently/models/perks_model.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
@@ -47,11 +46,7 @@ class Event {
   final String price;
 
   final List<String> listOfPerks;
-
-
 }
-
-
 
 extension CreateRecipe on Event {
   Recipe createRecipe({
@@ -59,8 +54,7 @@ extension CreateRecipe on Event {
     required String recipeId,
     required FreeDrop isFreeDrop,
     required String symbol,
-    required List<String> hashtagsList,
-    required String tradePercentage,
+    required List<PerksModel> hashtagsList,
     required String price,
   }) {
     return Recipe(
@@ -85,69 +79,34 @@ extension CreateRecipe on Event {
         itemOutputs: [
           ItemOutput(
             id: kEventlyEvent,
-            doubles: [
-              DoubleParam(
-                key: kResidual,
-                weightRanges: [
-                  DoubleWeightRange(
-                    lower: tradePercentage,
-                    upper: tradePercentage,
-                    weight: Int64(1),
-                  )
-                ],
-              )
-            ],
-            longs: [
-              LongParam(
-                key: kQuantity,
-                weightRanges: [
-                  IntWeightRange(
-                    lower: Int64(int.parse(numberOfTickets.replaceAll(",", "").trim())),
-                    upper: Int64(int.parse(numberOfTickets.replaceAll(",", "").trim())),
-                    weight: Int64(1),
-                  )
-                ],
-              ),
-              LongParam(key: kWidth, weightRanges: [_buildIntWeightRange(upperRange: width, lowerRange: width)]),
-              LongParam(key: kHeight, weightRanges: [_buildIntWeightRange(upperRange: height, lowerRange: height)]),
-              LongParam(
-                  key: kDuration, weightRanges: [_buildIntWeightRange(upperRange: duration, lowerRange: duration)]),
-            ],
+            doubles: [],
+            longs: [],
             strings: [
-              StringParam(key: kName, value: name.trim()),
-              StringParam(key: kAppType, value: kEasel),
+              StringParam(key: kEventName, value: eventName.trim()),
+              StringParam(key: kEventHostName, value: hostName.trim()),
+              StringParam(key: kEventHostName, value: thumbnail.trim()),
+              StringParam(key: kStartDate, value: startDate.trim()),
+              StringParam(key: kEndDate, value: endDate.trim()),
+              StringParam(key: kStartTime, value: startTime.trim()),
+              StringParam(key: kEndTime, value: endTime.trim()),
+              StringParam(key: kLocation, value: location.trim()),
               StringParam(key: kDescription, value: description.trim()),
-              StringParam(
-                key: kHashtags,
-                value: hashtagsList.join(kHashtagSymbol),
-              ),
-              StringParam(key: kNFTFormat, value: assetType),
-              StringParam(key: kNFTURL, value: url),
-              StringParam(key: kThumbnailUrl, value: thumbnailUrl),
-              StringParam(key: kCreator, value: creator.trim()),
-              StringParam(key: kFileExtension, value: fileExtension.trim()),
-              StringParam(key: kCID, value: cid),
-              StringParam(key: kFileSize, value: fileSize),
-              StringParam(key: kRealWorld, value: "false"),
+              StringParam(key: kPerks, value: kPerks.trim()),
+              StringParam(key: kNumberOfTickets, value: numberOfTickets.trim()),
+              StringParam(key: kPrice, value: price.trim()),
             ],
             mutableStrings: [],
             transferFee: [Coin(denom: kPylonSymbol, amount: transferFeeAmount)],
-            tradePercentage: tradePercentage,
             tradeable: true,
             amountMinted: Int64(),
-            quantity: Int64(int.parse(quantity.replaceAll(",", "").trim())),
           ),
         ],
         itemModifyOutputs: [],
       ),
-      outputs: [
-        WeightedOutputs(entryIds: [kEaselNFT], weight: Int64(1))
-      ],
+      outputs: [],
       blockInterval: Int64(),
       enabled: true,
       // extraInfo: kExtraInfo,
     );
   }
-
-
 }
