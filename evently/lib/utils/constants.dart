@@ -45,7 +45,6 @@ const kCookbookId = 'cookbook_id';
 const kUsername = 'username';
 const kHostName = 'artistName';
 
-
 ///perks
 const kFreeShirt = "free_shirt";
 const kFreeGift = "free_gift";
@@ -58,18 +57,20 @@ const kEventlyEvent = "Evently_Event";
 const kResidual = "Residual";
 const kQuantity = "Quantity";
 const String transferFeeAmount = '1';
-const kEaselNFT = "Easel_NFT";
 
 /// Event String keys
-const kEventName = "";
-const kEventHostName = "";
-const kThumbnail = "";
-const kStartDate = "";
-const kEndDate = "";
-const kStartTime = "";
-const kEndTime = "";
-
-
+const kEventName = "kEventName";
+const kEventHostName = "kEventHostName";
+const kThumbnail = "kThumbnail";
+const kStartDate = "kStartDate";
+const kEndDate = "kEndDate";
+const kStartTime = "kStartTime";
+const kEndTime = "kEndTime";
+const kLocation = "kLocation";
+const kDescription = "kDescription";
+const kPerks = "kPerks";
+const kNumberOfTickets = "kNumberOfTickets";
+const kPrice = "kPrice";
 
 /// ```SVG assets
 class SVGUtils {

@@ -235,6 +235,14 @@ class EventlyProvider extends ChangeNotifier {
     }
 
     _recipeId = repository.autoGenerateEventlyId();
+    event.createRecipe(
+      cookbookId: _cookbookId!,
+      recipeId: _recipeId,
+      isFreeDrop: isFreeDrop,
+      symbol: selectedDenom.symbol,
+      hashtagsList: perks,
+      price: price,
+    );
 
     return Future.value(true);
   }
