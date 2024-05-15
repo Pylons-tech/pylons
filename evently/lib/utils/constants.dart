@@ -51,6 +51,26 @@ const kFreeShirt = "free_shirt";
 const kFreeGift = "free_gift";
 const kFreeDrink = "free_drink";
 
+const kVersion = "v0.2.0";
+const kUpylon = "upylon";
+const String costPerBlock = '0';
+const kEventlyEvent = "Evently_Event";
+const kResidual = "Residual";
+const kQuantity = "Quantity";
+const String transferFeeAmount = '1';
+const kEaselNFT = "Easel_NFT";
+
+/// Event String keys
+const kEventName = "";
+const kEventHostName = "";
+const kThumbnail = "";
+const kStartDate = "";
+const kEndDate = "";
+const kStartTime = "";
+const kEndTime = "";
+
+
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
