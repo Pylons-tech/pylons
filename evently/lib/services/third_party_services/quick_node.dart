@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:evently/env.dart';
+import 'package:evently/models/storage_response_model.dart';
 import 'package:injectable/injectable.dart';
 
 typedef OnUploadProgressCallback = void Function(UploadProgress uploadProgress);
@@ -22,7 +22,7 @@ abstract class QuickNode {
   /// Upload a new object to IPFS and pins it for permanent storage on the network.
   /// [UploadIPFSInput] as an input
   /// [UploadIPFSOutput] as an output
-  Future<void> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
+  Future<StorageResponseModel> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// these are the list of extension required
   static List<String> listOfQuickNodeAllowedExtension() => ['jpg', 'png', 'heif', 'jpeg', 'gif'];
@@ -30,7 +30,6 @@ abstract class QuickNode {
   /// this method is used to get the content type while making request input to quick node
   static String getContentType(String fileExtension) {
     final dict = {
-      ///* images
       "jpg": "image/jpg",
       "png": "image/png",
       'heif': "image/heif",
@@ -48,7 +47,7 @@ class QuickNodeImpl extends QuickNode {
   final Dio httpClient;
 
   @override
-  Future<void> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
+  Future<StorageResponseModel> uploadNewObjectToIPFS({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback}) async {
     try {
       httpClient.options.headers['x-api-key'] = xApiKey;
 
@@ -68,8 +67,7 @@ class QuickNodeImpl extends QuickNode {
       );
 
       final uploadIPFSOutput = UploadIPFSOutput.fromJson(response.data as Map<String, dynamic>);
-
-      // return //StorageResponseModel.fromQuickNode(uploadIPFSOutput: uploadIPFSOutput);
+      return StorageResponseModel.fromQuickNode(uploadIPFSOutput: uploadIPFSOutput);
     } catch (e) {
       throw Exception('Failed to upload file: $e');
     }
