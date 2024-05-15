@@ -59,5 +59,7 @@
   "free_drink": "1 free drink",
   "publish" : "Publish",
   "recipe_created": "Recipe created",
-  "update_failed": "Upload Failed"
+  "update_failed": "Upload Failed",
+  "uploading": "Uploading ...",
+  "something_wrong_while_uploading": "Something went wrong while uploading. Please try again."
 }

@@ -32,3 +32,17 @@ extension ScaffoldMessengerKeyHelper on GlobalKey<NavigatorState> {
     return ScaffoldMessenger.maybeOf(navigatorKey.currentState!.overlay!.context);
   }
 }
+
+extension MyStringSnackBar on String {
+  void show({BuildContext? context}) {
+    ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context).showSnackBar(
+      SnackBar(
+        content: Text(
+          this,
+        ),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+}
+

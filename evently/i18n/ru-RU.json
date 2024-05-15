@@ -59,5 +59,7 @@
   "free_drink": "1 free drink",
   "publish" : "Publish",
   "recipe_created": "Recipe созданный",
-  "update_failed": "Загрузка не удалась"
+  "update_failed": "Загрузка не удалась",
+  "uploading": "Загрузка...",
+  "something_wrong_while_uploading": "Что-то пошло не так во время загрузки. Пожалуйста, попробуйте еще раз."
 }

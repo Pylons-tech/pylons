@@ -59,5 +59,7 @@
   "free_drink": "1 free drink",
   "publish" : "Publish",
   "recipe_created": "Recipe creada",
-  "update_failed": "Subida ha fallado"
+  "update_failed": "Subida ha fallado",
+  "uploading": "Subiendo...",
+  "something_wrong_while_uploading": "Algo salió mal durante la carga. Inténtalo de nuevo."
 }

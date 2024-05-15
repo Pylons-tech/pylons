@@ -74,6 +74,8 @@ const kPrice = "kPrice";
 
 const kErrRecipe = 'Recipe error :';
 
+/// ```URL constants
+const ipfsDomain = 'https://ipfs.io/ipfs';
 
 /// ```SVG assets
 class SVGUtils {
