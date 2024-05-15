@@ -13,4 +13,9 @@ class PerksModel {
         name: perksModel.name,
         description: description,
       );
+
+  @override
+  String toString() {
+    return 'PerksModel{name: $name, description: $description}';
+  }
 }

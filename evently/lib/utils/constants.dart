@@ -72,6 +72,9 @@ const kPerks = "kPerks";
 const kNumberOfTickets = "kNumberOfTickets";
 const kPrice = "kPrice";
 
+const kErrRecipe = 'Recipe error :';
+
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
