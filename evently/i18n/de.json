@@ -59,5 +59,7 @@
   "free_drink": "1 free drink",
   "publish" : "Publish",
   "recipe_created": "Recipe созданный",
-  "update_failed": "Upload Fehlgeschlagen"
+  "update_failed": "Upload Fehlgeschlagen",
+  "uploading": "Hochladen ...",
+  "something_wrong_while_uploading": "Beim Hochladen ist etwas schief gelaufen. Bitte versuche es erneut."
 }

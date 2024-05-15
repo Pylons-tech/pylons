@@ -55,6 +55,8 @@ dependencies:
     path: ../dart_sdk
   shared_preferences: ^2.2.3
   dio: ^5.4.3+1
+  cached_network_image: ^3.3.1
+  shimmer_animation: 2.1.0+1
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +89,7 @@ flutter:
      - i18n/es.json
      - assets/images/svg/
      - assets/images/
+     - assets/images/gifs/
 
   fonts:
     - family: UniversalSans

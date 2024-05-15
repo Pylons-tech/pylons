@@ -1,17 +1,25 @@
-import 'dart:io';
+import 'dart:async';
+import 'package:dartz/dartz.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/models/perks_model.dart';
 import 'package:evently/models/picked_file_model.dart';
+import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/extension_util.dart';
+import 'package:evently/utils/failure/failure.dart';
+import 'package:evently/widgets/loading_with_progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
+
+import 'services/third_party_services/quick_node.dart';
 
 enum FreeDrop { yes, no, unselected }
 
@@ -26,10 +34,10 @@ class EventlyProvider extends ChangeNotifier {
   ///* overview screen variable
   String _eventName = '';
   String _hostName = '';
-  File? _thumbnail;
+  String? _thumbnail;
   bool _isOverviewEnable = false;
 
-  File? get thumbnail => _thumbnail;
+  String? get thumbnail => _thumbnail;
   String get eventName => _eventName;
   String get hostName => _hostName;
   bool get isOverviewEnable => _isOverviewEnable;
@@ -46,7 +54,7 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setThumbnail(File? file) {
+  set setThumbnail(String? file) {
     _thumbnail = file;
     checkIsOverEnable();
     notifyListeners();
@@ -173,6 +181,10 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  final StreamController<UploadProgress> _uploadProgressController = StreamController.broadcast();
+
+  Stream<UploadProgress> get uploadProgressStream => _uploadProgressController.stream;
+
   void pickThumbnail() async {
     final pickedFile = await repository.pickFile();
 
@@ -185,7 +197,26 @@ class EventlyProvider extends ChangeNotifier {
     );
 
     if (result.path.isEmpty) return;
-    setThumbnail = File(result.path);
+
+    final loading = LoadingProgress()..showLoadingWithProgress(message: LocaleKeys.uploading.tr());
+
+    Either<Failure, StorageResponseModel> response;
+    response = await repository.uploadFileUsingQuickNode(
+      uploadIPFSInput: UploadIPFSInput(fileName: result.fileName, filePath: result!.path, contentType: QuickNode.getContentType(result.extension)),
+      onUploadProgressCallback: (value) {
+        _uploadProgressController.sink.add(value);
+      },
+    );
+
+    if (response.isLeft()) {
+      loading.dismiss();
+      LocaleKeys.something_wrong_while_uploading.tr().show();
+      return;
+    }
+    final fileUploadResponse = response.getOrElse(() => StorageResponseModel.initial());
+    loading.dismiss();
+
+    setThumbnail = "$ipfsDomain/${fileUploadResponse.value?.cid}";
   }
 
   String currentUserName = "";
@@ -239,7 +270,7 @@ class EventlyProvider extends ChangeNotifier {
     final event = Event(
         eventName: eventName,
         hostName: hostName,
-        thumbnail: thumbnail!.path,
+        thumbnail: thumbnail!,
         startDate: startDate,
         endDate: endDate,
         startTime: startTime,

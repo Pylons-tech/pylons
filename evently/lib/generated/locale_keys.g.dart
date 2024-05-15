@@ -60,5 +60,7 @@ abstract class  LocaleKeys {
   static const free_drink = 'free_drink';
   static const recipe_created = 'recipe_created';
   static const update_failed = 'update_failed';
+  static const uploading = 'uploading';
+  static const something_wrong_while_uploading = 'something_wrong_while_uploading';
 
 }

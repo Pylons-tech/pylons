@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class OverViewScreen extends StatefulWidget {
   const OverViewScreen({super.key});
@@ -94,11 +96,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
-                                    Image.file(
-                                      provider.thumbnail!,
-                                      fit: BoxFit.cover,
-                                      height: 176,
-                                      width: double.infinity,
+                                    CachedNetworkImage(
+                                      fit: BoxFit.fill,
+                                      imageUrl: provider.thumbnail!,
+                                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+                                      progressIndicatorBuilder: (context, _, progress) {
+                                        return Shimmer(color: EventlyAppTheme.kGrey04, child: const SizedBox.expand());
+                                      },
                                     ),
                                     GestureDetector(
                                       onTap: () => provider.pickThumbnail(),
