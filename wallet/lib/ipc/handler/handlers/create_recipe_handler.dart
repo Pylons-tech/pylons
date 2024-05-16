@@ -37,6 +37,8 @@ class CreateRecipeHandler implements BaseHandler {
     if (response.success) {
       if (shouldShowNFTPreview()) {
         final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(jsonMap);
+
+
         if (msgObj.cookbookId.contains('Evently')) {
           final events = Events.fromRecipeId(msgObj.cookbookId, msgObj.id);
           if (events != null) {

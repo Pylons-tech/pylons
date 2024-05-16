@@ -338,6 +338,7 @@ const kUploadErrorIcon = "assets/images/icons/upload_error_background.svg";
 const kSvgCloseButton = 'assets/images/svg/close_button.svg';
 const email = "support@pylons.tech";
 const mailto = "mailto";
+const shareIcon = "assets/images/svg/share_icon.svg";
 
 const String k3DText = "3D";
 const String kThreeDText = "ThreeD";
