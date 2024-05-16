@@ -222,9 +222,9 @@ class EventlyProvider extends ChangeNotifier {
   String currentUserName = "";
   bool stripeAccountExists = false;
 
-  String? _cookbookId;
-  String _recipeId = "";
 
+
+  String? _cookbookId;
   String? get cookbookId => _cookbookId;
 
   bool showStripeDialog() => !stripeAccountExists && _selectedDenom.symbol == kUsdSymbol && isFreeDrop == FreeDrop.no;
@@ -315,7 +315,7 @@ class EventlyProvider extends ChangeNotifier {
       id: _cookbookId,
       name: cookbookName,
       description: cookbookDesc,
-      developer: hostName,
+      developer: artistNameController.text,
       version: kVersionCookboox,
       supportEmail: supportedEmail,
       enabled: true,
@@ -330,6 +330,7 @@ class EventlyProvider extends ChangeNotifier {
     navigatorKey.showMsg(message: response.error);
     return false;
   }
+
 
   bool isDifferentUserName(String savedUserName) => currentUserName.isNotEmpty && savedUserName != currentUserName;
 }
