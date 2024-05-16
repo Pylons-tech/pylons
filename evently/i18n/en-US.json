@@ -64,5 +64,6 @@
   "something_wrong_while_uploading": "Something went wrong while uploading. Please try again.",
   "cookbook_not_found": "Cookbook not found",
   "loading": "loading ...",
-  "something_wrong": "Something went wrong. Please try restarting the application."
+  "something_wrong": "Something went wrong. Please try restarting the application.",
+  "get_error": "Failed to get draft"
 }

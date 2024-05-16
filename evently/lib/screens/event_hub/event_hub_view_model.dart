@@ -20,12 +20,12 @@ class EventHubViewModel extends ChangeNotifier {
 
   List<Events> get eventPublishedList => _eventPublishedList;
 
-  List<Events> _eventForSaleList = [];
+  List<Events> _eventForDraftList = [];
 
-  List<Events> get eventForSaleList => _eventForSaleList;
+  List<Events> get eventForSaleList => _eventForDraftList;
 
-  set setEventForSaleList(List<Events> nftForSale) {
-    _eventForSaleList = nftForSale;
+  set setEventForDraftList(List<Events> nftForSale) {
+    _eventForDraftList = nftForSale;
     notifyListeners();
   }
 
@@ -36,7 +36,7 @@ class EventHubViewModel extends ChangeNotifier {
 
   void updatePublishedEventList({required Events events}) {
     _eventPublishedList.add(events);
-    _eventForSaleList.add(events);
+    _eventForDraftList.add(events);
     notifyListeners();
   }
 
@@ -105,7 +105,8 @@ class EventHubViewModel extends ChangeNotifier {
       return;
     }
 
-    // nftDraftList = getNftResponse.getOrElse(() => []);
+    List<Events> draftEvent = getEventResponse.getOrElse(() => []);
+    setEventForDraftList = draftEvent;
 
     loading.dismiss();
 

@@ -1,6 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/events.dart';
+import 'package:evently/services/third_party_services/database.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/date_utils.dart';
+import 'package:evently/utils/failure/failure.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,9 +46,13 @@ abstract class LocalDataSource {
 
 @LazySingleton(as: LocalDataSource)
 class LocalDataSourceImpl extends LocalDataSource {
-  LocalDataSourceImpl({required this.sharedPreferences});
+  LocalDataSourceImpl({
+    required this.sharedPreferences,
+    required this.database,
+  });
 
   final SharedPreferences sharedPreferences;
+  final AppDatabase database;
 
   /// auto generates cookbookID string and saves into local storage
   /// returns cookbookId
@@ -93,8 +101,11 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<List<Events>> getEvents() {
-    // TODO: implement getEvents
-    throw UnimplementedError();
+  Future<List<Events>> getEvents() async {
+    try {
+      return await database.eventsDao.findAllEvents();
+    } catch (e) {
+      throw CacheFailure(LocaleKeys.get_error.tr());
+    }
   }
 }

@@ -65,5 +65,6 @@ abstract class  LocaleKeys {
   static const cookbook_not_found = 'cookbook_not_found';
   static const loading = 'loading';
   static const something_wrong = 'something_wrong';
+  static const get_error = 'get_error';
 
 }
