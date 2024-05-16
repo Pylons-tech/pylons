@@ -288,8 +288,8 @@ class EventlyProvider extends ChangeNotifier {
         return false;
       }
       scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-      final nftFromRecipe = Events.fromRecipe(recipe);
-      GetIt.I.get<EventHubViewModel>().updatePublishedEventList(nft: nftFromRecipe);
+      final eventsFromRecipe = Events.fromRecipe(recipe);
+      GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
       deleteEvent();
       return true;
     }
