@@ -1,10 +1,31 @@
 import 'package:equatable/equatable.dart';
+import 'package:floor/floor.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
 
 enum FreeDrop { yes, no, unselected }
 
+@entity
 class Events extends Equatable {
+  @primaryKey
+  final int? id;
+
+  final String eventName;
+  final String hostName;
+  final String thumbnail;
+  final String startDate;
+  final String endDate;
+  final String startTime;
+  final String endTime;
+  final String location;
+  final String description;
+  final String numberOfTickets;
+  final String price;
+  final String listOfPerks;
+  final String isFreeDrops;
+  final String cookbookID;
+  final String recipeID;
+
   const Events({
     ///* overview data
     this.eventName = '',
@@ -30,23 +51,8 @@ class Events extends Equatable {
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
+    this.id,
   });
-
-  final String eventName;
-  final String hostName;
-  final String thumbnail;
-  final String startDate;
-  final String endDate;
-  final String startTime;
-  final String endTime;
-  final String location;
-  final String description;
-  final String numberOfTickets;
-  final String price;
-  final String listOfPerks;
-  final String isFreeDrops;
-  final String cookbookID;
-  final String recipeID;
 
   factory Events.fromRecipe(Recipe recipe) {
     Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);

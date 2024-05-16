@@ -3,6 +3,7 @@ import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/utils/extension_util.dart';
+import 'package:evently/widgets/loading_with_progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
@@ -94,17 +95,17 @@ class EventHubViewModel extends ChangeNotifier {
   }
 
   Future<void> getDraftsList() async {
-    // final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
+    final loading = LoadingProgress()..showLoadingWithProgress(message: LocaleKeys.loading.tr());
 
-    final getNftResponse = await repository.getEvents();
+    final getEventResponse = await repository.getEvents();
 
-    if (getNftResponse.isLeft()) {
+    if (getEventResponse.isLeft()) {
       loading.dismiss();
       LocaleKeys.something_wrong.tr().show();
       return;
     }
 
-    nftDraftList = getNftResponse.getOrElse(() => []);
+    // nftDraftList = getNftResponse.getOrElse(() => []);
 
     loading.dismiss();
 
