@@ -4,7 +4,9 @@ import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class EventHubViewModel extends ChangeNotifier {
+  final List<Events> _eventPublishedList = [];
 
+  List<Events> get eventPublishedList => _eventPublishedList;
 
-  void updatePublishedNFTList({required Events nft}) {}
+  void updatePublishedEventList({required Events nft}) {}
 }
