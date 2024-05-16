@@ -249,51 +249,59 @@ class EventlyProvider extends ChangeNotifier {
   Future<bool> createRecipe() async {
     final scaffoldMessengerState = navigatorKey.getState();
 
-    final isCookBookCreated = await createCookbook();
+    _cookbookId = repository.getCookbookId();
 
-    if (isCookBookCreated) {
-      _recipeId = repository.autoGenerateEventlyId();
+    if (_cookbookId == null) {
+      // create cookbook
+      final isCookBookCreated = await createCookbook();
 
-      final event = Events(
-        eventName: eventName,
-        hostName: hostName,
-        thumbnail: thumbnail!,
-        startDate: startDate,
-        endDate: endDate,
-        startTime: startTime,
-        endTime: endTime,
-        location: location,
-        description: description,
-        numberOfTickets: numberOfTickets.toString(),
-        price: price.toString(),
-        listOfPerks: perks.join(','),
-        cookbookID: _cookbookId!,
-        recipeID: _recipeId,
-      );
-
-      final recipe = event.createRecipe(
-        cookbookId: _cookbookId!,
-        recipeId: _recipeId,
-        isFreeDrop: isFreeDrop,
-        symbol: selectedDenom.symbol,
-        perksList: perks,
-        price: price.toString(),
-      );
-
-      final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
-
-      if (!response.success) {
-        scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
+      if (isCookBookCreated) {
+        _cookbookId = repository.getCookbookId();
+        notifyListeners();
+      } else {
         return false;
       }
-      scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-      final eventsFromRecipe = Events.fromRecipe(recipe);
-      GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
-      deleteEvent();
-      return true;
     }
 
-    return false;
+    _recipeId = repository.autoGenerateEventlyId();
+
+    final event = Events(
+      eventName: eventName,
+      hostName: hostName,
+      thumbnail: thumbnail!,
+      startDate: startDate,
+      endDate: endDate,
+      startTime: startTime,
+      endTime: endTime,
+      location: location,
+      description: description,
+      numberOfTickets: numberOfTickets.toString(),
+      price: price.toString(),
+      listOfPerks: perks.join(','),
+      cookbookID: _cookbookId!,
+      recipeID: _recipeId,
+    );
+
+    final recipe = event.createRecipe(
+      cookbookId: _cookbookId!,
+      recipeId: _recipeId,
+      isFreeDrop: isFreeDrop,
+      symbol: selectedDenom.symbol,
+      perksList: perks,
+      price: price.toString(),
+    );
+
+    final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
+
+    if (!response.success) {
+      scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
+      return false;
+    }
+    scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
+    final eventsFromRecipe = Events.fromRecipe(recipe);
+    GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
+    deleteEvent();
+    return true;
   }
 
   Future<void> deleteEvent() async {
