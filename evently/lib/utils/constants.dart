@@ -73,6 +73,7 @@ const kNumberOfTickets = "kNumberOfTickets";
 const kPrice = "kPrice";
 
 const kErrRecipe = 'Recipe error :';
+const kExtraInfo = "extraInfo";
 
 /// ```URL constants
 const ipfsDomain = 'https://ipfs.io/ipfs';

@@ -160,9 +160,9 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  get numberOfTickets => _numberOfTickets;
+  int get numberOfTickets => _numberOfTickets;
 
-  get isFreeDrop => _isFreeDrop;
+  FreeDrop get isFreeDrop => _isFreeDrop;
 
   set setFreeDrop(FreeDrop freeDrop) {
     _isFreeDrop = freeDrop;
@@ -174,7 +174,7 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  get price => _price;
+  int get price => _price;
 
   void setSelectedDenom(Denom value) {
     _selectedDenom = value;
@@ -246,75 +246,56 @@ class EventlyProvider extends ChangeNotifier {
     return sdkResponse;
   }
 
+  String _recipeId = "";
+  String get recipeId => _recipeId;
+
   Future<bool> createRecipe() async {
     final scaffoldMessengerState = navigatorKey.getState();
 
-    _cookbookId = repository.getCookbookId();
+    final isCookBookCreated = await createCookbook();
 
-    final String savedUserName = repository.getCookBookGeneratorUsername();
+    if (isCookBookCreated) {
+      _recipeId = repository.autoGenerateEventlyId();
 
-    if (_cookbookId == null || isDifferentUserName(savedUserName)) {
-      // create cookbook
-      final isCookBookCreated = await createCookbook();
+      final event = Event(
+        eventName: eventName,
+        hostName: hostName,
+        thumbnail: thumbnail!,
+        startDate: startDate,
+        endDate: endDate,
+        startTime: startTime,
+        endTime: endTime,
+        location: location,
+        description: description,
+        isFreeDrop: "isFreeDrop",
+        numberOfTickets: numberOfTickets.toString(),
+        price: price.toString(),
+        listOfPerks: perks.map((e) => e.toString()).toList(),
+      );
 
-      if (isCookBookCreated) {
-        _cookbookId = repository.getCookbookId();
-        notifyListeners();
-      } else {
+      final recipe = event.createRecipe(
+        cookbookId: _cookbookId!,
+        recipeId: _recipeId,
+        isFreeDrop: isFreeDrop,
+        symbol: selectedDenom.symbol,
+        perksList: perks,
+        price: price.toString(),
+      );
+
+      final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
+
+      if (!response.success) {
+        scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
         return false;
       }
+      scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
+      // final nftFromRecipe = Event.fromRecipe(recipe);
+      // GetIt.I.get<>().updatePublishedNFTList(nft: nftFromRecipe);
+      // deleteNft(nft.id);
+      return true;
     }
 
-    // _recipeId = repository.autoGenerateEventlyId();
-    //
-    // final event = Event(
-    //     eventName: eventName,
-    //     hostName: hostName,
-    //     thumbnail: thumbnail!,
-    //     startDate: startDate,
-    //     endDate: endDate,
-    //     startTime: startTime,
-    //     endTime: endTime,
-    //     location: location,
-    //     description: description,
-    //     isFreeDrop: "isFreeDrop",
-    //     numberOfTickets: numberOfTickets.toString(),
-    //     price: price.toString(),
-    //     listOfPerks: perks.map((e) => e.toString()).toList());
-    //
-    // final recipe = event.createRecipe(
-    //   cookbookId: _cookbookId!,
-    //   recipeId: _recipeId,
-    //   isFreeDrop: isFreeDrop,
-    //   symbol: selectedDenom.symbol,
-    //   perksList: perks,
-    //   price: price,
-    // );
-    //
-    // final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
-    //
-    // if (!response.success) {
-    //   scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
-    //   return false;
-    // }
-    // scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-    // final nftFromRecipe = Event.fromRecipe(recipe);
-    // GetIt.I.get<>().updatePublishedNFTList(nft: nftFromRecipe);
-    // deleteNft(nft.id);
     return false;
-  }
-
-  String currentUsername = '';
-  bool isPylonsInstalled = false;
-
-  Future<void> populateUserName() async {
-    isPylonsInstalled = await PylonsWallet.instance.exists();
-    if (currentUsername.isEmpty) {
-      final String savedHostName = repository.getHostName();
-
-      currentUsername = savedHostName;
-    }
-    notifyListeners();
   }
 
   /// send createCookBook tx message to the wallet app
@@ -335,13 +316,10 @@ class EventlyProvider extends ChangeNotifier {
 
     final response = await PylonsWallet.instance.txCreateCookbook(cookBook1);
     if (response.success) {
-      repository.saveCookBookGeneratorUsername(currentUsername);
       return true;
     }
 
     navigatorKey.showMsg(message: response.error);
     return false;
   }
-
-  bool isDifferentUserName(String savedUserName) => currentUserName.isNotEmpty && savedUserName != currentUserName;
 }
