@@ -238,8 +238,6 @@ class EventlyProvider extends ChangeNotifier {
         _selectedDenom = supportedDenomList.first;
       }
     }
-    setHostName = currentUserName;
-
     return sdkResponse;
   }
 
