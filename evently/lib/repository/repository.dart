@@ -42,6 +42,10 @@ abstract class Repository {
   /// Input : [UploadIPFSInput] which needs to be uploaded
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
   Future<Either<Failure, StorageResponseModel>> uploadFileUsingQuickNode({required UploadIPFSInput uploadIPFSInput, required OnUploadProgressCallback onUploadProgressCallback});
+
+  /// This method will get the artist name
+  /// Output: [String] returns whether the operation is successful or not
+  String getHostName();
 }
 
 @LazySingleton(as: Repository)
@@ -100,5 +104,10 @@ class RepositoryImp implements Repository {
     } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.update_failed.tr()));
     }
+  }
+
+  @override
+  String getHostName() {
+    return localDataSource.getHostName();
   }
 }

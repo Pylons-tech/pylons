@@ -24,6 +24,15 @@ abstract class LocalDataSource {
   /// This method will generate easel Id for the NFT
   /// Output: [String] the id of the NFT that is going to be added in the recipe
   String autoGenerateEventlyId();
+
+  /// This method will get the artist name
+  /// Output: [String] returns whether the operation is successful or not
+  String getHostName();
+
+  /// This method will save the artist name
+  /// Input: [name] the name of the artist which the user want to save
+  /// Output: [bool] returns whether the operation is successful or not
+  Future<bool> saveHostName(String name);
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -65,5 +74,16 @@ class LocalDataSourceImpl extends LocalDataSource {
   String autoGenerateEventlyId() {
     final String cookbookId = "Evently_Recipe_auto_recipe_${getFullDateTime()}";
     return cookbookId;
+  }
+
+  @override
+  String getHostName() {
+    return sharedPreferences.getString(kHostName) ?? '';
+  }
+
+  @override
+  Future<bool> saveHostName(String name) async {
+    await sharedPreferences.setString(kHostName, name);
+    return true;
   }
 }
