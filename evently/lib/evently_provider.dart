@@ -289,15 +289,15 @@ class EventlyProvider extends ChangeNotifier {
       }
       scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
       final nftFromRecipe = Events.fromRecipe(recipe);
-      GetIt.I.get<EventHubViewModel>().updatePublishedNFTList(nft: nftFromRecipe);
-      deleteNft();
+      GetIt.I.get<EventHubViewModel>().updatePublishedEventList(nft: nftFromRecipe);
+      deleteEvent();
       return true;
     }
 
     return false;
   }
 
-  Future<void> deleteNft() async {
+  Future<void> deleteEvent() async {
     notifyListeners();
   }
 
