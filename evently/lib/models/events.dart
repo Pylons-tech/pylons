@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:evently/evently_provider.dart';
-import 'package:evently/models/perks_model.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
 
-class Event extends Equatable {
-  const Event({
+enum FreeDrop { yes, no, unselected }
+
+class Events extends Equatable {
+  const Events({
     ///* overview data
     this.eventName = '',
     this.hostName = '',
@@ -48,10 +48,10 @@ class Event extends Equatable {
   final String cookbookID;
   final String recipeID;
 
-  factory Event.fromRecipe(Recipe recipe) {
+  factory Events.fromRecipe(Recipe recipe) {
     Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
 
-    return Event(
+    return Events(
       eventName: map[kEventName]!,
       hostName: map[kEventHostName]!,
       thumbnail: map[kThumbnail]!,
@@ -102,7 +102,7 @@ class Event extends Equatable {
   }
 }
 
-extension CreateRecipe on Event {
+extension CreateRecipe on Events {
   Recipe createRecipe({
     required String cookbookId,
     required String recipeId,
@@ -193,3 +193,26 @@ const String transferFeeAmount = '1';
 const kEventlyEvent = "Evently_Event";
 const kExtraInfo = "extraInfo";
 const String costPerBlock = '0';
+
+
+class PerksModel {
+  PerksModel({required this.name, required this.description});
+
+  final String name;
+  final String description;
+
+  factory PerksModel.updateName({required String name, required PerksModel perksModel}) => PerksModel(
+    name: name,
+    description: perksModel.description,
+  );
+
+  factory PerksModel.updateDescription({required String description, required PerksModel perksModel}) => PerksModel(
+    name: perksModel.name,
+    description: description,
+  );
+
+  @override
+  String toString() {
+    return 'PerksModel{name: $name, description: $description}';
+  }
+}

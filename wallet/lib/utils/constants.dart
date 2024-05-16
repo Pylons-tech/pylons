@@ -499,18 +499,3 @@ const String drawerKey = "drawer_key";
 const String kRemaining = 'remaining';
 const kTotal = 'total';
 const kFileExtension = "file_extension";
-
-///* Event String
-/// Event String keys
-const kEventName = "kEventName";
-const kEventHostName = "kEventHostName";
-const kThumbnail = "kThumbnail";
-const kStartDate = "kStartDate";
-const kEndDate = "kEndDate";
-const kStartTime = "kStartTime";
-const kEndTime = "kEndTime";
-const kLocation = "kLocation";
-const kPerks = "kPerks";
-const kNumberOfTickets = "kNumberOfTickets";
-const kPrice = "kPrice";
-const kErrRecipe = 'Recipe error :';

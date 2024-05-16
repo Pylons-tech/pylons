@@ -21,7 +21,6 @@ import 'package:pylons_sdk/low_level.dart';
 
 import 'services/third_party_services/quick_node.dart';
 
-enum FreeDrop { yes, no, unselected }
 
 @LazySingleton()
 class EventlyProvider extends ChangeNotifier {
@@ -257,7 +256,7 @@ class EventlyProvider extends ChangeNotifier {
     if (isCookBookCreated) {
       _recipeId = repository.autoGenerateEventlyId();
 
-      final event = Event(
+      final event = Events(
         eventName: eventName,
         hostName: hostName,
         thumbnail: thumbnail!,
