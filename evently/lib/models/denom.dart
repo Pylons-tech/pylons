@@ -1,3 +1,4 @@
+import 'package:evently/models/events.dart';
 import 'package:evently/utils/amount_formatter.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:flutter/material.dart';
