@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/models/perks_model.dart';
-import 'package:evently/utils/constants.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
 
@@ -21,12 +20,16 @@ class Event extends Equatable {
     this.description = '',
 
     ///* perks
-    required this.listOfPerks,
+    this.listOfPerks = '',
 
     ///* price
     this.numberOfTickets = '0',
     this.price = '',
-    this.isFreeDrop = 'unselected',
+    this.isFreeDrops = 'unselected',
+
+    ///* other
+    this.cookbookID = '',
+    this.recipeID = '',
   });
 
   final String eventName;
@@ -40,8 +43,10 @@ class Event extends Equatable {
   final String description;
   final String numberOfTickets;
   final String price;
-  final List<String> listOfPerks;
-  final String isFreeDrop;
+  final String listOfPerks;
+  final String isFreeDrops;
+  final String cookbookID;
+  final String recipeID;
 
   factory Event.fromRecipe(Recipe recipe) {
     Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
@@ -58,7 +63,7 @@ class Event extends Equatable {
       description: map[kDescription]!,
       numberOfTickets: map[kNumberOfTickets]!,
       price: map[kPrice]!,
-      listOfPerks: [],
+      listOfPerks: map[kPerks]!,
     );
   }
 
@@ -89,7 +94,12 @@ class Event extends Equatable {
   }
 
   @override
-  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price];
+  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID];
+
+  @override
+  String toString() {
+    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, tradePercentage: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID}';
+  }
 }
 
 extension CreateRecipe on Event {
@@ -135,9 +145,12 @@ extension CreateRecipe on Event {
               StringParam(key: kEndTime, value: endTime.trim()),
               StringParam(key: kLocation, value: location.trim()),
               StringParam(key: kDescription, value: description.trim()),
-              StringParam(key: kPerks, value: kPerks.trim()),
               StringParam(key: kNumberOfTickets, value: numberOfTickets.trim()),
               StringParam(key: kPrice, value: price.trim()),
+              StringParam(key: kPerks, value: listOfPerks.trim()),
+              StringParam(key: kFreeDrop, value: isFreeDrops),
+              StringParam(key: kCookBookId, value: cookbookID),
+              StringParam(key: kRecipeId, value: recipeID),
             ],
             mutableStrings: [],
             transferFee: [Coin(denom: kPylonSymbol, amount: transferFeeAmount)],
@@ -156,3 +169,27 @@ extension CreateRecipe on Event {
     );
   }
 }
+
+/// Event String keys
+const kEventName = "kEventName";
+const kEventHostName = "kEventHostName";
+const kThumbnail = "kThumbnail";
+const kStartDate = "kStartDate";
+const kEndDate = "kEndDate";
+const kStartTime = "kStartTime";
+const kEndTime = "kEndTime";
+const kLocation = "kLocation";
+const kDescription = "kDescription";
+const kPerks = "kPerks";
+const kNumberOfTickets = "kNumberOfTickets";
+const kPrice = "kPrice";
+const kFreeDrop = "kFreeDrop";
+const kRecipeId = "kRecipeId";
+const kCookBookId = "kCookBookId";
+const kVersion = "v0.2.0";
+const kUpylon = "upylon";
+const kPylonSymbol = 'upylon';
+const String transferFeeAmount = '1';
+const kEventlyEvent = "Evently_Event";
+const kExtraInfo = "extraInfo";
+const String costPerBlock = '0';

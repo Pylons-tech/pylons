@@ -6,7 +6,6 @@ const kDraft = "Draft";
 
 final List<String> stepLabels = ["overview", "detail", "perks", "price"];
 
-const kPylonSymbol = 'upylon';
 const kUsdSymbol = 'ustripeusd';
 const kAtomSymbol = 'uatom';
 const kEuroSymbol = 'eeur';
@@ -50,30 +49,12 @@ const kFreeShirt = "free_shirt";
 const kFreeGift = "free_gift";
 const kFreeDrink = "free_drink";
 
-const kVersion = "v0.2.0";
-const kUpylon = "upylon";
-const String costPerBlock = '0';
-const kEventlyEvent = "Evently_Event";
+
 const kResidual = "Residual";
 const kQuantity = "Quantity";
 const String transferFeeAmount = '1';
 
-/// Event String keys
-const kEventName = "kEventName";
-const kEventHostName = "kEventHostName";
-const kThumbnail = "kThumbnail";
-const kStartDate = "kStartDate";
-const kEndDate = "kEndDate";
-const kStartTime = "kStartTime";
-const kEndTime = "kEndTime";
-const kLocation = "kLocation";
-const kDescription = "kDescription";
-const kPerks = "kPerks";
-const kNumberOfTickets = "kNumberOfTickets";
-const kPrice = "kPrice";
-
 const kErrRecipe = 'Recipe error :';
-const kExtraInfo = "extraInfo";
 
 /// ```URL constants
 const ipfsDomain = 'https://ipfs.io/ipfs';
