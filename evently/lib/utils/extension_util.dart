@@ -46,3 +46,19 @@ extension MyStringSnackBar on String {
   }
 }
 
+extension ScaffoldStateHelper on ScaffoldMessengerState {
+  void show({required String message}) {
+    this
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 14.sp,
+          ),
+        ),
+        duration: const Duration(seconds: 2),
+      ));
+  }
+}
