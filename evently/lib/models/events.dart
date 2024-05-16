@@ -153,10 +153,12 @@ extension CreateRecipe on Event {
         ],
         itemModifyOutputs: [],
       ),
-      outputs: [],
+      outputs: [
+        WeightedOutputs(entryIds: [kEventlyEvent], weight: Int64(1))
+      ],
       blockInterval: Int64(),
       enabled: true,
-      // extraInfo: kExtraInfo,
+      extraInfo: kExtraInfo,
     );
   }
 }
