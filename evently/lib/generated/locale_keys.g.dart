@@ -62,5 +62,6 @@ abstract class  LocaleKeys {
   static const update_failed = 'update_failed';
   static const uploading = 'uploading';
   static const something_wrong_while_uploading = 'something_wrong_while_uploading';
+  static const cookbook_not_found = 'cookbook_not_found';
 
 }

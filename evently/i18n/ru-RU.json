@@ -61,5 +61,6 @@
   "recipe_created": "Recipe созданный",
   "update_failed": "Загрузка не удалась",
   "uploading": "Загрузка...",
-  "something_wrong_while_uploading": "Что-то пошло не так во время загрузки. Пожалуйста, попробуйте еще раз."
+  "something_wrong_while_uploading": "Что-то пошло не так во время загрузки. Пожалуйста, попробуйте еще раз.",
+  "cookbook_not_found": "Cookbook не найден"
 }

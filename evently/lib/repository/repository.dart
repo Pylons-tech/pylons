@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
@@ -8,7 +9,7 @@ import 'package:evently/services/datasources/remote_datasource.dart';
 import 'package:evently/services/third_party_services/quick_node.dart';
 import 'package:evently/utils/file_utils_helper.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:pylons_sdk/low_level.dart';
 import '../utils/failure/failure.dart';
 
 abstract class Repository {
@@ -46,6 +47,12 @@ abstract class Repository {
   /// This method will get the artist name
   /// Output: [String] returns whether the operation is successful or not
   String getHostName();
+
+  /// This method returns the recipe list
+  /// Input : [cookBookId] id of the cookbook
+  /// Output: if successful the output will be the list of [pylons.Recipe]
+  /// will return error in the form of failure
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId});
 }
 
 @LazySingleton(as: Repository)
@@ -109,5 +116,17 @@ class RepositoryImp implements Repository {
   @override
   String getHostName() {
     return localDataSource.getHostName();
+  }
+
+  @override
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
+    try {
+      final sdkResponse = await remoteDataSource.getRecipesByCookbookID(cookBookId);
+      log(sdkResponse.toString(), name: 'pylons_sdk');
+
+      return Right(sdkResponse);
+    } on Exception catch (_) {
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
+    }
   }
 }

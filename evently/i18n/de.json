@@ -61,5 +61,6 @@
   "recipe_created": "Recipe созданный",
   "update_failed": "Upload Fehlgeschlagen",
   "uploading": "Hochladen ...",
-  "something_wrong_while_uploading": "Beim Hochladen ist etwas schief gelaufen. Bitte versuche es erneut."
+  "something_wrong_while_uploading": "Beim Hochladen ist etwas schief gelaufen. Bitte versuche es erneut.",
+  "cookbook_not_found": "Cookbook nicht gefunden"
 }
