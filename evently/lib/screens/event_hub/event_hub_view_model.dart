@@ -2,6 +2,8 @@ import 'package:evently/models/events.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 
+enum CollectionType { draft, forSale, history }
+
 @lazySingleton
 class EventHubViewModel extends ChangeNotifier {
   List<Events> _eventPublishedList = [];
@@ -26,5 +28,26 @@ class EventHubViewModel extends ChangeNotifier {
     _eventPublishedList.add(events);
     _eventForSaleList.add(events);
     notifyListeners();
+  }
+
+  CollectionType selectedCollectionType = CollectionType.draft;
+
+  void changeSelectedCollection(CollectionType collectionType) {
+    switch (collectionType) {
+      case CollectionType.draft:
+        selectedCollectionType = CollectionType.draft;
+        notifyListeners();
+        break;
+
+      case CollectionType.forSale:
+        selectedCollectionType = CollectionType.forSale;
+        notifyListeners();
+        break;
+
+      case CollectionType.history:
+        selectedCollectionType = CollectionType.history;
+        notifyListeners();
+        break;
+    }
   }
 }
