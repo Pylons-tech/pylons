@@ -41,4 +41,6 @@ class CreateEventViewModel extends ChangeNotifier {
   void disposeControllers() {
     pageController.dispose();
   }
+
+
 }

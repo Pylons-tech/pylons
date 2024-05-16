@@ -1,11 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/models/perks_model.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
 
-class Event {
-  Event({
+class Event extends Equatable {
+  const Event({
     required this.eventName,
     required this.hostName,
     required this.thumbnail,
@@ -46,6 +47,55 @@ class Event {
   final String price;
 
   final List<String> listOfPerks;
+
+  @override
+  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, isFreeDrop, numberOfTickets, price];
+
+  static Map<String, String> _extractAttributeValues(List<StringParam> attributes) {
+    final Map<String, String> attributeValues = {};
+    for (final attribute in attributes) {
+      switch (attribute.key) {
+        case kEventName:
+        case kEventHostName:
+        case kThumbnail:
+        case kStartDate:
+        case kEndDate:
+        case kStartTime:
+        case kEndTime:
+        case kLocation:
+        case kDescription:
+        case kPerks:
+        case kNumberOfTickets:
+        case kPrice:
+          attributeValues[attribute.key] = attribute.value;
+          break;
+        default:
+          continue;
+      }
+    }
+
+    return attributeValues;
+  }
+
+  factory Event.fromRecipe(Recipe recipe) {
+    Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
+
+    return Event(
+      eventName: map[kEventName]!,
+      hostName: map[kEventHostName]!,
+      thumbnail: map[kThumbnail]!,
+      startDate: map[kStartDate]!,
+      endDate: map[kEndDate]!,
+      startTime: map[kStartTime]!,
+      endTime: map[kEndTime]!,
+      location: map[kLocation]!,
+      description: map[kDescription]!,
+      isFreeDrop: '',
+      numberOfTickets: map[kNumberOfTickets]!,
+      price: map[kPrice]!,
+      listOfPerks: [],
+    );
+  }
 }
 
 extension CreateRecipe on Event {
@@ -84,7 +134,7 @@ extension CreateRecipe on Event {
             strings: [
               StringParam(key: kEventName, value: eventName.trim()),
               StringParam(key: kEventHostName, value: hostName.trim()),
-              StringParam(key: kEventHostName, value: thumbnail.trim()),
+              StringParam(key: kThumbnail, value: thumbnail.trim()),
               StringParam(key: kStartDate, value: startDate.trim()),
               StringParam(key: kEndDate, value: endDate.trim()),
               StringParam(key: kStartTime, value: startTime.trim()),

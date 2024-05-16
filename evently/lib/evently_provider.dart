@@ -202,7 +202,7 @@ class EventlyProvider extends ChangeNotifier {
 
     Either<Failure, StorageResponseModel> response;
     response = await repository.uploadFileUsingQuickNode(
-      uploadIPFSInput: UploadIPFSInput(fileName: result.fileName, filePath: result!.path, contentType: QuickNode.getContentType(result.extension)),
+      uploadIPFSInput: UploadIPFSInput(fileName: result.fileName, filePath: result.path, contentType: QuickNode.getContentType(result.extension)),
       onUploadProgressCallback: (value) {
         _uploadProgressController.sink.add(value);
       },
@@ -224,6 +224,8 @@ class EventlyProvider extends ChangeNotifier {
 
   String? _cookbookId;
   String _recipeId = "";
+
+  String? get cookbookId => _cookbookId;
 
   bool showStripeDialog() => !stripeAccountExists && _selectedDenom.symbol == kUsdSymbol && isFreeDrop == FreeDrop.no;
 
@@ -247,7 +249,7 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   Future<bool> createRecipe() async {
-    // final scaffoldMessengerState = navigatorKey.getState();
+    final scaffoldMessengerState = navigatorKey.getState();
 
     _cookbookId = repository.getCookbookId();
 
@@ -277,9 +279,9 @@ class EventlyProvider extends ChangeNotifier {
         endTime: endTime,
         location: location,
         description: description,
-        isFreeDrop: isFreeDrop,
-        numberOfTickets: numberOfTickets,
-        price: price,
+        isFreeDrop: "isFreeDrop",
+        numberOfTickets: numberOfTickets.toString(),
+        price: price.toString(),
         listOfPerks: perks.map((e) => e.toString()).toList());
 
     final recipe = event.createRecipe(
@@ -294,11 +296,11 @@ class EventlyProvider extends ChangeNotifier {
     final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
 
     if (!response.success) {
-      // scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
+      scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
       return false;
     }
-    // scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-    // final nftFromRecipe = NFT.fromRecipe(recipe);
+    scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
+    // final nftFromRecipe = Event.fromRecipe(recipe);
     // GetIt.I.get<>().updatePublishedNFTList(nft: nftFromRecipe);
     // deleteNft(nft.id);
     return false;
@@ -307,7 +309,7 @@ class EventlyProvider extends ChangeNotifier {
   /// send createCookBook tx message to the wallet app
   /// return true or false depending on the response from the wallet app
   Future<bool> createCookbook() async {
-    _cookbookId = repository.autoGenerateCookbookId();
+    _cookbookId = await repository.autoGenerateCookbookId();
     final cookBook1 = Cookbook(
       creator: "",
       id: _cookbookId,
@@ -321,7 +323,7 @@ class EventlyProvider extends ChangeNotifier {
 
     final response = await PylonsWallet.instance.txCreateCookbook(cookBook1);
     if (response.success) {
-      repository.saveCookBookGeneratorUsername(currentUserName);
+      repository.saveCookBookGeneratorUsername(currentUsername);
       return true;
     }
 
