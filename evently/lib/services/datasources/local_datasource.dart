@@ -1,3 +1,4 @@
+import 'package:evently/models/events.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/date_utils.dart';
 import 'package:injectable/injectable.dart';
@@ -33,6 +34,10 @@ abstract class LocalDataSource {
   /// Input: [name] the name of the artist which the user want to save
   /// Output: [bool] returns whether the operation is successful or not
   Future<bool> saveHostName(String name);
+
+  /// This method will get the drafts List from the local database
+  /// Output: [List][NFT] returns  the List of drafts
+  Future<List<Events>> getEvents();
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -85,5 +90,11 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<bool> saveHostName(String name) async {
     await sharedPreferences.setString(kHostName, name);
     return true;
+  }
+
+  @override
+  Future<List<Events>> getEvents() {
+    // TODO: implement getEvents
+    throw UnimplementedError();
   }
 }

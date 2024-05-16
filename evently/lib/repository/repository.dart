@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
+import 'package:evently/models/events.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/services/datasources/local_datasource.dart';
@@ -53,6 +54,10 @@ abstract class Repository {
   /// Output: if successful the output will be the list of [pylons.Recipe]
   /// will return error in the form of failure
   Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId});
+
+  /// This method will get the drafts List from the local database
+  /// Output: [List] returns that contains a number of [NFT]
+  Future<Either<Failure, List<Events>>> getEvents();
 }
 
 @LazySingleton(as: Repository)
@@ -127,6 +132,18 @@ class RepositoryImp implements Repository {
       return Right(sdkResponse);
     } on Exception catch (_) {
       return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Events>>> getEvents() async {
+    try {
+      final response = await localDataSource.getEvents();
+
+      return Right(response);
+    } on Exception catch (exception) {
+      crashlyticsHelper.recordFatalError(error: exception.toString());
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 }
