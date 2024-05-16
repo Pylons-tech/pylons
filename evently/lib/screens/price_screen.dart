@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
+import 'package:evently/models/events.dart';
 import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
 import 'package:evently/screens/custom_widgets/page_app_bar.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
