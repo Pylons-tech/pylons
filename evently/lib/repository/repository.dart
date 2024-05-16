@@ -17,9 +17,9 @@ abstract class Repository {
   /// returns [PickedFileModel] the selected file or [Failure] if aborted
   Future<Either<Failure, PickedFileModel>> pickFile();
 
-  /// This method will generate evently Id for the event
-  /// Output: [String] the id of the Event that is going to be added in the recipe
-  String autoGenerateCookbookId();
+  /// This method will generate the cookbook id for the easel app
+  /// Output: [String] the id of the cookbook which will contains all the NFTs.
+  Future<String> autoGenerateCookbookId();
 
   /// This method will save the username of the cookbook generator
   /// Input: [username] the username of the user who created the cookbook
@@ -68,7 +68,9 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String autoGenerateCookbookId() => localDataSource.autoGenerateCookbookId();
+  Future<String> autoGenerateCookbookId() async {
+    return localDataSource.autoGenerateCookbookId();
+  }
 
   @override
   Future<bool> saveCookBookGeneratorUsername(String username) {

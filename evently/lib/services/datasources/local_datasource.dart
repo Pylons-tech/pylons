@@ -4,9 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class LocalDataSource {
-  /// This method will generate Evently Id for the Event
-  /// Output: [String] the id of the Event that is going to be added in the recipe
-  String autoGenerateCookbookId();
+  /// This method will generate the cookbook id for the easel app
+  /// Output: [String] the id of the cookbook which will contains all the NFTs.
+  Future<String> autoGenerateCookbookId();
 
   /// This method will save the username of the cookbook generator
   /// Input: [username] the username of the user who created the cookbook
@@ -32,9 +32,12 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   final SharedPreferences sharedPreferences;
 
+  /// auto generates cookbookID string and saves into local storage
+  /// returns cookbookId
   @override
-  String autoGenerateCookbookId() {
-    final String cookbookId = "Evently_CookBook_auto_cookbook_${getFullDateTime()}";
+  Future<String> autoGenerateCookbookId() async {
+    final String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
+    await sharedPreferences.setString(kCookbookId, cookbookId);
     return cookbookId;
   }
 
