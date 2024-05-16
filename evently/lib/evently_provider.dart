@@ -8,7 +8,6 @@ import 'package:evently/models/events.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/repository/repository.dart';
-import 'package:evently/screens/event_hub/event_hub_screen.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/extension_util.dart';
