@@ -62,5 +62,7 @@
   "update_failed": "Загрузка не удалась",
   "uploading": "Загрузка...",
   "something_wrong_while_uploading": "Что-то пошло не так во время загрузки. Пожалуйста, попробуйте еще раз.",
-  "cookbook_not_found": "Cookbook не найден"
+  "cookbook_not_found": "Cookbook не найден",
+  "loading": "cargando ...",
+  "something_wrong": "Что-то пошло не так. Попробуйте перезапустить приложение."
 }

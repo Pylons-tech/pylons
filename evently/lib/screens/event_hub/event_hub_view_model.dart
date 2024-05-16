@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/repository/repository.dart';
+import 'package:evently/utils/extension_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
@@ -88,5 +91,23 @@ class EventHubViewModel extends ChangeNotifier {
       final nft = Events.fromRecipe(recipe);
       _eventPublishedList.add(nft);
     }
+  }
+
+  Future<void> getDraftsList() async {
+    // final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
+
+    final getNftResponse = await repository.getEvents();
+
+    if (getNftResponse.isLeft()) {
+      loading.dismiss();
+      LocaleKeys.something_wrong.tr().show();
+      return;
+    }
+
+    nftDraftList = getNftResponse.getOrElse(() => []);
+
+    loading.dismiss();
+
+    notifyListeners();
   }
 }
