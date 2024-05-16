@@ -77,7 +77,7 @@ class Events extends Equatable {
   }
 
   factory Events.fromRecipe(Recipe recipe) {
-    final Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
+    final map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
 
     return Events(
       eventName: map[kEventName]!,
