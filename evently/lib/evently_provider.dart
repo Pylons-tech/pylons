@@ -267,7 +267,6 @@ class EventlyProvider extends ChangeNotifier {
         endTime: endTime,
         location: location,
         description: description,
-        isFreeDrop: "isFreeDrop",
         numberOfTickets: numberOfTickets.toString(),
         price: price.toString(),
         listOfPerks: perks.map((e) => e.toString()).toList(),

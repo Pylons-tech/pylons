@@ -7,49 +7,60 @@ import 'package:fixnum/fixnum.dart';
 
 class Event extends Equatable {
   const Event({
-    required this.eventName,
-    required this.hostName,
-    required this.thumbnail,
-    required this.startDate,
-    required this.endDate,
-    required this.startTime,
-    required this.endTime,
-    required this.location,
-    required this.description,
-    required this.isFreeDrop,
-    required this.numberOfTickets,
-    required this.price,
+    ///* overview data
+    this.eventName = '',
+    this.hostName = '',
+    this.thumbnail = '',
+
+    ///* details
+    this.startDate = '',
+    this.endDate = '',
+    this.startTime = '',
+    this.endTime = '',
+    this.location = '',
+    this.description = '',
+
+    ///* perks
     required this.listOfPerks,
+
+    ///* price
+    this.numberOfTickets = '0',
+    this.price = '',
+    this.isFreeDrop = 'unselected',
   });
 
   final String eventName;
-
   final String hostName;
-
   final String thumbnail;
-
   final String startDate;
-
   final String endDate;
-
   final String startTime;
-
   final String endTime;
-
   final String location;
-
   final String description;
-
+  final String numberOfTickets;
+  final String price;
+  final List<String> listOfPerks;
   final String isFreeDrop;
 
-  final String numberOfTickets;
+  factory Event.fromRecipe(Recipe recipe) {
+    Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
 
-  final String price;
-
-  final List<String> listOfPerks;
-
-  @override
-  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, isFreeDrop, numberOfTickets, price];
+    return Event(
+      eventName: map[kEventName]!,
+      hostName: map[kEventHostName]!,
+      thumbnail: map[kThumbnail]!,
+      startDate: map[kStartDate]!,
+      endDate: map[kEndDate]!,
+      startTime: map[kStartTime]!,
+      endTime: map[kEndTime]!,
+      location: map[kLocation]!,
+      description: map[kDescription]!,
+      numberOfTickets: map[kNumberOfTickets]!,
+      price: map[kPrice]!,
+      listOfPerks: [],
+    );
+  }
 
   static Map<String, String> _extractAttributeValues(List<StringParam> attributes) {
     final Map<String, String> attributeValues = {};
@@ -77,25 +88,8 @@ class Event extends Equatable {
     return attributeValues;
   }
 
-  factory Event.fromRecipe(Recipe recipe) {
-    Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
-
-    return Event(
-      eventName: map[kEventName]!,
-      hostName: map[kEventHostName]!,
-      thumbnail: map[kThumbnail]!,
-      startDate: map[kStartDate]!,
-      endDate: map[kEndDate]!,
-      startTime: map[kStartTime]!,
-      endTime: map[kEndTime]!,
-      location: map[kLocation]!,
-      description: map[kDescription]!,
-      isFreeDrop: '',
-      numberOfTickets: map[kNumberOfTickets]!,
-      price: map[kPrice]!,
-      listOfPerks: [],
-    );
-  }
+  @override
+  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price];
 }
 
 extension CreateRecipe on Event {
