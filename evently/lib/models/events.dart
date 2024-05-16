@@ -50,7 +50,6 @@ class Events extends Equatable {
 
   factory Events.fromRecipe(Recipe recipe) {
     Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
-
     return Events(
       eventName: map[kEventName]!,
       hostName: map[kEventHostName]!,
@@ -80,9 +79,12 @@ class Events extends Equatable {
         case kEndTime:
         case kLocation:
         case kDescription:
-        case kPerks:
         case kNumberOfTickets:
         case kPrice:
+        case kPerks:
+        case kFreeDrop:
+        case kCookBookId:
+        case kRecipeId:
           attributeValues[attribute.key] = attribute.value;
           break;
         default:
@@ -189,11 +191,10 @@ const kCookBookId = "kCookBookId";
 const kVersion = "v0.2.0";
 const kUpylon = "upylon";
 const kPylonSymbol = 'upylon';
-const String transferFeeAmount = '1';
+const transferFeeAmount = '1';
 const kEventlyEvent = "Evently_Event";
 const kExtraInfo = "extraInfo";
-const String costPerBlock = '0';
-
+const costPerBlock = '0';
 
 class PerksModel {
   PerksModel({required this.name, required this.description});
@@ -202,14 +203,14 @@ class PerksModel {
   final String description;
 
   factory PerksModel.updateName({required String name, required PerksModel perksModel}) => PerksModel(
-    name: name,
-    description: perksModel.description,
-  );
+        name: name,
+        description: perksModel.description,
+      );
 
   factory PerksModel.updateDescription({required String description, required PerksModel perksModel}) => PerksModel(
-    name: perksModel.name,
-    description: description,
-  );
+        name: perksModel.name,
+        description: description,
+      );
 
   @override
   String toString() {

@@ -5,7 +5,6 @@ import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
 import 'package:evently/models/denom.dart';
 import 'package:evently/models/events.dart';
-import 'package:evently/models/perks_model.dart';
 import 'package:evently/models/picked_file_model.dart';
 import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/repository/repository.dart';
@@ -20,7 +19,6 @@ import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
 
 import 'services/third_party_services/quick_node.dart';
-
 
 @LazySingleton()
 class EventlyProvider extends ChangeNotifier {
@@ -268,7 +266,7 @@ class EventlyProvider extends ChangeNotifier {
         description: description,
         numberOfTickets: numberOfTickets.toString(),
         price: price.toString(),
-        listOfPerks: perks.map((e) => e.toString()).toList(),
+        listOfPerks: perks.join(','),
       );
 
       final recipe = event.createRecipe(
