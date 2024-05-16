@@ -6,6 +6,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/providers/collections_tab_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -36,11 +37,16 @@ class CreateRecipeHandler implements BaseHandler {
     if (response.success) {
       if (shouldShowNFTPreview()) {
         final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(jsonMap);
-
-        final nft = await NFT.fromRecipeId(msgObj.cookbookId, msgObj.id);
-
-        if (nft != null) {
-          await navigatorKey.currentState!.pushNamed(Routes.ownerView.name, arguments: nft);
+        if (msgObj.cookbookId.contains('Evently')) {
+          final events = Events.fromRecipeId(msgObj.cookbookId, msgObj.id);
+          if (events != null) {
+            await navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events);
+          }
+        } else {
+          final nft = await NFT.fromRecipeId(msgObj.cookbookId, msgObj.id);
+          if (nft != null) {
+            await navigatorKey.currentState!.pushNamed(Routes.ownerView.name, arguments: nft);
+          }
         }
 
         GetIt.I.get<HomeProvider>().changeTabs(0);

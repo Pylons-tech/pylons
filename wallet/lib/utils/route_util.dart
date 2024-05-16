@@ -111,6 +111,8 @@ class RouteUtil {
         return createRoute(const SizedBox());
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
+      case Routes.eventView:
+        return createRoute(const Placeholder());
     }
 
     return null;
@@ -146,7 +148,8 @@ enum Routes {
   purchaseView,
   transactionHistory,
   acceptPolicy,
-  fallback;
+  fallback,
+  eventView;
 
   static Routes getAppRouteFromString(String routeName) {
     switch (routeName) {
@@ -198,6 +201,8 @@ enum Routes {
         return localTransactionDetails;
       case 'transactionHistory':
         return transactionHistory;
+      case 'eventView':
+        return eventView;
       default:
         return fallback;
     }

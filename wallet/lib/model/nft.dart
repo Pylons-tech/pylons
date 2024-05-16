@@ -349,6 +349,20 @@ class NFT extends Equatable {
     return NFT.fromRecipe(recipeEither.toOption().toNullable()!);
   }
 
+
+  static Future<NFT?> eventFromRecipeId(String cookbookId, String recipeId) async {
+    final walletsStore = GetIt.I.get<WalletsStore>();
+    final recipeEither = await walletsStore.getRecipe(cookbookId, recipeId);
+
+    if (recipeEither.isLeft()) {
+      return null;
+    }
+
+    return NFT.fromRecipe(recipeEither.toOption().toNullable()!);
+  }
+
+
+
   factory NFT.fromJson(Map<String, Object?> json) {
     return NFT(
       name: json['name'].toString(),

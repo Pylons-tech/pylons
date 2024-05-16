@@ -106,13 +106,7 @@ const int kDenomInitial = 1;
 const int kDenomFinal = 4;
 
 const Map<String, dynamic> kCoinDenom = {
-  'upylon': {
-    "name": "Pylon",
-    "denom": "upylon",
-    "short": "pylon",
-    "icon": "assets/images/icons/pylons_logo_24x24.png",
-    "faucet": true
-  },
+  'upylon': {"name": "Pylon", "denom": "upylon", "short": "pylon", "icon": "assets/images/icons/pylons_logo_24x24.png", "faucet": true},
   'BTC': {
     "name": "Bitcoin",
     "denom": "BTC",
@@ -199,13 +193,7 @@ const IOS_VERSION = '1.0.8+3';
 const kCurrencyDecimalLength = 2;
 const kMaxPriceLength = 14;
 
-List<Color> colorList = [
-  AppColors.kYellow,
-  AppColors.kBlue,
-  AppColors.kDarkPurple,
-  AppColors.kDarkRed,
-  AppColors.kDarkGreen
-];
+List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
 List<Color> colorListForPracticeTest = [
   AppColors.kYellow,
   AppColors.kDarkPurple,
@@ -290,8 +278,7 @@ List<Map<String, dynamic>> languagesSupported = [
 
 ///review your nft
 
-const String kPylonsFeeMsg =
-    "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
+const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
 const String kStripeAccountNotCreatedIdentifier = "onboarding";
 const String kNftFormat = "NFT_Format";
 const String kDuration = "Duration";
@@ -447,11 +434,7 @@ const kCheckoutDialogKey = "checkout_dialog_key";
 const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
 const kCloseBottomSheetKey = "close_bottom_sheet_key";
 
-Map<String, Color> denomColors = {
-  'upylon': const Color(0xFF5252d5),
-  'ustripeusd': const Color(0xFF85bb65),
-  'uusd': const Color(0xFF85bb65)
-};
+Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 
 const String kNftName = "nftName";
 const String kNftPrice = "nftPrice";
@@ -515,3 +498,18 @@ const String drawerKey = "drawer_key";
 const String kRemaining = 'remaining';
 const kTotal = 'total';
 const kFileExtension = "file_extension";
+
+///* Event String
+/// Event String keys
+const kEventName = "kEventName";
+const kEventHostName = "kEventHostName";
+const kThumbnail = "kThumbnail";
+const kStartDate = "kStartDate";
+const kEndDate = "kEndDate";
+const kStartTime = "kStartTime";
+const kEndTime = "kEndTime";
+const kLocation = "kLocation";
+const kPerks = "kPerks";
+const kNumberOfTickets = "kNumberOfTickets";
+const kPrice = "kPrice";
+const kErrRecipe = 'Recipe error :';
