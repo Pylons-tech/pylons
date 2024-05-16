@@ -252,7 +252,6 @@ class EventlyProvider extends ChangeNotifier {
     _cookbookId = repository.getCookbookId();
 
     if (_cookbookId == null) {
-      // create cookbook
       final isCookBookCreated = await createCookbook();
 
       if (isCookBookCreated) {

@@ -19,3 +19,17 @@ class CacheFailure extends Failure {
   @override
   List<Object?> get props => [message];
 }
+
+class NoInternetFailure extends Failure {
+  const NoInternetFailure(super.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class CookBookNotFoundFailure extends Failure {
+  const CookBookNotFoundFailure(super.message);
+
+  @override
+  List<Object?> get props => [message];
+}

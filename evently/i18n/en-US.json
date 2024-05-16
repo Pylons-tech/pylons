@@ -61,5 +61,6 @@
   "recipe_created": "Recipe created",
   "update_failed": "Upload Failed",
   "uploading": "Uploading ...",
-  "something_wrong_while_uploading": "Something went wrong while uploading. Please try again."
+  "something_wrong_while_uploading": "Something went wrong while uploading. Please try again.",
+  "cookbook_not_found": "Cookbook not found"
 }
