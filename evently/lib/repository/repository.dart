@@ -141,8 +141,7 @@ class RepositoryImp implements Repository {
       final response = await localDataSource.getEvents();
 
       return Right(response);
-    } on Exception catch (exception) {
-      crashlyticsHelper.recordFatalError(error: exception.toString());
+    } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
