@@ -265,6 +265,8 @@ class EventlyProvider extends ChangeNotifier {
         numberOfTickets: numberOfTickets.toString(),
         price: price.toString(),
         listOfPerks: perks.join(','),
+        cookbookID: _cookbookId!,
+        recipeID: _recipeId,
       );
 
       final recipe = event.createRecipe(
