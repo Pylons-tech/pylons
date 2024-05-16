@@ -1,9 +1,11 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/pages/events/events_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/recovery_screen.dart';
 
+import '../model/event.dart';
 import '../model/nft.dart';
 import '../model/transaction_failure_model.dart';
 import '../pages/detailed_asset_view/owner_view.dart';
@@ -112,7 +114,14 @@ class RouteUtil {
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
       case Routes.eventView:
-        return createRoute(const Placeholder());
+        if (settings.arguments != null && settings.arguments is NFT) {
+          return createRoute(EventPassViewScreen(
+            key: ValueKey(settings.arguments),
+            events: settings.arguments as Events,
+          ));
+        }
+
+        return createRoute(const SizedBox());
     }
 
     return null;

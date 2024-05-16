@@ -45,7 +45,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   /// returns cookbookId
   @override
   Future<String> autoGenerateCookbookId() async {
-    final String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
+    final String cookbookId = "Evently_CookBook_auto_cookbook_${getFullDateTime()}";
     await sharedPreferences.setString(kCookbookId, cookbookId);
     return cookbookId;
   }
