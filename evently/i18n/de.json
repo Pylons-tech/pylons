@@ -65,5 +65,8 @@
   "cookbook_not_found": "Cookbook nicht gefunden",
   "loading": "Wird geladen ...",
   "something_wrong": "Etwas ist schief gelaufen. Bitte versuchen Sie, die Anwendung neu zu starten.",
-  "get_error": "Entwurf konnte nicht abgerufen werden"
+  "get_error": "Entwurf konnte nicht abgerufen werden",
+  "delete_error": "Entwurf konnte nicht gelöscht werden",
+  "save_error": "Entwurf konnte nicht gespeichert werden",
+  "save_error": "Failed to save draft"
 }

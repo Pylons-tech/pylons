@@ -66,5 +66,7 @@ abstract class  LocaleKeys {
   static const loading = 'loading';
   static const something_wrong = 'something_wrong';
   static const get_error = 'get_error';
+  static const delete_error = 'delete_error';
+  static const save_error = 'save_error';
 
 }

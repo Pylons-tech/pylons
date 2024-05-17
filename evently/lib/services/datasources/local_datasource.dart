@@ -41,7 +41,17 @@ abstract class LocalDataSource {
 
   /// This method will get the drafts List from the local database
   /// Output: [List][NFT] returns  the List of drafts
-  Future<List<Events>> getEvents();
+  Future<List<Events>> getAllEvents();
+
+  /// This method will delete draft from the local database
+  /// Input: [recipeID] the id of the draft which the user wants to delete
+  /// Output: [bool] returns whether the operation is successful or not
+  Future<bool> deleteEvents(int id);
+
+  /// This method will save the draft of the NFT
+  /// Input: [Events] the draft that will will be saved in database
+  /// Output: [int] returns id of the inserted document
+  Future<int> saveEvents(Events events);
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -101,11 +111,31 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<List<Events>> getEvents() async {
+  Future<List<Events>> getAllEvents() async {
     try {
       return await database.eventsDao.findAllEvents();
     } catch (e) {
       throw CacheFailure(LocaleKeys.get_error.tr());
+    }
+  }
+
+  @override
+  Future<bool> deleteEvents(int id) async {
+    try {
+      await database.eventsDao.delete(id);
+      return true;
+    } catch (e) {
+      throw CacheFailure(LocaleKeys.delete_error.tr());
+    }
+  }
+
+  @override
+  Future<int> saveEvents(Events events) async {
+    try {
+      final result = await database.eventsDao.insertEvents(events);
+      return result;
+    } catch (e) {
+      throw LocaleKeys.save_error.tr();
     }
   }
 }

@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Events` (`id` INTEGER, `eventName` TEXT NOT NULL, `hostName` TEXT NOT NULL, `thumbnail` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `location` TEXT NOT NULL, `description` TEXT NOT NULL, `numberOfTickets` TEXT NOT NULL, `price` TEXT NOT NULL, `listOfPerks` TEXT NOT NULL, `isFreeDrops` TEXT NOT NULL, `cookbookID` TEXT NOT NULL, `recipeID` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Events` (`id` INTEGER, `recipeID` TEXT NOT NULL, `eventName` TEXT NOT NULL, `hostName` TEXT NOT NULL, `thumbnail` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `location` TEXT NOT NULL, `description` TEXT NOT NULL, `numberOfTickets` TEXT NOT NULL, `price` TEXT NOT NULL, `listOfPerks` TEXT NOT NULL, `isFreeDrops` TEXT NOT NULL, `cookbookID` TEXT NOT NULL, `step` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -120,6 +120,7 @@ class _$EventsDao extends EventsDao {
             'Events',
             (Events item) => <String, Object?>{
                   'id': item.id,
+                  'recipeID': item.recipeID,
                   'eventName': item.eventName,
                   'hostName': item.hostName,
                   'thumbnail': item.thumbnail,
@@ -134,7 +135,7 @@ class _$EventsDao extends EventsDao {
                   'listOfPerks': item.listOfPerks,
                   'isFreeDrops': item.isFreeDrops,
                   'cookbookID': item.cookbookID,
-                  'recipeID': item.recipeID
+                  'step': item.step
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -147,9 +148,9 @@ class _$EventsDao extends EventsDao {
 
   @override
   Future<List<Events>> findAllEvents() async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM events ORDER BY dateTime DESC',
+    return _queryAdapter.queryList('SELECT * FROM events',
         mapper: (Map<String, Object?> row) => Events(
+            id: row['id'] as int?,
             eventName: row['eventName'] as String,
             hostName: row['hostName'] as String,
             thumbnail: row['thumbnail'] as String,
@@ -165,13 +166,14 @@ class _$EventsDao extends EventsDao {
             isFreeDrops: row['isFreeDrops'] as String,
             cookbookID: row['cookbookID'] as String,
             recipeID: row['recipeID'] as String,
-            id: row['id'] as int?));
+            step: row['step'] as String));
   }
 
   @override
   Future<Events?> findEventsById(int id) async {
     return _queryAdapter.query('SELECT * FROM events WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Events(
+            id: row['id'] as int?,
             eventName: row['eventName'] as String,
             hostName: row['hostName'] as String,
             thumbnail: row['thumbnail'] as String,
@@ -187,7 +189,7 @@ class _$EventsDao extends EventsDao {
             isFreeDrops: row['isFreeDrops'] as String,
             cookbookID: row['cookbookID'] as String,
             recipeID: row['recipeID'] as String,
-            id: row['id'] as int?),
+            step: row['step'] as String),
         arguments: [id]);
   }
 
@@ -195,6 +197,51 @@ class _$EventsDao extends EventsDao {
   Future<void> delete(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE FROM events WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
+  Future<void> updateNFTFromDetail(
+    String startDate,
+    String endDate,
+    String startTime,
+    String endTime,
+    String location,
+    String description,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET startDate = ?1, endDate= ?2, startTime = ?3, endTime = ?4,location = ?5, description = ?6 WHERE id = ?7',
+        arguments: [
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+          location,
+          description,
+          id
+        ]);
+  }
+
+  @override
+  Future<void> updateNFTFromPerks(
+    String listOfPerks,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET listOfPerks = ?1 WHERE id = ?2',
+        arguments: [listOfPerks, id]);
+  }
+
+  @override
+  Future<void> updateNFTFromPrice(
+    int id,
+    String numberOfTickets,
+    String price,
+    String isFreeDrops,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4   WHERE id = ?1',
+        arguments: [id, numberOfTickets, price, isFreeDrops]);
   }
 
   @override

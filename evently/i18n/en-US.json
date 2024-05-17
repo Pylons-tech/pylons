@@ -65,5 +65,6 @@
   "cookbook_not_found": "Cookbook not found",
   "loading": "loading ...",
   "something_wrong": "Something went wrong. Please try restarting the application.",
-  "get_error": "Failed to get draft"
+  "get_error": "Failed to get draft",
+  "delete_error": "Failed to delete draft"
 }

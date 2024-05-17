@@ -1,3 +1,4 @@
+import 'package:evently/evently_provider.dart';
 import 'package:evently/screens/detail_screen.dart';
 import 'package:evently/screens/host_view_ticket_preview.dart';
 import 'package:evently/screens/overview_screen.dart';
@@ -22,6 +23,10 @@ class _CreateEventState extends State<CreateEvent> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<EventlyProvider>().initStore();
+    });
 
     createEventViewModel.init();
   }
