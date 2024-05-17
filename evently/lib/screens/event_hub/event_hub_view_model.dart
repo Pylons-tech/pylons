@@ -97,7 +97,7 @@ class EventHubViewModel extends ChangeNotifier {
   Future<void> getDraftsList() async {
     final loading = LoadingProgress()..showLoadingWithProgress(message: LocaleKeys.loading.tr());
 
-    final getEventResponse = await repository.getEvents();
+    final getEventResponse = await repository.getAllEvents();
 
     if (getEventResponse.isLeft()) {
       loading.dismiss();

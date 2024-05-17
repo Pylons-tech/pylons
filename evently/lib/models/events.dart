@@ -9,7 +9,7 @@ enum FreeDrop { yes, no, unselected }
 class Events extends Equatable {
   @primaryKey
   final int? id;
-
+  final String recipeID;
   final String eventName;
   final String hostName;
   final String thumbnail;
@@ -24,9 +24,11 @@ class Events extends Equatable {
   final String listOfPerks;
   final String isFreeDrops;
   final String cookbookID;
-  final String recipeID;
+  final String step;
 
   const Events({
+    this.id,
+
     ///* overview data
     this.eventName = '',
     this.hostName = '',
@@ -51,7 +53,7 @@ class Events extends Equatable {
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
-    this.id,
+    required this.step,
   });
 
   factory Events.fromRecipe(Recipe recipe) {
@@ -69,6 +71,7 @@ class Events extends Equatable {
       numberOfTickets: map[kNumberOfTickets]!,
       price: map[kPrice]!,
       listOfPerks: map[kPerks]!,
+      step: '',
     );
   }
 

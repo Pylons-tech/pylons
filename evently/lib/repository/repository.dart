@@ -57,7 +57,7 @@ abstract class Repository {
 
   /// This method will get the drafts List from the local database
   /// Output: [List] returns that contains a number of [NFT]
-  Future<Either<Failure, List<Events>>> getEvents();
+  Future<Either<Failure, List<Events>>> getAllEvents();
 }
 
 @LazySingleton(as: Repository)
@@ -136,10 +136,9 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<Events>>> getEvents() async {
+  Future<Either<Failure, List<Events>>> getAllEvents() async {
     try {
-      final response = await localDataSource.getEvents();
-
+      final response = await localDataSource.getAllEvents();
       return Right(response);
     } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));

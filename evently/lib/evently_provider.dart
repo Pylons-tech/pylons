@@ -19,7 +19,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
-
 import 'services/third_party_services/quick_node.dart';
 
 @LazySingleton()
@@ -218,7 +217,6 @@ class EventlyProvider extends ChangeNotifier {
     setThumbnail = "$ipfsDomain/${fileUploadResponse.value?.cid}";
   }
 
-  String currentUserName = "";
   bool stripeAccountExists = false;
 
   String? _cookbookId;
@@ -231,7 +229,6 @@ class EventlyProvider extends ChangeNotifier {
     final sdkResponse = await PylonsWallet.instance.getProfile();
 
     if (sdkResponse.success) {
-      currentUserName = sdkResponse.data!.username;
       stripeAccountExists = sdkResponse.data!.stripeExists;
 
       supportedDenomList = Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
@@ -278,7 +275,7 @@ class EventlyProvider extends ChangeNotifier {
       price: price.toString(),
       listOfPerks: perks.join(','),
       cookbookID: _cookbookId!,
-      recipeID: _recipeId,
+      recipeID: _recipeId, step: '',
     );
 
     final recipe = event.createRecipe(
@@ -330,5 +327,27 @@ class EventlyProvider extends ChangeNotifier {
 
     navigatorKey.showMsg(message: response.error);
     return false;
+  }
+
+  void initStore() {
+    _eventName = "";
+    _hostName = "";
+    _thumbnail = "";
+    _isOverviewEnable = false;
+
+    _startDate = "";
+    _endDate = "";
+    _startTime = "";
+    _endTime = "";
+    _location = "";
+    _description = "";
+    _selectedDenom = Denom.availableDenoms.first;
+
+    _isFreeDrop = FreeDrop.unselected;
+    _numberOfTickets = 0;
+    _price = 0;
+    _cookbookId = '';
+
+    notifyListeners();
   }
 }

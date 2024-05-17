@@ -3,7 +3,7 @@ import 'package:floor/floor.dart';
 
 @dao
 abstract class EventsDao {
-  @Query('SELECT * FROM events ORDER BY dateTime DESC')
+  @Query('SELECT * FROM events')
   Future<List<Events>> findAllEvents();
 
   @Query('SELECT * FROM events WHERE id = :id')
@@ -14,4 +14,29 @@ abstract class EventsDao {
 
   @Query('DELETE FROM events WHERE id = :id')
   Future<void> delete(int id);
+
+  @Query('UPDATE events SET startDate = :startDate, endDate= :endDate, startTime = :startTime, endTime = :endTime,location = :location, description = :description WHERE id = :id')
+  Future<void> updateNFTFromDetail(
+    String startDate,
+    String endDate,
+    String startTime,
+    String endTime,
+    String location,
+    String description,
+    int id,
+  );
+
+  @Query('UPDATE events SET listOfPerks = :listOfPerks WHERE id = :id')
+  Future<void> updateNFTFromPerks(
+    String listOfPerks,
+    int id,
+  );
+
+  @Query('UPDATE events SET numberOfTickets = :numberOfTickets, price = :price, isFreeDrops = :isFreeDrops   WHERE id = :id')
+  Future<void> updateNFTFromPrice(
+    int id,
+    String numberOfTickets,
+    String price,
+    String isFreeDrops,
+  );
 }
