@@ -69,5 +69,6 @@
   "delete_error": "Не удалось удалить черновик",
   "save_error": "Не удалось сохранить черновик",
   "event_name" : "Event Name",
-  "are_you_sure_you_want_to_delete": "Вы уверены, что хотите удалить этот черновик?"
+  "are_you_sure_you_want_to_delete": "Вы уверены, что хотите удалить этот черновик?",
+  "published": "изданный"
 }

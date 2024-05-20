@@ -69,5 +69,6 @@ abstract class  LocaleKeys {
   static const delete_error = 'delete_error';
   static const save_error = 'save_error';
   static const are_you_sure_you_want_to_delete = 'are_you_sure_you_want_to_delete';
+  static const published = 'published';
 
 }

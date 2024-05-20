@@ -70,5 +70,6 @@
   "save_error": "Entwurf konnte nicht gespeichert werden",
   "save_error": "Failed to save draft",
   "event_name" : "Event Name",
-  "are_you_sure_you_want_to_delete": "Möchten Sie diesen Entwurf wirklich löschen?"
+  "are_you_sure_you_want_to_delete": "Möchten Sie diesen Entwurf wirklich löschen?",
+  "published": "Veröffentlicht"
 }
