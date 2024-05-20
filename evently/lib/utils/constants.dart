@@ -49,7 +49,6 @@ const kFreeShirt = "free_shirt";
 const kFreeGift = "free_gift";
 const kFreeDrink = "free_drink";
 
-
 const kResidual = "Residual";
 const kQuantity = "Quantity";
 const String transferFeeAmount = '1';
@@ -70,6 +69,13 @@ class SVGUtils {
   static const kDiamond = "assets/images/svg/diamond.svg";
   static const kCamera = "assets/images/svg/camera.svg";
   static const kAlertIcon = 'assets/images/svg/i_icon.svg';
+  static const kSvgMoreOption = 'assets/images/svg/more_options.svg';
+  static const kSvgDelete = 'assets/images/svg/delete.svg';
+  static const kGridIcon = 'assets/images/svg/grid.svg';
+  static const kListIcon = 'assets/images/svg/list.svg';
+  static const kSvgPublish = 'assets/images/svg/publish.svg';
+
+
 }
 
 /// ```PNG assets
@@ -82,6 +88,7 @@ class PngUtils {
   static const kIconDenomUsd = 'assets/images/denom_usd.png';
   static const kIconDenomPylon = 'assets/images/denom_pylon.png';
   static const kHostPreview = "assets/images/host_preview.png";
+  static const kSvgIpfsLogo = 'assets/images/ipfs_logo.png';
 
   /// will remove this variable for ui dev
   /// i need this variable to be used

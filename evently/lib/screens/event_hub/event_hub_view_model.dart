@@ -10,6 +10,8 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 
 enum CollectionType { draft, forSale, history }
 
+enum ViewType { viewGrid, viewList }
+
 @lazySingleton
 class EventHubViewModel extends ChangeNotifier {
   EventHubViewModel(this.repository);
@@ -21,6 +23,15 @@ class EventHubViewModel extends ChangeNotifier {
   List<Events> get eventPublishedList => _eventPublishedList;
 
   List<Events> _eventForDraftList = [];
+
+  ViewType viewType = ViewType.viewGrid;
+
+  void updateViewType(ViewType selectedViewType) {
+    viewType = selectedViewType;
+    notifyListeners();
+  }
+
+  List<Events> get eventForDraftList => _eventForDraftList;
 
   List<Events> get eventForSaleList => _eventForDraftList;
 
@@ -40,22 +51,24 @@ class EventHubViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  CollectionType selectedCollectionType = CollectionType.draft;
+  CollectionType _selectedCollectionType = CollectionType.draft;
+
+  CollectionType get selectedCollectionType => _selectedCollectionType;
 
   void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
-        selectedCollectionType = CollectionType.draft;
+        _selectedCollectionType = CollectionType.draft;
         notifyListeners();
         break;
 
       case CollectionType.forSale:
-        selectedCollectionType = CollectionType.forSale;
+        _selectedCollectionType = CollectionType.forSale;
         notifyListeners();
         break;
 
       case CollectionType.history:
-        selectedCollectionType = CollectionType.history;
+        _selectedCollectionType = CollectionType.history;
         notifyListeners();
         break;
     }
@@ -116,6 +129,17 @@ class EventHubViewModel extends ChangeNotifier {
   Future<void> getPublishAndDraftData() async {
     await getRecipesList();
     await getDraftsList();
+    notifyListeners();
+  }
+
+  Future<void> deleteNft(int? id) async {
+    final deleteNftResponse = await repository.deleteNft(id!);
+
+    if (deleteNftResponse.isLeft()) {
+      LocaleKeys.delete_error.tr().show();
+      return;
+    }
+    eventForDraftList.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 }

@@ -62,6 +62,11 @@ abstract class Repository {
   /// This method will save event
   /// Output: [int] returns that id of [Event]
   Future<Either<Failure, int>> saveEvents(Events events);
+
+  /// This method will delete draft from the local database
+  /// Input: [id] the id of the nft which the user wants to delete
+  /// Output: [bool] returns whether the operation is successful or not
+  Future<Either<Failure, bool>> deleteNft(int id);
 }
 
 @LazySingleton(as: Repository)
@@ -156,6 +161,17 @@ class RepositoryImp implements Repository {
       return Right(id);
     } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.save_error.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNft(int id) async {
+    try {
+      final bool result = await localDataSource.deleteNft(id);
+      return Right(result);
+    } on Exception catch (exception) {
+
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 }
