@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class EventHubScreen extends StatefulWidget {
   const EventHubScreen({super.key});
@@ -172,18 +174,38 @@ class _EventHubContentState extends State<EventHubContent> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                BuildListView(
-                  eventsList: viewModel.eventForDraftList,
-                  onEmptyList: (BuildContext context) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          LocaleKeys.no_nft_created.tr(),
-                          style: subTitleStyle,
-                        )),
-                  ),
-                ),
+                viewModel.viewType == ViewType.viewGrid
+                    ? Expanded(
+                        child: BuildGridView(
+                          eventsList: viewModel.eventForDraftList,
+                          onEmptyList: (BuildContext context) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  LocaleKeys.no_nft_created.tr(),
+                                  style: subTitleStyle,
+                                )),
+                          ),
+                          calculateBannerPrice: ({required String currency, required String price}) {
+                            return '';
+                          },
+                        ),
+                      )
+                    : Expanded(
+                        child: BuildListView(
+                          eventsList: viewModel.eventForDraftList,
+                          onEmptyList: (BuildContext context) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  LocaleKeys.no_nft_created.tr(),
+                                  style: subTitleStyle,
+                                )),
+                          ),
+                        ),
+                      ),
                 const Spacer(),
                 Padding(padding: EdgeInsets.symmetric(horizontal: 20.w), child: getCreateEventWidget()),
               ],
@@ -283,67 +305,6 @@ class DraftListTile extends StatefulWidget {
 }
 
 class _DraftListTileState extends State<DraftListTile> {
-  Widget getPlaceHolder() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-      decoration: BoxDecoration(
-        color: EventlyAppTheme.kGery03,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(0.0, 1.0),
-            blurRadius: 4.0,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-        child: Row(
-          children: [
-            Container(
-              width: 50.0.w,
-              height: 50.0.w,
-              decoration: const BoxDecoration(
-                color: EventlyAppTheme.kGery03,
-              ),
-            ),
-            SizedBox(
-              width: 10.w,
-            ),
-            Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 30.0.w,
-                    height: 9.0.h,
-                    color: EventlyAppTheme.kGery03,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 8.0.h,
-                  );
-                },
-                itemCount: 3,
-              ),
-            ),
-            SizedBox(
-              width: 10.w,
-            ),
-            Padding(
-              padding: EdgeInsets.all(4.0.w),
-              child: SvgPicture.asset(
-                SVGUtils.kSvgMoreOption,
-                color: EventlyAppTheme.kGery03,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget getDraftCard() {
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -360,15 +321,20 @@ class _DraftListTileState extends State<DraftListTile> {
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
         child: Row(
           children: [
-            SizedBox(
-              width: 10.w,
+            CachedNetworkImage(
+              width: 90.w,
+              fit: BoxFit.contain,
+              imageUrl: widget.events.thumbnail,
+              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+              progressIndicatorBuilder: (context, _, progress) {
+                return Shimmer(color: EventlyAppTheme.kGrey04, child: const SizedBox.expand());
+              },
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    // "event_name".tr(args: [if (widget.events.eventName.isNotEmpty) widget.nft.name else 'Event Name']),
                     (widget.events.eventName.isNotEmpty) ? widget.events.eventName : 'Event Name',
                     style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                     maxLines: 1,
@@ -391,18 +357,12 @@ class _DraftListTileState extends State<DraftListTile> {
                 ],
               ),
             ),
-            SizedBox(
-              width: 10.w,
-            ),
             InkWell(
               onTap: () {},
               child: Padding(
                 padding: EdgeInsets.all(4.0.w),
                 child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
               ),
-            ),
-            SizedBox(
-              width: 10.w,
             ),
           ],
         ),
@@ -431,37 +391,8 @@ class _DraftListTileState extends State<DraftListTile> {
               ),
             ],
           ),
-          child: (widget.events.price.isNotEmpty && double.parse(widget.events.price) > 0)
-              ? Card(
-                  elevation: 5,
-                  margin: EdgeInsets.zero,
-                  child: ClipRRect(
-                    child: Banner(
-                      color: EventlyAppTheme.kDarkGreen,
-                      location: BannerLocation.topEnd,
-                      message: "\$ ${widget.events.price}",
-                      child: getDraftCard(),
-                    ),
-                  ),
-                )
-              : getDraftCard(),
+          child: getDraftCard(),
         ),
-        // IgnorePointer(
-        //   child: SizedBox(
-        //     height: 85.0.h,
-        //     width: double.infinity,
-        //     child: CachedNetworkImage(
-        //       imageUrl: widget.events.thumbnail,
-        //       fit: BoxFit.fill,
-        //       color: EventlyAppTheme.kTransparent,
-        //       colorBlendMode: BlendMode.clear,
-        //       placeholder: (context, _) => getPlaceHolder(),
-        //       errorWidget: (context, _, __) {
-        //         return const IgnorePointer(child: SizedBox());
-        //       },
-        //     ),
-        //   ),
-        // )
       ],
     );
   }
@@ -511,7 +442,6 @@ class BuildGridView extends StatelessWidget {
           if (events.price.isNotEmpty && double.parse(events.price) > 0) {
             return ClipRRect(
               child: Banner(
-
                 color: EventlyAppTheme.kDarkGreen,
                 location: BannerLocation.topEnd,
                 message: calculateBannerPrice(price: events.price, currency: events.denom),
