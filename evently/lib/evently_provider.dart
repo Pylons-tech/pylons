@@ -10,6 +10,7 @@ import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/enums.dart';
 import 'package:evently/utils/extension_util.dart';
 import 'package:evently/utils/failure/failure.dart';
 import 'package:evently/widgets/loading_with_progress.dart';
@@ -211,6 +212,7 @@ class EventlyProvider extends ChangeNotifier {
       LocaleKeys.something_wrong_while_uploading.tr().show();
       return;
     }
+
     final fileUploadResponse = response.getOrElse(() => StorageResponseModel.initial());
     loading.dismiss();
 
@@ -275,7 +277,8 @@ class EventlyProvider extends ChangeNotifier {
       price: price.toString(),
       listOfPerks: perks.join(','),
       cookbookID: _cookbookId!,
-      recipeID: _recipeId, step: '',
+      recipeID: _recipeId,
+      step: '',
     );
 
     final recipe = event.createRecipe(
@@ -349,5 +352,12 @@ class EventlyProvider extends ChangeNotifier {
     _cookbookId = '';
 
     notifyListeners();
+  }
+
+  saveAsDraft({
+    required VoidCallback onCompleted,
+    required UploadStep uploadStep,
+  }) {
+    onCompleted();
   }
 }
