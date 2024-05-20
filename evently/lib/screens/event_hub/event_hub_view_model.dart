@@ -112,4 +112,10 @@ class EventHubViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  Future<void> getPublishAndDraftData() async {
+    await getRecipesList();
+    await getDraftsList();
+    notifyListeners();
+  }
 }

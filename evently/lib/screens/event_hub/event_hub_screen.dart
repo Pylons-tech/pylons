@@ -1,12 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
+import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:evently/widgets/clipped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class EventHubScreen extends StatefulWidget {
   const EventHubScreen({super.key});
@@ -42,68 +45,80 @@ class _EventHubScreenState extends State<EventHubScreen> {
     fontFamily: kUniversalFontFamily,
   );
 
+  EventHubViewModel get eventHubViewModel => sl<EventHubViewModel>();
+
+  @override
+  void initState() {
+    eventHubViewModel.getPublishAndDraftData();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: EventlyAppTheme.kBlack,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: EventlyAppTheme.kBlack,
-          body: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
-                      child: const DecoratedBox(
-                        decoration: BoxDecoration(color: EventlyAppTheme.kTextLightBlue),
-                        child: Icon(Icons.add, size: 21, color: EventlyAppTheme.kWhite),
+    return ChangeNotifierProvider.value(
+      value: eventHubViewModel,
+      child: ColoredBox(
+        color: EventlyAppTheme.kBlack,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: EventlyAppTheme.kBlack,
+            body: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.kCreateEvent),
+                        child: const DecoratedBox(
+                          decoration: BoxDecoration(color: EventlyAppTheme.kTextLightBlue),
+                          child: Icon(Icons.add, size: 21, color: EventlyAppTheme.kWhite),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Text(
-                  LocaleKeys.eventhub.tr(),
-                  style: headingStyle,
-                  textAlign: TextAlign.center,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    LocaleKeys.welcome_event.tr(),
-                    style: titleStyle,
+                  Text(
+                    LocaleKeys.eventhub.tr(),
+                    style: headingStyle,
                     textAlign: TextAlign.center,
                   ),
-                ),
-                const SizedBox(height: 40),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      getButton(title: LocaleKeys.draft),
-                      getButton(title: LocaleKeys.for_sale),
-                      getButton(title: LocaleKeys.history),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      LocaleKeys.welcome_event.tr(),
+                      style: titleStyle,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 40),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        LocaleKeys.no_nft_created.tr(),
-                        style: subTitleStyle,
-                      )),
-                ),
-                const Spacer(),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 20.w), child: getCreateEventWidget()),
-              ],
+                  const SizedBox(height: 40),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        getButton(title: LocaleKeys.draft),
+                        getButton(title: LocaleKeys.for_sale),
+                        getButton(title: LocaleKeys.history),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          LocaleKeys.no_nft_created.tr(),
+                          style: subTitleStyle,
+                        )),
+                  ),
+                  const Spacer(),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 20.w), child: getCreateEventWidget()),
+                ],
+              ),
             ),
           ),
         ),
