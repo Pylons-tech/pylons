@@ -18,10 +18,12 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  late EventlyProvider eventlyProvider;
   CreateEventViewModel createEventViewModel = sl<CreateEventViewModel>();
 
   @override
   void initState() {
+    eventlyProvider = Provider.of<EventlyProvider>(context, listen: false);
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -29,12 +31,9 @@ class _CreateEventState extends State<CreateEvent> {
     });
 
     createEventViewModel.init(setTextField: () {
-
-
-
-
-
-
+      eventlyProvider.setEventName = createEventViewModel.events!.eventName;
+      eventlyProvider.setHostName = createEventViewModel.events!.hostName;
+      eventlyProvider.setThumbnail = createEventViewModel.events!.thumbnail;
     });
   }
 
