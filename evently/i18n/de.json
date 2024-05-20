@@ -61,6 +61,7 @@
   "recipe_created": "Recipe созданный",
   "update_failed": "Upload Fehlgeschlagen",
   "uploading": "Hochladen ...",
+  "uploading": "Hochladen ...",
   "something_wrong_while_uploading": "Beim Hochladen ist etwas schief gelaufen. Bitte versuche es erneut.",
   "cookbook_not_found": "Cookbook nicht gefunden",
   "loading": "Wird geladen ...",
@@ -71,5 +72,6 @@
   "save_error": "Failed to save draft",
   "event_name" : "Event Name",
   "are_you_sure_you_want_to_delete": "Möchten Sie diesen Entwurf wirklich löschen?",
-  "published": "Veröffentlicht"
+  "published": "Veröffentlicht",
+  "delete": "Löschen"
 }

@@ -70,5 +70,6 @@
   "save_error": "No se pudo guardar el Plan Preliminar",
   "event_name" : "Event Name",
   "are_you_sure_you_want_to_delete": "¿Seguro que quieres eliminar este Plan Preliminar?",
-  "published": "Publicado"
+  "published": "Publicado",
+  "delete": "Borrar"
 }

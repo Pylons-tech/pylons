@@ -67,6 +67,29 @@ abstract class Repository {
   /// Input: [id] the id of the nft which the user wants to delete
   /// Output: [bool] returns whether the operation is successful or not
   Future<Either<Failure, bool>> deleteNft(int id);
+
+  /// This method will set the input in the cache
+  /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
+  bool setCacheDynamicType({required String key, required dynamic value});
+
+  /// This method will set the input in the cache
+  /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
+  void setCacheString({required String key, required String value});
+
+  /// This method will return the saved String if exists
+  /// Input: [key] the key of the value
+  /// Output: [String] the value of the key
+  String getCacheString({required String key});
+
+  /// This method will delete the value from the cache
+  /// Input: [key] the key of the value
+  /// Output: [value] will return the value that is just removed
+  String deleteCacheString({required String key});
+
+  /// This method will return the saved String if exists
+  /// Input: [key] the key of the value
+  /// Output: [String] the value of the key
+  dynamic getCacheDynamicType({required String key});
 }
 
 @LazySingleton(as: Repository)
@@ -169,9 +192,33 @@ class RepositoryImp implements Repository {
     try {
       final bool result = await localDataSource.deleteNft(id);
       return Right(result);
-    } on Exception catch (exception) {
-
+    } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
+  }
+
+  @override
+  bool setCacheDynamicType({required String key, required dynamic value}) {
+    return localDataSource.setCacheDynamicType(key: key, value: value);
+  }
+
+  @override
+  void setCacheString({required String key, required String value}) {
+    localDataSource.setCacheString(key: key, value: value);
+  }
+
+  @override
+  String getCacheString({required String key}) {
+    return localDataSource.getCacheString(key: key);
+  }
+
+  @override
+  String deleteCacheString({required String key}) {
+    return localDataSource.deleteCacheString(key: key);
+  }
+
+  @override
+  dynamic getCacheDynamicType({required String key}) {
+    return localDataSource.getCacheDynamicType(key: key);
   }
 }

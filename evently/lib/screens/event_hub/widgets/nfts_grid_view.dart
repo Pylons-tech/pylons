@@ -54,15 +54,12 @@ class NftGridViewItem extends StatelessWidget {
           width: 150.w,
           child: InkWell(
             onTap: () {
-              if (context.read<EventHubViewModel>().selectedCollectionType == CollectionType.draft) {
-                final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                  buildContext: context,
-                  events: events,
-                );
-                draftsBottomSheet.show();
-                return;
-              }
-              buildBottomSheet(context: context);
+              final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                buildContext: context,
+                events: events,
+              );
+              draftsBottomSheet.show();
+              return;
             },
             child: CachedNetworkImage(
               fit: BoxFit.fitHeight,
@@ -131,7 +128,6 @@ class NftGridViewItem extends StatelessWidget {
                         draftsBottomSheet.show();
                         return;
                       }
-                      buildBottomSheet(context: context);
                     },
                     child: Padding(
                       padding: EdgeInsets.all(4.0.w),
@@ -158,6 +154,4 @@ class NftGridViewItem extends StatelessWidget {
       placeholder: (context, url) => Shimmer(color: EventlyAppTheme.kGrey01, child: const SizedBox.expand()),
     );
   }
-
-  void buildBottomSheet({required BuildContext context}) {}
 }

@@ -58,6 +58,9 @@ const kErrRecipe = 'Recipe error :';
 /// ```URL constants
 const ipfsDomain = 'https://ipfs.io/ipfs';
 
+const String fromKey = 'from';
+const String eventKey = 'event';
+
 /// ```SVG assets
 class SVGUtils {
   static const kSvgSplash = 'assets/images/svg/splash.svg';
@@ -75,8 +78,6 @@ class SVGUtils {
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kSvgPublish = 'assets/images/svg/publish.svg';
   static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
-
-
 }
 
 /// ```PNG assets

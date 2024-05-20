@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/main.dart';
 import 'package:evently/models/events.dart';
@@ -6,6 +7,7 @@ import 'package:evently/screens/event_hub/widgets/delete_confirmation_dialog.dar
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/utils/route_util.dart';
 import 'package:evently/widgets/clippers/bottom_sheet_clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,18 +47,13 @@ class DraftsMoreBottomSheet extends StatelessWidget {
 
   EventlyProvider get easelProvider => sl();
 
-  Future<void> onViewOnIPFSPressed({required BuildContext context, required Events events}) async {
-    // final easelProvider = Provider.of<EventlyProvider>(context, listen: false);
-    // await easelProvider.repository.launchMyUrl(url: nft.url.changeDomain());
-  }
-
   @override
   Widget build(BuildContext context) {
-    // final viewModel = context.watch<EventHubViewModel>();
+    final viewModel = context.watch<EventHubViewModel>();
     return ClipPath(
       clipper: BottomSheetClipper(),
       child: Container(
-        color: EventlyAppTheme.kGrey02,
+        color: EventlyAppTheme.kGery03,
         padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
         child: Wrap(
           children: [
@@ -64,9 +61,9 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                 title: "publish",
                 image: SVGUtils.kSvgPublish,
                 onPressed: () {
-                  // viewModel.saveNFT(nft: nft);
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pushNamed(RouteUtil.kRouteHome);
+                  viewModel.saveEvent(events: events);
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(RouteUtil.kCreateEvent);
                 }),
             const Divider(
               color: EventlyAppTheme.kGrey01,
@@ -105,7 +102,7 @@ Widget moreOptionTile({required String title, required String image, required Vo
             width: 30.w,
           ),
           Text(
-            title,
+            title.tr(),
             style: titleStyle.copyWith(fontSize: 16.sp),
           )
         ],
