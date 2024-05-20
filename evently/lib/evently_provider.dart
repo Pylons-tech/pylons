@@ -357,7 +357,9 @@ class EventlyProvider extends ChangeNotifier {
   saveAsDraft({
     required VoidCallback onCompleted,
     required UploadStep uploadStep,
-  }) {
+  }) async {
+    final id = await repository.saveEvents(Events(step: uploadStep.toString(), eventName: eventName, hostName: hostName, thumbnail: thumbnail!));
+
     onCompleted();
   }
 }
