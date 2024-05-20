@@ -58,6 +58,8 @@ dependencies:
   shimmer_animation: 2.1.0+1
   network_info_plus: ^5.0.3
   floor: ^1.5.0
+  focus_detector: ^2.0.1
+  flutter_slidable: ^3.1.0
 
 dev_dependencies:
   flutter_test:

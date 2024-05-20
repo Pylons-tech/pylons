@@ -52,6 +52,11 @@ abstract class LocalDataSource {
   /// Input: [Events] the draft that will will be saved in database
   /// Output: [int] returns id of the inserted document
   Future<int> saveEvents(Events events);
+
+  /// This method will delete draft from the local database
+  /// Input: [id] the id of the draft which the user wants to delete
+  /// Output: [bool] returns whether the operation is successful or not
+  Future<bool> deleteNft(int id);
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -136,6 +141,16 @@ class LocalDataSourceImpl extends LocalDataSource {
       return result;
     } catch (e) {
       throw LocaleKeys.save_error.tr();
+    }
+  }
+
+  @override
+  Future<bool> deleteNft(int id) async {
+    try {
+      await database.eventsDao.delete(id);
+      return true;
+    } catch (e) {
+      throw CacheFailure(LocaleKeys.delete_error.tr());
     }
   }
 }

@@ -25,6 +25,7 @@ class Events extends Equatable {
   final String isFreeDrops;
   final String cookbookID;
   final String step;
+  final String denom;
 
   const Events({
     this.id,
@@ -49,11 +50,13 @@ class Events extends Equatable {
     this.numberOfTickets = '0',
     this.price = '',
     this.isFreeDrops = 'unselected',
+    this.denom = '',
 
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
     required this.step,
+
   });
 
   factory Events.fromRecipe(Recipe recipe) {

@@ -67,5 +67,7 @@
   "something_wrong": "Algo salió mal. Intenta reiniciar la aplicación.",
   "get_error": "No se pudo obtener el Plan Preliminar",
   "delete_error": "No se pudo eliminar el Plan Preliminar",
-  "save_error": "No se pudo guardar el Plan Preliminar"
+  "save_error": "No se pudo guardar el Plan Preliminar",
+  "event_name" : "Event Name",
+  "are_you_sure_you_want_to_delete": "¿Seguro que quieres eliminar este Plan Preliminar?"
 }
