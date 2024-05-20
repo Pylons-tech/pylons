@@ -159,9 +159,5 @@ class NftGridViewItem extends StatelessWidget {
     );
   }
 
-  void buildBottomSheet({required BuildContext context}) {
-    // final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
-    //
-    // bottomSheet.show();
-  }
+  void buildBottomSheet({required BuildContext context}) {}
 }
