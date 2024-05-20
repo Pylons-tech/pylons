@@ -15,7 +15,7 @@ abstract class EventsDao {
   @Query('DELETE FROM events WHERE id = :id')
   Future<void> delete(int id);
 
-  @Query('UPDATE events SET startDate = :startDate, endDate= :endDate, startTime = :startTime, endTime = :endTime,location = :location, description = :description WHERE id = :id')
+  @Query('UPDATE events SET startDate = :startDate, endDate= :endDate, startTime = :startTime, endTime = :endTime,location = :location, description = :description, step = :step WHERE id = :id')
   Future<void> updateNFTFromDetail(
     String startDate,
     String endDate,
@@ -24,6 +24,7 @@ abstract class EventsDao {
     String location,
     String description,
     int id,
+    String step,
   );
 
   @Query('UPDATE events SET listOfPerks = :listOfPerks WHERE id = :id')

@@ -83,6 +83,13 @@ class EventlyProvider extends ChangeNotifier {
   String get location => _location;
   String get description => _description;
 
+  int? _id;
+  set setId(int id) {
+    _id = id;
+  }
+
+  get id => _id;
+
   set setStartDate(String value) {
     _startDate = value;
     notifyListeners();
@@ -358,7 +365,33 @@ class EventlyProvider extends ChangeNotifier {
     required VoidCallback onCompleted,
     required UploadStep uploadStep,
   }) async {
-    await repository.saveEvents(Events(step: uploadStep.toString(), eventName: eventName, hostName: hostName, thumbnail: thumbnail!));
+    switch (uploadStep) {
+      case UploadStep.overView:
+        await repository.saveEvents(Events(step: uploadStep.toString(), eventName: eventName, hostName: hostName, thumbnail: thumbnail!));
+        break;
+      case UploadStep.detail:
+        await repository.saveFromDetail(Events(
+          id: 1,
+          step: uploadStep.toString(),
+          eventName: eventName,
+          hostName: hostName,
+          thumbnail: thumbnail!,
+          startDate: startDate,
+          endDate: endDate,
+          startTime: startTime,
+          endTime: endTime,
+          location: location,
+          description: description,
+        ));
+        break;
+      case UploadStep.perks:
+      // TODO: Handle this case.
+      case UploadStep.price:
+      // TODO: Handle this case.
+      case UploadStep.none:
+      // TODO: Handle this case.
+    }
+
     onCompleted();
   }
 }

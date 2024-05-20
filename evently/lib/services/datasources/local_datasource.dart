@@ -86,6 +86,9 @@ abstract class LocalDataSource {
   /// Input: [key] the key of the value
   /// Output: [String] the value of the key
   String getCacheString({required String key});
+
+  /// this method is used to save draft from
+  Future<bool> saveEventFromDetail({required Events events});
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -213,5 +216,24 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   void deleteCacheDynamic({required String key}) {
     cacheManager.deleteCacheDynamic(key: key);
+  }
+
+  @override
+  Future<bool> saveEventFromDetail({required Events events}) async {
+    try {
+      await database.eventsDao.updateNFTFromDetail(
+        events.startDate,
+        events.endDate,
+        events.startTime,
+        events.endTime,
+        events.location,
+        events.description,
+        events.id!,
+        events.step,
+      );
+      return true;
+    } catch (e) {
+      throw CacheFailure(LocaleKeys.get_error.tr());
+    }
   }
 }
