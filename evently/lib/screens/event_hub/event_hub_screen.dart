@@ -306,65 +306,77 @@ class DraftListTile extends StatefulWidget {
 
 class _DraftListTileState extends State<DraftListTile> {
   Widget getDraftCard() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(0.0, 1.0),
-            blurRadius: 4.0,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-        child: Row(
-          children: [
-            CachedNetworkImage(
-              width: 90.w,
-              fit: BoxFit.contain,
-              imageUrl: widget.events.thumbnail,
-              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-              progressIndicatorBuilder: (context, _, progress) {
-                return Shimmer(color: EventlyAppTheme.kGrey04, child: const SizedBox.expand());
-              },
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    (widget.events.eventName.isNotEmpty) ? widget.events.eventName : 'Event Name',
-                    style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: 6.h,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(1.h),
-                      color: EventlyAppTheme.kLightRed,
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                    child: Text(
-                      LocaleKeys.draft.tr(),
-                      style: EventlyAppTheme.titleStyle.copyWith(color: EventlyAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.all(4.0.w),
-                child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
-              ),
+    return InkWell(
+      onTap: (){
+
+        final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+          buildContext: context,
+          events: widget.events,
+        );
+        draftsBottomSheet.show();
+        return;
+
+      },
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(0.0, 1.0),
+              blurRadius: 4.0,
             ),
           ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+          child: Row(
+            children: [
+              CachedNetworkImage(
+                width: 90.w,
+                fit: BoxFit.contain,
+                imageUrl: widget.events.thumbnail,
+                errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+                progressIndicatorBuilder: (context, _, progress) {
+                  return Shimmer(color: EventlyAppTheme.kGrey04, child: const SizedBox.expand());
+                },
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (widget.events.eventName.isNotEmpty) ? widget.events.eventName : 'Event Name',
+                      style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: 6.h,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(1.h),
+                        color: EventlyAppTheme.kLightRed,
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                      child: Text(
+                        LocaleKeys.draft.tr(),
+                        style: EventlyAppTheme.titleStyle.copyWith(color: EventlyAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.all(4.0.w),
+                  child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -439,22 +451,7 @@ class BuildGridView extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final events = eventsList[index];
-          if (events.price.isNotEmpty && double.parse(events.price) > 0) {
-            return ClipRRect(
-              child: Banner(
-                color: EventlyAppTheme.kDarkGreen,
-                location: BannerLocation.topEnd,
-                message: calculateBannerPrice(price: events.price, currency: events.denom),
-                child: NftGridViewItem(
-                  events: events,
-                ),
-              ),
-            );
-          } else {
-            return NftGridViewItem(
-              events: events,
-            );
-          }
+          return NftGridViewItem(events: events);
         },
       ),
     );

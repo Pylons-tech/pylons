@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/repository/repository.dart';
+import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/extension_util.dart';
 import 'package:evently/widgets/loading_with_progress.dart';
 import 'package:flutter/cupertino.dart';
@@ -141,5 +142,10 @@ class EventHubViewModel extends ChangeNotifier {
     }
     eventForDraftList.removeWhere((element) => element.id == id);
     notifyListeners();
+  }
+
+  void saveEvent({required Events events}) {
+    repository.setCacheDynamicType(key: eventKey, value: events);
+    repository.setCacheString(key: fromKey, value: kDraft);
   }
 }

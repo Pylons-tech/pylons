@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Events` (`id` INTEGER, `recipeID` TEXT NOT NULL, `eventName` TEXT NOT NULL, `hostName` TEXT NOT NULL, `thumbnail` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `location` TEXT NOT NULL, `description` TEXT NOT NULL, `numberOfTickets` TEXT NOT NULL, `price` TEXT NOT NULL, `listOfPerks` TEXT NOT NULL, `isFreeDrops` TEXT NOT NULL, `cookbookID` TEXT NOT NULL, `step` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `Events` (`id` INTEGER, `recipeID` TEXT NOT NULL, `eventName` TEXT NOT NULL, `hostName` TEXT NOT NULL, `thumbnail` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `startTime` TEXT NOT NULL, `endTime` TEXT NOT NULL, `location` TEXT NOT NULL, `description` TEXT NOT NULL, `numberOfTickets` TEXT NOT NULL, `price` TEXT NOT NULL, `listOfPerks` TEXT NOT NULL, `isFreeDrops` TEXT NOT NULL, `cookbookID` TEXT NOT NULL, `step` TEXT NOT NULL, `denom` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -135,7 +135,8 @@ class _$EventsDao extends EventsDao {
                   'listOfPerks': item.listOfPerks,
                   'isFreeDrops': item.isFreeDrops,
                   'cookbookID': item.cookbookID,
-                  'step': item.step
+                  'step': item.step,
+                  'denom': item.denom
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -164,6 +165,7 @@ class _$EventsDao extends EventsDao {
             numberOfTickets: row['numberOfTickets'] as String,
             price: row['price'] as String,
             isFreeDrops: row['isFreeDrops'] as String,
+            denom: row['denom'] as String,
             cookbookID: row['cookbookID'] as String,
             recipeID: row['recipeID'] as String,
             step: row['step'] as String));
@@ -187,6 +189,7 @@ class _$EventsDao extends EventsDao {
             numberOfTickets: row['numberOfTickets'] as String,
             price: row['price'] as String,
             isFreeDrops: row['isFreeDrops'] as String,
+            denom: row['denom'] as String,
             cookbookID: row['cookbookID'] as String,
             recipeID: row['recipeID'] as String,
             step: row['step'] as String),

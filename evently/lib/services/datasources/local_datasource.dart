@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/models/events.dart';
+import 'package:evently/services/datasources/cache_manager.dart';
 import 'package:evently/services/third_party_services/database.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/date_utils.dart';
@@ -57,6 +58,34 @@ abstract class LocalDataSource {
   /// Input: [id] the id of the draft which the user wants to delete
   /// Output: [bool] returns whether the operation is successful or not
   Future<bool> deleteNft(int id);
+
+  /// This method will delete the value from the cache
+  /// Input: [key] the key of the value
+  /// Output: [value] will return the value that is just removed
+  String deleteCacheString({required String key});
+
+  /// This method will set the input in the cache
+  /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
+  void setCacheString({required String key, required String value});
+
+  /// This method will set the input in the cache
+  /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
+  bool setCacheDynamicType({required String key, required dynamic value});
+
+  /// This method will return the saved String if exists
+  /// Input: [key] the key of the value
+  /// Output: [String] the value of the key
+  dynamic getCacheDynamicType({required String key});
+
+  /// This method will delete the value from the cache
+  /// Input: [key] the key of the value
+  /// Output: [value] will return the value that is just removed
+  dynamic deleteCacheDynamic({required String key});
+
+  /// This method will return the saved String if exists
+  /// Input: [key] the key of the value
+  /// Output: [String] the value of the key
+  String getCacheString({required String key});
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -64,10 +93,12 @@ class LocalDataSourceImpl extends LocalDataSource {
   LocalDataSourceImpl({
     required this.sharedPreferences,
     required this.database,
+    required this.cacheManager,
   });
 
   final SharedPreferences sharedPreferences;
   final AppDatabase database;
+  final CacheManager cacheManager;
 
   /// auto generates cookbookID string and saves into local storage
   /// returns cookbookId
@@ -152,5 +183,35 @@ class LocalDataSourceImpl extends LocalDataSource {
     } catch (e) {
       throw CacheFailure(LocaleKeys.delete_error.tr());
     }
+  }
+
+  @override
+  String deleteCacheString({required String key}) {
+    return cacheManager.deleteString(key: key);
+  }
+
+  @override
+  dynamic getCacheDynamicType({required String key}) {
+    return cacheManager.getDynamicType(key: key);
+  }
+
+  @override
+  String getCacheString({required String key}) {
+    return cacheManager.getString(key: key);
+  }
+
+  @override
+  bool setCacheDynamicType({required String key, required dynamic value}) {
+    return cacheManager.setDynamicType(key: key, value: value);
+  }
+
+  @override
+  void setCacheString({required String key, required String value}) {
+    cacheManager.setString(key: key, value: value);
+  }
+
+  @override
+  void deleteCacheDynamic({required String key}) {
+    cacheManager.deleteCacheDynamic(key: key);
   }
 }
