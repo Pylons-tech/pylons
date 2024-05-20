@@ -90,6 +90,8 @@ abstract class Repository {
   /// Input: [key] the key of the value
   /// Output: [String] the value of the key
   dynamic getCacheDynamicType({required String key});
+
+  Future<Either<Failure, bool>> saveFromDetail(Events events);
 }
 
 @LazySingleton(as: Repository)
@@ -220,5 +222,18 @@ class RepositoryImp implements Repository {
   @override
   dynamic getCacheDynamicType({required String key}) {
     return localDataSource.getCacheDynamicType(key: key);
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveFromDetail(Events events) async {
+    try {
+      final bool result = await localDataSource.saveEventFromDetail(events: events);
+      if (!result) {
+        return Left(CacheFailure(LocaleKeys.get_error.tr()));
+      }
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.get_error.tr()));
+    }
   }
 }

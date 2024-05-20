@@ -34,6 +34,12 @@ class _CreateEventState extends State<CreateEvent> {
       eventlyProvider.setEventName = createEventViewModel.events!.eventName;
       eventlyProvider.setHostName = createEventViewModel.events!.hostName;
       eventlyProvider.setThumbnail = createEventViewModel.events!.thumbnail;
+      eventlyProvider.setStartDate = createEventViewModel.events!.startDate;
+      eventlyProvider.setEndDate = createEventViewModel.events!.endDate;
+      eventlyProvider.setStartTime = createEventViewModel.events!.startTime;
+      eventlyProvider.setEndTime = createEventViewModel.events!.endTime;
+      eventlyProvider.setLocation = createEventViewModel.events!.location;
+      eventlyProvider.setDescription = createEventViewModel.events!.description;
     });
   }
 

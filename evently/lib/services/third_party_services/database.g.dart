@@ -21,12 +21,14 @@ abstract class $AppDatabaseBuilderContract {
 class $FloorAppDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $AppDatabaseBuilderContract databaseBuilder(String name) => _$AppDatabaseBuilder(name);
+  static $AppDatabaseBuilderContract databaseBuilder(String name) =>
+      _$AppDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $AppDatabaseBuilderContract inMemoryDatabaseBuilder() => _$AppDatabaseBuilder(null);
+  static $AppDatabaseBuilderContract inMemoryDatabaseBuilder() =>
+      _$AppDatabaseBuilder(null);
 }
 
 class _$AppDatabaseBuilder implements $AppDatabaseBuilderContract {
@@ -52,7 +54,9 @@ class _$AppDatabaseBuilder implements $AppDatabaseBuilderContract {
 
   @override
   Future<AppDatabase> build() async {
-    final path = name != null ? await sqfliteDatabaseFactory.getDatabasePath(name!) : ':memory:';
+    final path = name != null
+        ? await sqfliteDatabaseFactory.getDatabasePath(name!)
+        : ':memory:';
     final database = _$AppDatabase();
     database.database = await database.open(
       path,
@@ -85,7 +89,8 @@ class _$AppDatabase extends AppDatabase {
         await callback?.onOpen?.call(database);
       },
       onUpgrade: (database, startVersion, endVersion) async {
-        await MigrationAdapter.runMigrations(database, startVersion, endVersion, migrations);
+        await MigrationAdapter.runMigrations(
+            database, startVersion, endVersion, migrations);
 
         await callback?.onUpgrade?.call(database, startVersion, endVersion);
       },
@@ -193,7 +198,8 @@ class _$EventsDao extends EventsDao {
 
   @override
   Future<void> delete(int id) async {
-    await _queryAdapter.queryNoReturn('DELETE FROM events WHERE id = ?1', arguments: [id]);
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM events WHERE id = ?1', arguments: [id]);
   }
 
   @override
@@ -205,9 +211,20 @@ class _$EventsDao extends EventsDao {
     String location,
     String description,
     int id,
+    String step,
   ) async {
-    await _queryAdapter.queryNoReturn('UPDATE events SET startDate = ?1, endDate= ?2, startTime = ?3, endTime = ?4,location = ?5, description = ?6 WHERE id = ?7',
-        arguments: [startDate, endDate, startTime, endTime, location, description, id]);
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET startDate = ?1, endDate= ?2, startTime = ?3, endTime = ?4,location = ?5, description = ?6, step = ?8 WHERE id = ?7',
+        arguments: [
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+          location,
+          description,
+          id,
+          step
+        ]);
   }
 
   @override
@@ -215,7 +232,9 @@ class _$EventsDao extends EventsDao {
     String listOfPerks,
     int id,
   ) async {
-    await _queryAdapter.queryNoReturn('UPDATE events SET listOfPerks = ?1 WHERE id = ?2', arguments: [listOfPerks, id]);
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET listOfPerks = ?1 WHERE id = ?2',
+        arguments: [listOfPerks, id]);
   }
 
   @override
@@ -225,11 +244,14 @@ class _$EventsDao extends EventsDao {
     String price,
     String isFreeDrops,
   ) async {
-    await _queryAdapter.queryNoReturn('UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4   WHERE id = ?1', arguments: [id, numberOfTickets, price, isFreeDrops]);
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4   WHERE id = ?1',
+        arguments: [id, numberOfTickets, price, isFreeDrops]);
   }
 
   @override
   Future<int> insertEvents(Events events) {
-    return _eventsInsertionAdapter.insertAndReturnId(events, OnConflictStrategy.abort);
+    return _eventsInsertionAdapter.insertAndReturnId(
+        events, OnConflictStrategy.abort);
   }
 }
