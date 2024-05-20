@@ -3,6 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
+import 'package:evently/screens/event_hub/widgets/drafts_more_bottomsheet.dart';
+import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,33 +53,22 @@ class NftGridViewItem extends StatelessWidget {
           height: 200.h,
           width: 150.w,
           child: InkWell(
-
             onTap: () {
               if (context.read<EventHubViewModel>().selectedCollectionType == CollectionType.draft) {
                 final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
                   buildContext: context,
-                  nft: nft,
+                  events: events,
                 );
                 draftsBottomSheet.show();
                 return;
               }
               buildBottomSheet(context: context);
             },
-            child: NftTypeBuilder(
-              onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
-              onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-              onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-              onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-              on3D: (context) => IgnorePointer(
-                child: ModelViewer(
-                  src: nft.url.changeDomain(),
-                  ar: false,
-                  autoRotate: false,
-                  backgroundColor: EaselAppTheme.kWhite,
-                  cameraControls: false,
-                ),
-              ),
-              assetType: nft.assetType.toAssetTypeEnum(),
+            child: CachedNetworkImage(
+              fit: BoxFit.fitHeight,
+              imageUrl: events.thumbnail,
+              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+              placeholder: (context, url) => Shimmer(color: EventlyAppTheme.kGery03, child: const SizedBox.expand()),
             ),
           ),
         ),
@@ -96,8 +87,7 @@ class NftGridViewItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 8.w, top: 10.0.h),
                 child: SvgPicture.asset(
-                  getNFTIcon(),
-                  key: Key(getNFTIconKey()),
+                  SVGUtils.kFileTypeImageIcon,
                   color: Colors.white,
                   width: 14,
                   height: 14,
@@ -118,30 +108,25 @@ class NftGridViewItem extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(1.h),
-                      color: context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft
-                          ? EaselAppTheme.kLightRed
-                          : EaselAppTheme.kDarkGreen,
+                      color: context.read<EventHubViewModel>().selectedCollectionType == CollectionType.draft ? EventlyAppTheme.kLightRed : EventlyAppTheme.kDarkGreen,
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                     margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
                     child: Text(
-                      context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft
-                          ? LocaleKeys.draft.tr()
-                          : LocaleKeys.published.tr(),
-                      style: EaselAppTheme.titleStyle.copyWith(
-                        color: EaselAppTheme.kWhite,
+                      context.read<EventHubViewModel>().selectedCollectionType == CollectionType.draft ? LocaleKeys.draft.tr() : LocaleKeys.published.tr(),
+                      style: EventlyAppTheme.titleStyle.copyWith(
+                        color: EventlyAppTheme.kWhite,
                         fontSize: isTablet ? 8.sp : 11.sp,
                       ),
                     ),
                   ),
                   const Spacer(),
                   InkWell(
-                    key: const Key(kGridViewTileMoreOptionKey),
                     onTap: () {
-                      if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
+                      if (context.read<EventHubViewModel>().selectedCollectionType == CollectionType.draft) {
                         final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
                           buildContext: context,
-                          nft: nft,
+                          events: events,
                         );
                         draftsBottomSheet.show();
                         return;
@@ -170,43 +155,13 @@ class NftGridViewItem extends StatelessWidget {
       fit: BoxFit.fitHeight,
       imageUrl: url,
       errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+      placeholder: (context, url) => Shimmer(color: EventlyAppTheme.kGrey01, child: const SizedBox.expand()),
     );
   }
 
   void buildBottomSheet({required BuildContext context}) {
-    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
-
-    bottomSheet.show();
-  }
-
-  String getNFTIcon() {
-    switch (nft.assetType) {
-      case kVideoText:
-        return SVGUtils.kSvgNftFormatVideo;
-      case kAudioText:
-        return SVGUtils.kSvgNftFormatAudio;
-      case kPdfText:
-        return SVGUtils.kSvgNftFormatPDF;
-      case k3dText:
-        return SVGUtils.kSvgNftFormat3d;
-      default:
-        return SVGUtils.kFileTypeImageIcon;
-    }
-  }
-
-  String getNFTIconKey() {
-    switch (nft.assetType) {
-      case kVideoText:
-        return kNFTTypeVideoIconKey;
-      case kAudioText:
-        return kNFTTypeAudioIconKey;
-      case kPdfText:
-        return kNFTTypePdfIconKey;
-      case k3dText:
-        return kNFTType3dModelIconKey;
-      default:
-        return kNFTTypeImageIconKey;
-    }
+    // final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
+    //
+    // bottomSheet.show();
   }
 }

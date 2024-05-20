@@ -5,6 +5,7 @@ import 'package:evently/models/events.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/screens/event_hub/widgets/delete_confirmation_dialog.dart';
 import 'package:evently/screens/event_hub/widgets/drafts_more_bottomsheet.dart';
+import 'package:evently/screens/event_hub/widgets/nfts_grid_view.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
@@ -515,13 +516,13 @@ class BuildGridView extends StatelessWidget {
                 location: BannerLocation.topEnd,
                 message: calculateBannerPrice(price: events.price, currency: events.denom),
                 child: NftGridViewItem(
-                  nft: nft,
+                  events: events,
                 ),
               ),
             );
           } else {
             return NftGridViewItem(
-              nft: nft,
+              events: events,
             );
           }
         },

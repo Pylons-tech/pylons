@@ -74,6 +74,7 @@ class SVGUtils {
   static const kGridIcon = 'assets/images/svg/grid.svg';
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kSvgPublish = 'assets/images/svg/publish.svg';
+  static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
 
 
 }

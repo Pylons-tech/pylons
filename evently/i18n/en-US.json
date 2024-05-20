@@ -68,5 +68,6 @@
   "get_error": "Failed to get draft",
   "delete_error": "Failed to delete draft",
   "event_name" : "Event Name",
-  "are_you_sure_you_want_to_delete": "Are you sure you want to delete this draft?"
+  "are_you_sure_you_want_to_delete": "Are you sure you want to delete this draft?",
+  "published": "Published"
 }
