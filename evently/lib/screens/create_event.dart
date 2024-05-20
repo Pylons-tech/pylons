@@ -28,7 +28,14 @@ class _CreateEventState extends State<CreateEvent> {
       context.read<EventlyProvider>().initStore();
     });
 
-    createEventViewModel.init(setTextField: () {});
+    createEventViewModel.init(setTextField: () {
+
+
+
+
+
+
+    });
   }
 
   @override

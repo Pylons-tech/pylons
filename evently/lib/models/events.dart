@@ -55,8 +55,9 @@ class Events extends Equatable {
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
-    required this.step,
 
+    ///* for tracking where its save as draft
+    this.step = '',
   });
 
   factory Events.fromRecipe(Recipe recipe) {
@@ -108,11 +109,12 @@ class Events extends Equatable {
   }
 
   @override
-  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID];
+  List<Object?> get props =>
+      [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID, step];
 
   @override
   String toString() {
-    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, tradePercentage: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID}';
+    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, tradePercentage: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step}';
   }
 }
 

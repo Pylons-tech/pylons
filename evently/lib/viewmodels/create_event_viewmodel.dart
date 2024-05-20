@@ -34,9 +34,6 @@ class CreateEventViewModel extends ChangeNotifier {
     if (from == kDraft) {
       events = repository.getCacheDynamicType(key: eventKey) as Events;
 
-      Future.delayed(const Duration(milliseconds: 1), () {
-        setTextField.call();
-      });
 
       Future.delayed(const Duration(milliseconds: 1), () {
         setTextField.call();
