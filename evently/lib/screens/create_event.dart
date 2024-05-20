@@ -40,6 +40,7 @@ class _CreateEventState extends State<CreateEvent> {
       eventlyProvider.setEndTime = createEventViewModel.events!.endTime;
       eventlyProvider.setLocation = createEventViewModel.events!.location;
       eventlyProvider.setDescription = createEventViewModel.events!.description;
+      eventlyProvider.setId = createEventViewModel.events!.id!;
     });
   }
 

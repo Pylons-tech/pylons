@@ -371,7 +371,7 @@ class EventlyProvider extends ChangeNotifier {
         break;
       case UploadStep.detail:
         await repository.saveFromDetail(Events(
-          id: 1,
+          id: id,
           step: uploadStep.toString(),
           eventName: eventName,
           hostName: hostName,
