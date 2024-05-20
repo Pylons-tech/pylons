@@ -4,14 +4,15 @@ import 'package:evently/evently_provider.dart';
 import 'package:evently/screens/buyer_status_screen.dart';
 import 'package:evently/screens/create_event.dart';
 import 'package:evently/screens/event_hub/event_hub_screen.dart';
-import 'package:evently/screens/host_view_ticket_preview.dart';
 import 'package:evently/screens/splash_screen.dart';
+import 'package:evently/services/third_party_services/database.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
@@ -25,6 +26,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
 
   configureDependencies();
+  await GetIt.I.isReady<AppDatabase>();
 
   isTablet = _getIsCurrentDeviceTablet();
 

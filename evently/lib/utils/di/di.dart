@@ -13,7 +13,7 @@ final sl = GetIt.I;
 // initialization of Service locator
 @InjectableInit()
 void configureDependencies() {
-  sl.registerSingletonAsync<SharedPreferences>(() => SharedPreferences.getInstance());
-  sl.registerSingletonAsync<AppDatabase>(() => $FloorAppDatabase.databaseBuilder('app_database.db').build());
-  sl.init();
+  GetIt.I.registerSingletonAsync<SharedPreferences>(() => SharedPreferences.getInstance());
+  GetIt.I.registerSingletonAsync<AppDatabase>(() => $FloorAppDatabase.databaseBuilder('app_database.db').build());
+  GetIt.I.init();
 }

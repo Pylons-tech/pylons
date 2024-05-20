@@ -307,15 +307,13 @@ class DraftListTile extends StatefulWidget {
 class _DraftListTileState extends State<DraftListTile> {
   Widget getDraftCard() {
     return InkWell(
-      onTap: (){
-
+      onTap: () {
         final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
           buildContext: context,
           events: widget.events,
         );
         draftsBottomSheet.show();
         return;
-
       },
       child: DecoratedBox(
         decoration: BoxDecoration(

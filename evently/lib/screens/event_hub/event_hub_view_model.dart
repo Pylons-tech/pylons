@@ -36,8 +36,8 @@ class EventHubViewModel extends ChangeNotifier {
 
   List<Events> get eventForSaleList => _eventForDraftList;
 
-  set setEventForDraftList(List<Events> nftForSale) {
-    _eventForDraftList = nftForSale;
+  set setEventForDraftList(List<Events> eventDraftList) {
+    _eventForDraftList = eventDraftList;
     notifyListeners();
   }
 
