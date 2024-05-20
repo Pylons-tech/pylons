@@ -197,12 +197,10 @@ class _EventHubContentState extends State<EventHubContent> {
                           eventsList: viewModel.eventForDraftList,
                           onEmptyList: (BuildContext context) => Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  LocaleKeys.no_nft_created.tr(),
-                                  style: subTitleStyle,
-                                )),
+                            child: Text(
+                              LocaleKeys.no_nft_created.tr(),
+                              style: subTitleStyle,
+                            ),
                           ),
                         ),
                       ),
