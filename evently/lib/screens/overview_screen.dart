@@ -145,10 +145,6 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   const VerticalSpace(80),
                   BottomButtons(
                     onPressContinue: () {
-                      provider.saveAsDraft(
-                        onCompleted: () => {},
-                        uploadStep: UploadStep.overView,
-                      );
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
