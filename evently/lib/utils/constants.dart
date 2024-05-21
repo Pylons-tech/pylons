@@ -28,9 +28,6 @@ const int kEthIntBase = 1000000000000000000;
 final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "heif"];
 const kPylons = "Pylons";
 
-///number constant
-const kMinEventName = 9;
-const kMinHostName = 9;
 
 const kErrProfileNotExist = 'profileDoesNotExist';
 

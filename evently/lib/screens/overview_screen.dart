@@ -91,7 +91,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                         dashPattern: const [10, 6],
                         color: EventlyAppTheme.kTextDarkPurple,
                         strokeWidth: 3.h,
-                        child: provider.thumbnail != null
+                        child: provider.thumbnail!.isNotEmpty
                             ? SizedBox(
                                 height: 180,
                                 width: double.infinity,
@@ -99,7 +99,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                   alignment: Alignment.center,
                                   children: [
                                     CachedNetworkImage(
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.contain,
                                       imageUrl: provider.thumbnail!,
                                       errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
                                       progressIndicatorBuilder: (context, _, progress) {
@@ -110,7 +110,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                       onTap: () => provider.pickThumbnail(),
                                       child: SvgPicture.asset(
                                         SVGUtils.kSvgUpload,
-                                        color: EventlyAppTheme.kWhite,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
@@ -145,6 +145,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
                   const VerticalSpace(80),
                   BottomButtons(
                     onPressContinue: () {
+                      provider.saveAsDraft(
+                        onCompleted: () => {},
+                        uploadStep: UploadStep.overView,
+                      );
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
