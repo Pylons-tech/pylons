@@ -166,10 +166,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   const VerticalSpace(80),
                   BottomButtons(
                     onPressContinue: () {
-                      provider.saveAsDraft(
-                        onCompleted: () => {},
-                        uploadStep: UploadStep.price,
-                      );
+
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {

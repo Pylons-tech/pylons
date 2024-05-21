@@ -206,10 +206,7 @@ class _PriceScreenState extends State<PriceScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: BottomButtons(
                     onPressContinue: () {
-                      provider.saveAsDraft(
-                        onCompleted: () => {},
-                        uploadStep: UploadStep.price,
-                      );
+
                       homeViewModel.nextPage();
                     },
                     onPressSaveDraft: () {

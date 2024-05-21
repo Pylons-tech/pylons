@@ -114,10 +114,7 @@ class _PerksScreenState extends State<PerksScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: BottomButtons(
                       onPressContinue: () {
-                        provider.saveAsDraft(
-                          onCompleted: () => {},
-                          uploadStep: UploadStep.perks,
-                        );
+
                         createEventViewModel.nextPage();
                       },
                       onPressSaveDraft: () {
