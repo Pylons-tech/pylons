@@ -122,7 +122,7 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   /// perks screen
-  final List<PerksModel> _perks = [];
+  List<PerksModel> _perks = [];
   int _selectedPerk = 0;
 
   List<PerksModel> get perks => _perks;
@@ -358,6 +358,8 @@ class EventlyProvider extends ChangeNotifier {
     _numberOfTickets = 0;
     _price = 0;
     _cookbookId = '';
+
+    _perks = [];
 
     notifyListeners();
   }
