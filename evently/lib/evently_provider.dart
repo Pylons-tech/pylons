@@ -34,7 +34,7 @@ class EventlyProvider extends ChangeNotifier {
   ///* overview screen variable
   String _eventName = '';
   String _hostName = '';
-  String? _thumbnail;
+  String _thumbnail = '';
   bool _isOverviewEnable = false;
 
   String? get thumbnail => _thumbnail;
@@ -55,7 +55,7 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   set setThumbnail(String? file) {
-    _thumbnail = file;
+    _thumbnail = file!;
     checkIsOverEnable();
     notifyListeners();
   }
@@ -66,7 +66,7 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   checkIsOverEnable() {
-    setOverviewEnable = thumbnail != null && eventName.length >= kMinEventName && hostName.length >= kMinHostName;
+    setOverviewEnable = thumbnail!.isNotEmpty && eventName.isNotEmpty && hostName.isNotEmpty;
   }
 
   ///* detail screen

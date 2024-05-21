@@ -56,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onTap: () async {
                             _showDatePicker(onSelected: (DateTime? val) {
                               if (val == null) return;
-                              provider.setStartDate = DateFormat("dd-MM-yyyy").format(val);
+                              provider.setStartDate = _dateFormatter(val);
                             });
                           },
                           child: EventlyTextField(
@@ -73,7 +73,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onTap: () {
                             _showDatePicker(onSelected: (DateTime? val) {
                               if (val == null) return;
-                              provider.setEndDate = DateFormat("dd-MM-yyyy").format(val);
+                              provider.setEndDate = _dateFormatter(val);
                             });
                           },
                           child: EventlyTextField(
@@ -97,7 +97,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onTap: () {
                             _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
                               if (timeOfDay == null) return;
-                              provider.setStartTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                              final currentTime = DateTime.now();
+                              final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                              provider.setStartTime = _timerFormatter(time);
                             });
                           },
                           child: EventlyTextField(
@@ -117,7 +119,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           onTap: () {
                             _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
                               if (timeOfDay == null) return;
-                              provider.setEndTime = '${timeOfDay.hour}:${timeOfDay.minute}';
+                              final currentTime = DateTime.now();
+                              final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                              provider.setEndTime = _timerFormatter(time);
                             });
                           },
                           child: EventlyTextField(
@@ -162,6 +166,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   const VerticalSpace(80),
                   BottomButtons(
                     onPressContinue: () {
+                      provider.saveAsDraft(
+                        onCompleted: () => {},
+                        uploadStep: UploadStep.price,
+                      );
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
@@ -198,7 +206,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
     showDatePicker(
       context: context,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2099, 12),
     ).then((value) => onSelected(value!));
+  }
+
+  _timerFormatter(DateTime dateTime) {
+    return DateFormat('hh:mm a').format(dateTime);
+  }
+
+  _dateFormatter(DateTime dateTime) {
+    return DateFormat.yMMMMd('en_US').format(dateTime);
   }
 }

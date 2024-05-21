@@ -62,11 +62,12 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      child: ColoredBox(
-        color: EventlyAppTheme.kWhite,
-        child: SafeArea(
-          bottom: false,
+    return ColoredBox(
+      color: EventlyAppTheme.kWhite,
+      child: SafeArea(
+        bottom: false,
+        child: PopScope(
+          canPop: false,
           child: Scaffold(
             body: ChangeNotifierProvider.value(value: createEventViewModel, child: const CreateEventContent()),
           ),
