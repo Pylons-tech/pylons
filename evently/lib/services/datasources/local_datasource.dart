@@ -92,6 +92,9 @@ abstract class LocalDataSource {
 
   /// this method is used to save draft from details screen
   Future<bool> saveEventFromPerks({required Events events});
+
+  /// this method is used to save draft from details screen
+  Future<bool> saveEventFromPrice({required Events events});
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -244,6 +247,16 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<bool> saveEventFromPerks({required Events events}) async {
     try {
       await database.eventsDao.updateNFTFromPerks(events.listOfPerks, events.id!, events.step);
+      return true;
+    } catch (_) {
+      throw CacheFailure(LocaleKeys.get_error.tr());
+    }
+  }
+
+  @override
+  Future<bool> saveEventFromPrice({required Events events}) async {
+    try {
+      await database.eventsDao.updateNFTFromPrice(events.id!, events.numberOfTickets, events.price, events.isFreeDrops, events.denom, events.step);
       return true;
     } catch (_) {
       throw CacheFailure(LocaleKeys.get_error.tr());

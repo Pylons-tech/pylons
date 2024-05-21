@@ -380,7 +380,7 @@ class EventlyProvider extends ChangeNotifier {
       description: description,
       listOfPerks: perks.map((e) => jsonEncode(e)).toList().toString(),
       isFreeDrops: isFreeDrop.toString(),
-      denom: selectedDenom.toString(),
+      denom: jsonEncode(selectedDenom),
       numberOfTickets: numberOfTickets.toString(),
       price: price.toString(),
     );
@@ -403,12 +403,12 @@ class EventlyProvider extends ChangeNotifier {
         await repository.saveFromPerks(saveEvent);
         break;
       case UploadStep.price:
-      // TODO: Handle this case.
+        await repository.saveEventFromPrice(saveEvent);
+        break;
       case UploadStep.none:
       // TODO: Handle this case.
     }
 
     onCompleted();
   }
-
 }

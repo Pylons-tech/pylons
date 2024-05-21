@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:evently/evently_provider.dart';
+import 'package:evently/models/denom.dart';
 import 'package:evently/models/events.dart';
 import 'package:evently/screens/detail_screen.dart';
 import 'package:evently/screens/host_view_ticket_preview.dart';
@@ -8,6 +9,7 @@ import 'package:evently/screens/overview_screen.dart';
 import 'package:evently/screens/perks_screen.dart';
 import 'package:evently/screens/price_screen.dart';
 import 'package:evently/utils/di/di.dart';
+import 'package:evently/utils/enums.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -50,17 +52,24 @@ class _CreateEventState extends State<CreateEvent> {
       for (var perksJson in listOfPerkJson) {
         eventlyProvider.setPerks = PerksModel.fromJson(perksJson);
       }
+
+      eventlyProvider.setFreeDrop = createEventViewModel.events!.isFreeDrops.toFreeDrop();
+      eventlyProvider.setPrice = int.parse(createEventViewModel.events!.price);
+      eventlyProvider.setNumberOfTickets = int.parse(createEventViewModel.events!.numberOfTickets);
+      eventlyProvider.setSelectedDenom(Denom.fromJson(jsonDecode(createEventViewModel.events!.denom)));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: EventlyAppTheme.kWhite,
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          body: ChangeNotifierProvider.value(value: createEventViewModel, child: const CreateEventContent()),
+    return PopScope(
+      child: ColoredBox(
+        color: EventlyAppTheme.kWhite,
+        child: SafeArea(
+          bottom: false,
+          child: Scaffold(
+            body: ChangeNotifierProvider.value(value: createEventViewModel, child: const CreateEventContent()),
+          ),
         ),
       ),
     );

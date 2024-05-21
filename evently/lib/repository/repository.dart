@@ -94,6 +94,8 @@ abstract class Repository {
   Future<Either<Failure, bool>> saveFromDetail(Events events);
 
   Future<Either<Failure, bool>> saveFromPerks(Events events);
+
+  Future<Either<Failure, bool>> saveEventFromPrice(Events events);
 }
 
 @LazySingleton(as: Repository)
@@ -243,6 +245,19 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> saveFromPerks(Events events) async {
     try {
       final bool result = await localDataSource.saveEventFromPerks(events: events);
+      if (!result) {
+        return Left(CacheFailure(LocaleKeys.get_error.tr()));
+      }
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.get_error.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveEventFromPrice(Events events) async {
+    try {
+      final bool result = await localDataSource.saveEventFromPrice(events: events);
       if (!result) {
         return Left(CacheFailure(LocaleKeys.get_error.tr()));
       }

@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:evently/utils/enums.dart';
 import 'package:floor/floor.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:fixnum/fixnum.dart';
-
-enum FreeDrop { yes, no, unselected }
 
 @entity
 class Events extends Equatable {

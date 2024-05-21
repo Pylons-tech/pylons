@@ -82,4 +82,18 @@ class Denom {
         return (double.parse(price.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0);
     }
   }
+
+  Map<String, String> toJson() {
+    Map<String, String> map = {};
+    map['name'] = name;
+    map['symbol'] = symbol;
+    map['icon'] = icon;
+    return map;
+  }
+
+  factory Denom.fromJson(Map<String, String> json) => Denom(
+        name: json['name']!,
+        symbol: json['symbol']!,
+        icon: json['icon']!,
+      );
 }
