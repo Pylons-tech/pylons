@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
@@ -365,26 +366,41 @@ class EventlyProvider extends ChangeNotifier {
     required VoidCallback onCompleted,
     required UploadStep uploadStep,
   }) async {
+    final saveEvent = Events(
+      id: id,
+      step: uploadStep.toString(),
+      eventName: eventName,
+      hostName: hostName,
+      thumbnail: thumbnail!,
+      startDate: startDate,
+      endDate: endDate,
+      startTime: startTime,
+      endTime: endTime,
+      location: location,
+      description: description,
+      listOfPerks: perks.map((e) => jsonEncode(e)).toList().toString(),
+      isFreeDrops: isFreeDrop.toString(),
+      denom: selectedDenom.toString(),
+      numberOfTickets: numberOfTickets.toString(),
+      price: price.toString(),
+    );
+
+    /// this check is for when no event is save as draft
+    if (saveEvent.id == null) {
+      await repository.saveEvents(saveEvent);
+      onCompleted();
+      return;
+    }
+
     switch (uploadStep) {
       case UploadStep.overView:
-        await repository.saveEvents(Events(step: uploadStep.toString(), eventName: eventName, hostName: hostName, thumbnail: thumbnail!));
+        await repository.saveEvents(saveEvent);
         break;
       case UploadStep.detail:
-        await repository.saveFromDetail(Events(
-            id: id,
-            step: uploadStep.toString(),
-            eventName: eventName,
-            hostName: hostName,
-            thumbnail: thumbnail!,
-            startDate: startDate,
-            endDate: endDate,
-            startTime: startTime,
-            endTime: endTime,
-            location: location,
-            description: description));
+        await repository.saveFromDetail(saveEvent);
         break;
       case UploadStep.perks:
-        await repository.saveFromPerks(Events(id: id, listOfPerks: perks.join(','), step: uploadStep.toString()));
+        await repository.saveFromPerks(saveEvent);
         break;
       case UploadStep.price:
       // TODO: Handle this case.
@@ -394,4 +410,5 @@ class EventlyProvider extends ChangeNotifier {
 
     onCompleted();
   }
+
 }

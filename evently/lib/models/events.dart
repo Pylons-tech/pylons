@@ -114,7 +114,7 @@ class Events extends Equatable {
 
   @override
   String toString() {
-    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, tradePercentage: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step}';
+    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, listOfPerks: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step}';
   }
 }
 
@@ -225,6 +225,16 @@ class PerksModel {
         name: perksModel.name,
         description: description,
       );
+
+  factory PerksModel.fromJson(Map<String, dynamic> map) => PerksModel(name: map['name'] ?? '', description: map['description'] ?? '');
+
+  Map<String, String> toJson() {
+    Map<String, String> map = {};
+    map['name'] = name;
+    map['description'] = description;
+
+    return map;
+  }
 
   @override
   String toString() {
