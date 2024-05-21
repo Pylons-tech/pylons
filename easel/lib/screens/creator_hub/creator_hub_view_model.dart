@@ -134,19 +134,19 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   Future<void> getDraftsList() async {
-    final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
+    // final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
 
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
-      loading.dismiss();
+      // loading.dismiss();
       LocaleKeys.something_wrong.tr().show();
       return;
     }
 
     nftDraftList = getNftResponse.getOrElse(() => []);
 
-    loading.dismiss();
+    // loading.dismiss();
 
     notifyListeners();
   }
