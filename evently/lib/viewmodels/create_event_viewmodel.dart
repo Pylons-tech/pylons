@@ -34,7 +34,6 @@ class CreateEventViewModel extends ChangeNotifier {
     if (from == kDraft) {
       events = repository.getCacheDynamicType(key: eventKey) as Events;
 
-
       Future.delayed(const Duration(milliseconds: 1), () {
         setTextField.call();
       });
@@ -60,9 +59,9 @@ class CreateEventViewModel extends ChangeNotifier {
           return;
 
         case UploadStep.price:
-          currentPage = ValueNotifier(3);
-          currentStep = ValueNotifier(3);
-          pageController = PageController(initialPage: 3);
+          currentPage = ValueNotifier(4);
+          currentStep = ValueNotifier(4);
+          pageController = PageController(initialPage: 4);
           return;
 
         case UploadStep.none:

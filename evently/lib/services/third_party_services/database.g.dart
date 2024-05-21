@@ -231,10 +231,11 @@ class _$EventsDao extends EventsDao {
   Future<void> updateNFTFromPerks(
     String listOfPerks,
     int id,
+    String step,
   ) async {
     await _queryAdapter.queryNoReturn(
-        'UPDATE events SET listOfPerks = ?1 WHERE id = ?2',
-        arguments: [listOfPerks, id]);
+        'UPDATE events SET listOfPerks = ?1, step = ?3 WHERE id = ?2',
+        arguments: [listOfPerks, id, step]);
   }
 
   @override

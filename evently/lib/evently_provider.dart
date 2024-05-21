@@ -371,21 +371,21 @@ class EventlyProvider extends ChangeNotifier {
         break;
       case UploadStep.detail:
         await repository.saveFromDetail(Events(
-          id: id,
-          step: uploadStep.toString(),
-          eventName: eventName,
-          hostName: hostName,
-          thumbnail: thumbnail!,
-          startDate: startDate,
-          endDate: endDate,
-          startTime: startTime,
-          endTime: endTime,
-          location: location,
-          description: description,
-        ));
+            id: id,
+            step: uploadStep.toString(),
+            eventName: eventName,
+            hostName: hostName,
+            thumbnail: thumbnail!,
+            startDate: startDate,
+            endDate: endDate,
+            startTime: startTime,
+            endTime: endTime,
+            location: location,
+            description: description));
         break;
       case UploadStep.perks:
-      // TODO: Handle this case.
+        await repository.saveFromPerks(Events(id: id, listOfPerks: perks.join(','), step: uploadStep.toString()));
+        break;
       case UploadStep.price:
       // TODO: Handle this case.
       case UploadStep.none:
