@@ -244,10 +244,12 @@ class _$EventsDao extends EventsDao {
     String numberOfTickets,
     String price,
     String isFreeDrops,
+    String denom,
+    String step,
   ) async {
     await _queryAdapter.queryNoReturn(
-        'UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4   WHERE id = ?1',
-        arguments: [id, numberOfTickets, price, isFreeDrops]);
+        'UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4, denom = ?5, step = ?6 WHERE id = ?1',
+        arguments: [id, numberOfTickets, price, isFreeDrops, denom, step]);
   }
 
   @override

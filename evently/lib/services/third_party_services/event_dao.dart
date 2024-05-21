@@ -34,11 +34,13 @@ abstract class EventsDao {
     String step,
   );
 
-  @Query('UPDATE events SET numberOfTickets = :numberOfTickets, price = :price, isFreeDrops = :isFreeDrops   WHERE id = :id')
+  @Query('UPDATE events SET numberOfTickets = :numberOfTickets, price = :price, isFreeDrops = :isFreeDrops, denom = :denom, step = :step WHERE id = :id')
   Future<void> updateNFTFromPrice(
     int id,
     String numberOfTickets,
     String price,
     String isFreeDrops,
+    String denom,
+    String step,
   );
 }

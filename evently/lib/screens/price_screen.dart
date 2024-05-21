@@ -6,7 +6,9 @@ import 'package:evently/screens/custom_widgets/page_app_bar.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/enums.dart';
 import 'package:evently/utils/evently_app_theme.dart';
+import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/screen_responsive.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
@@ -207,7 +209,13 @@ class _PriceScreenState extends State<PriceScreen> {
                     onPressContinue: () {
                       homeViewModel.nextPage();
                     },
-                    onPressSaveDraft: () {},
+                    onPressSaveDraft: () {
+                      final navigator = Navigator.of(context);
+                      provider.saveAsDraft(
+                        onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
+                        uploadStep: UploadStep.price,
+                      );
+                    },
                     isContinueEnable: provider.isFreeDrop == FreeDrop.unselected
                         ? false
                         : provider.isFreeDrop == FreeDrop.yes
