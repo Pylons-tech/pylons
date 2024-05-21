@@ -32,7 +32,7 @@ class Denom {
 
   @override
   String toString() {
-    return 'Denom{name: $name, symbol: $symbol, icon: $icon}';
+    return '{name: $name, symbol: $symbol, icon: $icon}';
   }
 
   Widget getIconWidget() {

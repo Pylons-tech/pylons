@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:evently/evently_provider.dart';
+import 'package:evently/models/events.dart';
 import 'package:evently/screens/detail_screen.dart';
 import 'package:evently/screens/host_view_ticket_preview.dart';
 import 'package:evently/screens/overview_screen.dart';
@@ -41,6 +44,12 @@ class _CreateEventState extends State<CreateEvent> {
       eventlyProvider.setLocation = createEventViewModel.events!.location;
       eventlyProvider.setDescription = createEventViewModel.events!.description;
       eventlyProvider.setId = createEventViewModel.events!.id!;
+
+      final listOfPerkJson = jsonDecode(createEventViewModel.events!.listOfPerks);
+
+      for (var perksJson in listOfPerkJson) {
+        eventlyProvider.setPerks = PerksModel.fromJson(perksJson);
+      }
     });
   }
 
