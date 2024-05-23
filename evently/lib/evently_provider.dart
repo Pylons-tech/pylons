@@ -11,6 +11,7 @@ import 'package:evently/models/storage_response_model.dart';
 import 'package:evently/repository/repository.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/enums.dart';
 import 'package:evently/utils/extension_util.dart';
 import 'package:evently/utils/failure/failure.dart';
@@ -18,7 +19,6 @@ import 'package:evently/widgets/loading_with_progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'services/third_party_services/quick_node.dart';
@@ -66,7 +66,7 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   checkIsOverEnable() {
-    setOverviewEnable = thumbnail!.isNotEmpty && eventName.isNotEmpty && hostName.isNotEmpty;
+    setOverviewEnable = thumbnail!.isNotEmpty && eventName.length > 8 && hostName.isNotEmpty;
   }
 
   ///* detail screen
@@ -305,8 +305,7 @@ class EventlyProvider extends ChangeNotifier {
       return false;
     }
     scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-    // final eventsFromRecipe = Events.fromRecipe(recipe);
-    // GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
+    sl<EventHubViewModel>().updatePublishedEventList();
     deleteEvent(event.id);
     return true;
   }
