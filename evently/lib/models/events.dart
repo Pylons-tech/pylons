@@ -125,7 +125,6 @@ extension CreateRecipe on Events {
     required String recipeId,
     required FreeDrop isFreeDrop,
     required String symbol,
-    required List<PerksModel> perksList,
     required String price,
   }) {
     return Recipe(

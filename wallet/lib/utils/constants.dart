@@ -78,6 +78,7 @@ class AppColors {
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
   static Color kTransparentColor = Colors.transparent;
   static Color kGrey = Colors.grey;
+  static const Color kGreenText = Color(0xFF14FB00);
 }
 
 const double kIconSize = 24.0;
@@ -333,6 +334,7 @@ const recipeIdKey = "recipeId";
 
 /// Assets
 
+const kDiamondIcon = "assets/images/svg/diamond.svg";
 const kAlertIcon = "assets/images/icons/alert.svg";
 const kUploadErrorIcon = "assets/images/icons/upload_error_background.svg";
 const kSvgCloseButton = 'assets/images/svg/close_button.svg';
