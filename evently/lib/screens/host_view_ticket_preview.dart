@@ -3,7 +3,9 @@ import 'package:evently/evently_provider.dart';
 import 'package:evently/generated/locale_keys.g.dart';
 import 'package:evently/main.dart';
 import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
+import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
+import 'package:evently/utils/di/di.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/space_utils.dart';
@@ -149,34 +151,35 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                                 ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'SEAT',
-                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                                ),
-                                SizedBox(height: 1.h),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '6A',
-                                      style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                                    ),
-                                    Text(
-                                      'Room 3',
-                                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   children: [
+                            //     Text(
+                            //       'SEAT',
+                            //       style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                            //     ),
+                            //     SizedBox(height: 1.h),
+                            //     Column(
+                            //       mainAxisAlignment: MainAxisAlignment.start,
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         Text(
+                            //           '6A',
+                            //           style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                            //         ),
+                            //         Text(
+                            //           'Room 3',
+                            //           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
+                      VerticalSpace(20.h),
                       Padding(
                         padding: EdgeInsets.only(left: 10.w, right: 30.h),
                         child: Row(
@@ -276,6 +279,7 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
       return;
     }
 
+    sl<EventHubViewModel>().changeSelectedCollection(CollectionType.publish);
     navigator.popUntil((route) {
       return route.settings.name == RouteUtil.kRouteEventHub;
     });
