@@ -140,4 +140,9 @@ class EventHubViewModel extends ChangeNotifier {
     repository.setCacheDynamicType(key: eventKey, value: events);
     repository.setCacheString(key: fromKey, value: kDraft);
   }
+
+  updatePublishedEventList() {
+    getDraftsList();
+    getRecipesList();
+  }
 }
