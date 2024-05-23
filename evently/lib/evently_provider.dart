@@ -305,14 +305,15 @@ class EventlyProvider extends ChangeNotifier {
       return false;
     }
     scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-    final eventsFromRecipe = Events.fromRecipe(recipe);
-    GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
-    deleteEvent();
+    // final eventsFromRecipe = Events.fromRecipe(recipe);
+    // GetIt.I.get<EventHubViewModel>().updatePublishedEventList(events: eventsFromRecipe);
+    deleteEvent(event.id);
     return true;
   }
 
-  Future<void> deleteEvent() async {
-    notifyListeners();
+  Future<void> deleteEvent(int? id) async {
+    if (id == null) return;
+    await repository.deleteEvent(id);
   }
 
   /// send createCookBook tx message to the wallet app

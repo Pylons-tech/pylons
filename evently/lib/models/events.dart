@@ -75,6 +75,8 @@ class Events extends Equatable {
       price: map[kPrice]!,
       listOfPerks: map[kPerks]!,
       step: '',
+      cookbookID: map[kCookBookId]!,
+      recipeID: map[kRecipeId]!,
     );
   }
 

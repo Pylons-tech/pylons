@@ -66,7 +66,7 @@ abstract class Repository {
   /// This method will delete draft from the local database
   /// Input: [id] the id of the nft which the user wants to delete
   /// Output: [bool] returns whether the operation is successful or not
-  Future<Either<Failure, bool>> deleteNft(int id);
+  Future<Either<Failure, bool>> deleteEvent(int id);
 
   /// This method will set the input in the cache
   /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
@@ -194,9 +194,9 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteNft(int id) async {
+  Future<Either<Failure, bool>> deleteEvent(int id) async {
     try {
-      final bool result = await localDataSource.deleteNft(id);
+      final bool result = await localDataSource.deleteEvents(id);
       return Right(result);
     } on Exception catch (_) {
       return Left(CacheFailure(LocaleKeys.something_wrong.tr()));

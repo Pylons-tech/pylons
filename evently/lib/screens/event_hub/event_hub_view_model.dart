@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
-enum CollectionType { draft, forSale, history }
+enum CollectionType { draft, publish }
 
 enum ViewType { viewGrid, viewList }
 
@@ -19,36 +19,26 @@ class EventHubViewModel extends ChangeNotifier {
 
   final Repository repository;
 
-  List<Events> _eventPublishedList = [];
+  List<Events> _draftList = [];
+  List<Events> _publishList = [];
 
-  List<Events> get eventPublishedList => _eventPublishedList;
+  List<Events> get getDraftList => _draftList;
+  List<Events> get getPublishList => _publishList;
 
-  List<Events> _eventForDraftList = [];
+  set setDraftList(List<Events> eventList) {
+    _draftList = eventList;
+    notifyListeners();
+  }
+
+  set setPublishList(List<Events> eventList) {
+    _publishList = eventList;
+    notifyListeners();
+  }
 
   ViewType viewType = ViewType.viewGrid;
 
   void updateViewType(ViewType selectedViewType) {
     viewType = selectedViewType;
-    notifyListeners();
-  }
-
-  List<Events> get eventForDraftList => _eventForDraftList;
-
-  List<Events> get eventForSaleList => _eventForDraftList;
-
-  set setEventForDraftList(List<Events> eventDraftList) {
-    _eventForDraftList = eventDraftList;
-    notifyListeners();
-  }
-
-  set setEventPublishList(List<Events> events) {
-    _eventPublishedList = events;
-    notifyListeners();
-  }
-
-  void updatePublishedEventList({required Events events}) {
-    _eventPublishedList.add(events);
-    _eventForDraftList.add(events);
     notifyListeners();
   }
 
@@ -63,13 +53,8 @@ class EventHubViewModel extends ChangeNotifier {
         notifyListeners();
         break;
 
-      case CollectionType.forSale:
-        _selectedCollectionType = CollectionType.forSale;
-        notifyListeners();
-        break;
-
-      case CollectionType.history:
-        _selectedCollectionType = CollectionType.history;
+      case CollectionType.publish:
+        _selectedCollectionType = CollectionType.publish;
         notifyListeners();
         break;
     }
@@ -102,10 +87,15 @@ class EventHubViewModel extends ChangeNotifier {
     if (recipesList.isEmpty) {
       return;
     }
+
+    List<Events> eventsList = [];
+
     for (final recipe in recipesList) {
-      final nft = Events.fromRecipe(recipe);
-      _eventPublishedList.add(nft);
+      final events = Events.fromRecipe(recipe);
+      eventsList.add(events);
     }
+
+    setPublishList = eventsList;
   }
 
   Future<void> getDraftsList() async {
@@ -120,7 +110,8 @@ class EventHubViewModel extends ChangeNotifier {
     }
 
     List<Events> draftEvent = getEventResponse.getOrElse(() => []);
-    setEventForDraftList = draftEvent;
+
+    setDraftList = draftEvent;
 
     loading.dismiss();
 
@@ -134,13 +125,14 @@ class EventHubViewModel extends ChangeNotifier {
   }
 
   Future<void> deleteNft(int? id) async {
-    final deleteNftResponse = await repository.deleteNft(id!);
+    final deleteNftResponse = await repository.deleteEvent(id!);
 
     if (deleteNftResponse.isLeft()) {
       LocaleKeys.delete_error.tr().show();
       return;
     }
-    eventForDraftList.removeWhere((element) => element.id == id);
+
+    getDraftList.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 

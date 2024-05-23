@@ -76,7 +76,6 @@ class _EventHubContentState extends State<EventHubContent> {
     color: EventlyAppTheme.kWhite,
     fontFamily: kUniversalFontFamily,
   );
-
   TextStyle subTitleStyle = TextStyle(
     fontSize: isTablet ? 12.sp : 15,
     fontWeight: FontWeight.w700,
@@ -134,14 +133,9 @@ class _EventHubContentState extends State<EventHubContent> {
                         isSelected: viewModel.selectedCollectionType == CollectionType.draft,
                       ),
                       getButton(
-                        title: LocaleKeys.for_sale,
-                        onTap: () => viewModel.changeSelectedCollection(CollectionType.forSale),
-                        isSelected: viewModel.selectedCollectionType == CollectionType.forSale,
-                      ),
-                      getButton(
-                        title: LocaleKeys.history,
-                        onTap: () => viewModel.changeSelectedCollection(CollectionType.history),
-                        isSelected: viewModel.selectedCollectionType == CollectionType.history,
+                        title: LocaleKeys.published,
+                        onTap: () => viewModel.changeSelectedCollection(CollectionType.publish),
+                        isSelected: viewModel.selectedCollectionType == CollectionType.publish,
                       ),
                     ],
                   ),
@@ -177,15 +171,16 @@ class _EventHubContentState extends State<EventHubContent> {
                 viewModel.viewType == ViewType.viewGrid
                     ? Expanded(
                         child: BuildGridView(
-                          eventsList: viewModel.eventForDraftList,
+                          eventsList: viewModel.selectedCollectionType == CollectionType.draft ? viewModel.getDraftList : viewModel.getPublishList,
                           onEmptyList: (BuildContext context) => Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  LocaleKeys.no_nft_created.tr(),
-                                  style: subTitleStyle,
-                                )),
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                LocaleKeys.no_nft_created.tr(),
+                                style: subTitleStyle,
+                              ),
+                            ),
                           ),
                           calculateBannerPrice: ({required String currency, required String price}) {
                             return '';
@@ -194,12 +189,15 @@ class _EventHubContentState extends State<EventHubContent> {
                       )
                     : Expanded(
                         child: BuildListView(
-                          eventsList: viewModel.eventForDraftList,
+                          eventsList: viewModel.selectedCollectionType == CollectionType.draft ? viewModel.getDraftList : viewModel.getPublishList,
                           onEmptyList: (BuildContext context) => Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Text(
-                              LocaleKeys.no_nft_created.tr(),
-                              style: subTitleStyle,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                LocaleKeys.no_nft_created.tr(),
+                                style: subTitleStyle,
+                              ),
                             ),
                           ),
                         ),
