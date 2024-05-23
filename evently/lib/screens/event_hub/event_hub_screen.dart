@@ -6,6 +6,7 @@ import 'package:evently/models/events.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/screens/event_hub/widgets/delete_confirmation_dialog.dart';
 import 'package:evently/screens/event_hub/widgets/drafts_more_bottomsheet.dart';
+import 'package:evently/screens/event_hub/widgets/events_list_tile.dart';
 import 'package:evently/screens/event_hub/widgets/nfts_grid_view.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
@@ -202,7 +203,6 @@ class _EventHubContentState extends State<EventHubContent> {
                           ),
                         ),
                       ),
-                const Spacer(),
                 Padding(padding: EdgeInsets.symmetric(horizontal: 20.w), child: getCreateEventWidget()),
               ],
             ),
@@ -283,7 +283,9 @@ class BuildListView extends StatelessWidget {
             child: DraftListTile(events: events, viewModel: viewModel),
           );
         } else {
-          return const Placeholder();
+          return NFTsListTile(
+            publishedEvents: events,
+          );
         }
       },
     );

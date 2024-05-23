@@ -27,6 +27,9 @@ class EventlyAppTheme {
   static const Color kLightRed = Color(0xFFEF4421);
   static const Color kDarkGreen = Color(0xFF3A8977);
 
+  static Color cardBackground = const Color(0xFFC4C4C4).withOpacity(0.2);
+
+
   static const String universalSansFamily = "UniversalSans";
 
   static ThemeData theme(BuildContext context) => ThemeData(

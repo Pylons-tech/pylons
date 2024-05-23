@@ -94,3 +94,14 @@ class PngUtils {
   static const kPhantom = "assets/images/phantom.png";
   static const kDottedLine = "assets/images/dotted_line.png";
 }
+
+/// Currency ABRR
+const String kEmoneyAbb = "EEUR";
+const String kAGoricAbb = "run";
+const String kPYLNAbbrevation = 'PYLN';
+const String kStripeUSDABR = 'USD';
+const String kAgoricAbr = "RUN";
+const String kAtomAbr = "ATOM";
+const String kLunaAbr = "Luna";
+const String kEthereumAbr = "ETH";
+

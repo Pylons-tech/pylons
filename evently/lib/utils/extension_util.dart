@@ -1,6 +1,9 @@
 import 'package:evently/main.dart';
+import 'package:evently/models/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'constants.dart';
 
 extension NavigatorKey on GlobalKey {
   void showMsg({required String message}) {
@@ -62,4 +65,49 @@ extension ScaffoldStateHelper on ScaffoldMessengerState {
       ));
   }
 }
+
+extension GetAbbrev on String {
+  String getAbbrev() {
+    switch (this) {
+      case kAgoricSymbol:
+        return kAgoricAbr;
+      case kPylonSymbol:
+        return kPYLNAbbrevation;
+      case kUsdSymbol:
+        return kStripeUSDABR;
+      case kEuroSymbol:
+        return kEmoneyAbb;
+      case kAtomSymbol:
+        return kAtomAbr;
+      case kEthereumSymbol:
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
+  }
+}
+
+extension GetCoinWithProperDenomination on String {
+  String getCoinWithProperDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
+  String getEaselInputCoinWithDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return double.parse(amount).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return double.parse(amount).toStringAsFixed(0);
+    } else {
+      return double.parse(amount).toStringAsFixed(2);
+    }
+  }
+}
+
+
 
