@@ -283,7 +283,7 @@ class EventlyProvider extends ChangeNotifier {
       description: description,
       numberOfTickets: numberOfTickets.toString(),
       price: price.toString(),
-      listOfPerks: perks.join(','),
+      listOfPerks: perks.map((e) => jsonEncode(e)).toList().toString(),
       cookbookID: _cookbookId!,
       recipeID: _recipeId,
       step: '',
@@ -294,7 +294,6 @@ class EventlyProvider extends ChangeNotifier {
       recipeId: _recipeId,
       isFreeDrop: isFreeDrop,
       symbol: selectedDenom.symbol,
-      perksList: perks,
       price: price.toString(),
     );
 

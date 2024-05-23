@@ -1,8 +1,7 @@
+import 'dart:convert';
 import 'package:equatable/equatable.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
-import '../modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 
 enum FreeDrop { yes, no, unselected }
@@ -21,7 +20,7 @@ class Events extends Equatable {
   final String description;
   final String numberOfTickets;
   final String price;
-  final String listOfPerks;
+  final List<PerksModel>? listOfPerks;
   final String isFreeDrops;
   final String cookbookID;
   final String step;
@@ -44,7 +43,7 @@ class Events extends Equatable {
     this.description = '',
 
     ///* perks
-    this.listOfPerks = '',
+    this.listOfPerks,
 
     ///* price
     this.numberOfTickets = '0',
@@ -62,6 +61,12 @@ class Events extends Equatable {
 
   factory Events.fromRecipe(Recipe recipe) {
     final Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
+
+    final List<PerksModel> listOfPerks = [];
+    jsonDecode(map[kPerks]!).map((jsonMap) {
+      listOfPerks.add(PerksModel.fromJson(jsonMap as Map<String, dynamic>));
+    }).toList();
+
     return Events(
       eventName: map[kEventName]!,
       hostName: map[kEventHostName]!,
@@ -74,7 +79,7 @@ class Events extends Equatable {
       description: map[kDescription]!,
       numberOfTickets: map[kNumberOfTickets]!,
       price: map[kPrice]!,
-      listOfPerks: map[kPerks]!,
+      listOfPerks: listOfPerks,
       cookbookID: map[kCookBookId]!,
       recipeID: map[kRecipeId]!,
     );
@@ -130,74 +135,6 @@ class Events extends Equatable {
   }
 }
 
-extension CreateRecipe on Events {
-  Recipe createRecipe({
-    required String cookbookId,
-    required String recipeId,
-    required FreeDrop isFreeDrop,
-    required String symbol,
-    required List<PerksModel> perksList,
-    required String price,
-  }) {
-    return Recipe(
-      cookbookId: cookbookId,
-      id: recipeId,
-      nodeVersion: Int64(1),
-      name: eventName.trim(),
-      description: description.trim(),
-      version: kVersion,
-      coinInputs: [
-        if (isFreeDrop == FreeDrop.yes)
-          CoinInput()
-        else
-          CoinInput(
-            coins: [Coin(amount: price, denom: symbol)],
-          )
-      ],
-      itemInputs: [],
-      costPerBlock: Coin(denom: kUpylon, amount: costPerBlock),
-      entries: EntriesList(
-        coinOutputs: [],
-        itemOutputs: [
-          ItemOutput(
-            id: kEventlyEvent,
-            doubles: [],
-            longs: [],
-            strings: [
-              StringParam(key: kEventName, value: eventName.trim()),
-              StringParam(key: kEventHostName, value: hostName.trim()),
-              StringParam(key: kThumbnail, value: thumbnail.trim()),
-              StringParam(key: kStartDate, value: startDate.trim()),
-              StringParam(key: kEndDate, value: endDate.trim()),
-              StringParam(key: kStartTime, value: startTime.trim()),
-              StringParam(key: kEndTime, value: endTime.trim()),
-              StringParam(key: kLocation, value: location.trim()),
-              StringParam(key: kDescription, value: description.trim()),
-              StringParam(key: kNumberOfTickets, value: numberOfTickets.trim()),
-              StringParam(key: kPrice, value: price.trim()),
-              StringParam(key: kPerks, value: listOfPerks.trim()),
-              StringParam(key: kFreeDrop, value: isFreeDrops),
-              StringParam(key: kCookBookId, value: cookbookID),
-              StringParam(key: kRecipeId, value: recipeID),
-            ],
-            mutableStrings: [],
-            transferFee: [Coin(denom: kPylonSymbol, amount: transferFeeAmount)],
-            tradeable: true,
-            amountMinted: Int64(),
-          ),
-        ],
-        itemModifyOutputs: [],
-      ),
-      outputs: [
-        WeightedOutputs(entryIds: [kEventlyEvent], weight: Int64(1))
-      ],
-      blockInterval: Int64(),
-      enabled: true,
-      extraInfo: kExtraInfo,
-    );
-  }
-}
-
 /// Event String keys
 const kEventName = "kEventName";
 const kEventHostName = "kEventHostName";
@@ -238,7 +175,7 @@ class PerksModel {
         description: description,
       );
 
-  factory PerksModel.fromJson(Map<String, String> map) => PerksModel(name: map['name']!, description: map['description']!);
+  factory PerksModel.fromJson(Map<String, dynamic> map) => PerksModel(name: map['name']!.toString(), description: map['description']!.toString());
 
   Map<String, String> toJson() {
     final Map<String, String> map = {};
