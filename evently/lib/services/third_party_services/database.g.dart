@@ -203,7 +203,7 @@ class _$EventsDao extends EventsDao {
   }
 
   @override
-  Future<void> updateNFTFromDetail(
+  Future<void> updateEventFromDetail(
     String startDate,
     String endDate,
     String startTime,
@@ -228,7 +228,7 @@ class _$EventsDao extends EventsDao {
   }
 
   @override
-  Future<void> updateNFTFromPerks(
+  Future<void> updateEventFromPerks(
     String listOfPerks,
     int id,
     String step,
@@ -239,7 +239,7 @@ class _$EventsDao extends EventsDao {
   }
 
   @override
-  Future<void> updateNFTFromPrice(
+  Future<void> updateEventFromPrice(
     int id,
     String numberOfTickets,
     String price,
@@ -250,6 +250,47 @@ class _$EventsDao extends EventsDao {
     await _queryAdapter.queryNoReturn(
         'UPDATE events SET numberOfTickets = ?2, price = ?3, isFreeDrops = ?4, denom = ?5, step = ?6 WHERE id = ?1',
         arguments: [id, numberOfTickets, price, isFreeDrops, denom, step]);
+  }
+
+  @override
+  Future<void> updateEvent(
+    int id,
+    String step,
+    String eventName,
+    String hostName,
+    String thumbnail,
+    String startDate,
+    String endDate,
+    String startTime,
+    String endTime,
+    String location,
+    String description,
+    String listOfPerks,
+    String numberOfTickets,
+    String price,
+    String isFreeDrops,
+    String denom,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE events SET eventName = ?3, hostName = ?4, thumbnail = ?5, startDate = ?6, endDate = ?7, startTime = ?8, endTime = ?9, location = ?10, description = ?11, numberOfTickets = ?13, price = ?14, listOfPerks = ?12, isFreeDrops = ?15, step = ?2, denom = ?16 WHERE id = ?1',
+        arguments: [
+          id,
+          step,
+          eventName,
+          hostName,
+          thumbnail,
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+          location,
+          description,
+          listOfPerks,
+          numberOfTickets,
+          price,
+          isFreeDrops,
+          denom
+        ]);
   }
 
   @override

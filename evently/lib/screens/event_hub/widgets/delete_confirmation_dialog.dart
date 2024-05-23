@@ -76,7 +76,7 @@ class DeleteDialog {
                               clipperType: ClipperType.bottomLeftTopRight,
                               onPressed: () async {
                                 Navigator.of(context).pop();
-                                creatorHubViewModel.deleteNft(events.id);
+                                creatorHubViewModel.deleteEvents(events.id);
                               },
                               cuttingHeight: 12.h,
                             ),
