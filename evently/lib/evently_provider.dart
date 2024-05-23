@@ -272,6 +272,7 @@ class EventlyProvider extends ChangeNotifier {
     _recipeId = repository.autoGenerateEventlyId();
 
     final event = Events(
+      id: id,
       eventName: eventName,
       hostName: hostName,
       thumbnail: thumbnail!,
@@ -304,8 +305,8 @@ class EventlyProvider extends ChangeNotifier {
       return false;
     }
     scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
-    sl<EventHubViewModel>().updatePublishedEventList();
-    deleteEvent(event.id);
+    await sl<EventHubViewModel>().updatePublishedEventList();
+    await deleteEvent(event.id);
     return true;
   }
 
@@ -395,19 +396,19 @@ class EventlyProvider extends ChangeNotifier {
 
     switch (uploadStep) {
       case UploadStep.overView:
-        await repository.saveEvents(saveEvent);
+        await repository.updateEvent(saveEvent);
         break;
       case UploadStep.detail:
-        await repository.saveFromDetail(saveEvent);
+        await repository.updateEvent(saveEvent);
         break;
       case UploadStep.perks:
-        await repository.saveFromPerks(saveEvent);
+        await repository.updateEvent(saveEvent);
         break;
       case UploadStep.price:
-        await repository.saveEventFromPrice(saveEvent);
+        await repository.updateEvent(saveEvent);
         break;
       case UploadStep.none:
-      // TODO: Handle this case.
+        break;
     }
 
     onCompleted();

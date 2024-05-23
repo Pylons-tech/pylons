@@ -90,6 +90,8 @@ abstract class LocalDataSource {
 
   /// this method is used to save draft from details screen
   Future<bool> saveEventFromPrice({required Events events});
+
+  Future<bool> updateEvent({required Events events});
 }
 
 @LazySingleton(as: LocalDataSource)
@@ -212,7 +214,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<bool> saveEventFromDetail({required Events events}) async {
     try {
-      await database.eventsDao.updateNFTFromDetail(
+      await database.eventsDao.updateEventFromDetail(
         events.startDate,
         events.endDate,
         events.startTime,
@@ -231,7 +233,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<bool> saveEventFromPerks({required Events events}) async {
     try {
-      await database.eventsDao.updateNFTFromPerks(events.listOfPerks, events.id!, events.step);
+      await database.eventsDao.updateEventFromPerks(events.listOfPerks, events.id!, events.step);
       return true;
     } catch (_) {
       throw CacheFailure(LocaleKeys.get_error.tr());
@@ -241,7 +243,34 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<bool> saveEventFromPrice({required Events events}) async {
     try {
-      await database.eventsDao.updateNFTFromPrice(events.id!, events.numberOfTickets, events.price, events.isFreeDrops, events.denom, events.step);
+      await database.eventsDao.updateEventFromPrice(events.id!, events.numberOfTickets, events.price, events.isFreeDrops, events.denom, events.step);
+      return true;
+    } catch (_) {
+      throw CacheFailure(LocaleKeys.get_error.tr());
+    }
+  }
+
+  @override
+  Future<bool> updateEvent({required Events events}) async {
+    try {
+      await database.eventsDao.updateEvent(
+        events.id!,
+        events.step,
+        events.eventName,
+        events.hostName,
+        events.thumbnail,
+        events.startDate,
+        events.endDate,
+        events.startTime,
+        events.endTime,
+        events.location,
+        events.description,
+        events.listOfPerks,
+        events.numberOfTickets,
+        events.price,
+        events.isFreeDrops,
+        events.denom,
+      );
       return true;
     } catch (_) {
       throw CacheFailure(LocaleKeys.get_error.tr());

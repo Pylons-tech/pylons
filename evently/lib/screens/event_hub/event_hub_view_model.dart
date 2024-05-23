@@ -124,7 +124,7 @@ class EventHubViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteNft(int? id) async {
+  Future<void> deleteEvents(int? id) async {
     final deleteNftResponse = await repository.deleteEvent(id!);
 
     if (deleteNftResponse.isLeft()) {
@@ -141,8 +141,8 @@ class EventHubViewModel extends ChangeNotifier {
     repository.setCacheString(key: fromKey, value: kDraft);
   }
 
-  updatePublishedEventList() {
-    getDraftsList();
-    getRecipesList();
+  Future<void> updatePublishedEventList() async {
+    await getDraftsList();
+    await getRecipesList();
   }
 }

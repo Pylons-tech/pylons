@@ -21,9 +21,7 @@ class NFTsListTile extends StatelessWidget {
 
   EventlyProvider get _easelProvider => GetIt.I.get();
 
-  void buildBottomSheet({required BuildContext context}) {
-
-  }
+  void buildBottomSheet({required BuildContext context}) {}
 
   Widget getPublishedCard({required BuildContext context}) {
     return DecoratedBox(
@@ -82,7 +80,6 @@ class NFTsListTile extends StatelessWidget {
               width: 10.w,
             ),
             InkWell(
-
               onTap: () => buildBottomSheet(context: context),
               child: Padding(
                 padding: EdgeInsets.all(4.0.w),
