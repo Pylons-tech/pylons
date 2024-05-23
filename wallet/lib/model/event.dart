@@ -8,7 +8,28 @@ import '../modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart'
 enum FreeDrop { yes, no, unselected }
 
 class Events extends Equatable {
+  final int? id;
+  final String recipeID;
+  final String eventName;
+  final String hostName;
+  final String thumbnail;
+  final String startDate;
+  final String endDate;
+  final String startTime;
+  final String endTime;
+  final String location;
+  final String description;
+  final String numberOfTickets;
+  final String price;
+  final String listOfPerks;
+  final String isFreeDrops;
+  final String cookbookID;
+  final String step;
+  final String denom;
+
   const Events({
+    this.id,
+
     ///* overview data
     this.eventName = '',
     this.hostName = '',
@@ -29,31 +50,18 @@ class Events extends Equatable {
     this.numberOfTickets = '0',
     this.price = '',
     this.isFreeDrops = 'unselected',
+    this.denom = '',
 
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
+
+    ///* for tracking where its save as draft
+    this.step = '',
   });
 
-  final String eventName;
-  final String hostName;
-  final String thumbnail;
-  final String startDate;
-  final String endDate;
-  final String startTime;
-  final String endTime;
-  final String location;
-  final String description;
-  final String numberOfTickets;
-  final String price;
-  final String listOfPerks;
-  final String isFreeDrops;
-  final String cookbookID;
-  final String recipeID;
-
   factory Events.fromRecipe(Recipe recipe) {
-    Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
-
+    final Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
     return Events(
       eventName: map[kEventName]!,
       hostName: map[kEventHostName]!,
@@ -67,6 +75,8 @@ class Events extends Equatable {
       numberOfTickets: map[kNumberOfTickets]!,
       price: map[kPrice]!,
       listOfPerks: map[kPerks]!,
+      cookbookID: map[kCookBookId]!,
+      recipeID: map[kRecipeId]!,
     );
   }
 
@@ -83,9 +93,12 @@ class Events extends Equatable {
         case kEndTime:
         case kLocation:
         case kDescription:
-        case kPerks:
         case kNumberOfTickets:
         case kPrice:
+        case kPerks:
+        case kFreeDrop:
+        case kCookBookId:
+        case kRecipeId:
           attributeValues[attribute.key] = attribute.value;
           break;
         default:
@@ -97,14 +110,15 @@ class Events extends Equatable {
   }
 
   @override
-  List<Object?> get props => [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID];
+  List<Object?> get props =>
+      [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID, step];
 
   @override
   String toString() {
-    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, tradePercentage: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID}';
+    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, listOfPerks: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step}';
   }
 
-  static Future<Events?> fromRecipeId(String cookbookId, String recipeId) async {
+  static Future<Events?> eventFromRecipeId(String cookbookId, String recipeId) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final recipeEither = await walletsStore.getRecipe(cookbookId, recipeId);
 
@@ -203,10 +217,10 @@ const kCookBookId = "kCookBookId";
 const kVersion = "v0.2.0";
 const kUpylon = "upylon";
 const kPylonSymbol = 'upylon';
-const String transferFeeAmount = '1';
+const transferFeeAmount = '1';
 const kEventlyEvent = "Evently_Event";
 const kExtraInfo = "extraInfo";
-const String costPerBlock = '0';
+const costPerBlock = '0';
 
 class PerksModel {
   PerksModel({required this.name, required this.description});
@@ -223,6 +237,16 @@ class PerksModel {
         name: perksModel.name,
         description: description,
       );
+
+  factory PerksModel.fromJson(Map<String, String> map) => PerksModel(name: map['name']!, description: map['description']!);
+
+  Map<String, String> toJson() {
+    final Map<String, String> map = {};
+    map['name'] = name;
+    map['description'] = description;
+
+    return map;
+  }
 
   @override
   String toString() {

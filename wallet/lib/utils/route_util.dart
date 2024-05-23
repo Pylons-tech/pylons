@@ -114,7 +114,7 @@ class RouteUtil {
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
       case Routes.eventView:
-        if (settings.arguments != null && settings.arguments is NFT) {
+        if (settings.arguments != null && settings.arguments is Events) {
           return createRoute(EventPassViewScreen(
             key: ValueKey(settings.arguments),
             events: settings.arguments as Events,

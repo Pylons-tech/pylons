@@ -39,7 +39,7 @@ class CreateRecipeHandler implements BaseHandler {
         final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(jsonMap);
 
         if (msgObj.cookbookId.contains('Evently')) {
-          final events = await Events.fromRecipeId(msgObj.cookbookId, msgObj.id);
+          final events = await Events.eventFromRecipeId(msgObj.cookbookId, msgObj.id);
           if (events != null) {
             await navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events);
           }
