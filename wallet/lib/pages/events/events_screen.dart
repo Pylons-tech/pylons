@@ -160,16 +160,18 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                   ],
                 ),
               ),
-              VerticalSpace(20.h),
-              CachedNetworkImage(
-                fit: BoxFit.fill,
-                imageUrl: widget.events.thumbnail,
-                errorWidget: (a, b, c) => const Center(
-                    child: Icon(
-                  Icons.error_outline,
-                  color: AppColors.kWhite,
-                )),
-                placeholder: (context, url) => Shimmer(color: AppColors.kLightGray, child: const SizedBox.expand()),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                child: CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  imageUrl: widget.events.thumbnail,
+                  errorWidget: (a, b, c) => const Center(
+                      child: Icon(
+                    Icons.error_outline,
+                    color: AppColors.kWhite,
+                  )),
+                  // placeholder: (context, url) => Shimmer(color: AppColors.kLightGray, child: const SizedBox.expand()),
+                ),
               )
             ],
           ),
