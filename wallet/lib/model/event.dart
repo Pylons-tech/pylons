@@ -25,8 +25,10 @@ class Events extends Equatable {
   final String cookbookID;
   final String step;
   final String denom;
+  String ownerAddress = "";
+  String owner = "";
 
-  const Events({
+  Events({
     this.id,
 
     ///* overview data
@@ -57,7 +59,24 @@ class Events extends Equatable {
 
     ///* for tracking where its save as draft
     this.step = '',
+
+    ///*
+    this.ownerAddress = "",
+    this.owner = '',
   });
+
+  Future<String> getOwnerAddress() async {
+    if (ownerAddress.isEmpty) {
+      final walletsStore = GetIt.I.get<WalletsStore>();
+      final cookbook = await walletsStore.getCookbookById(cookbookID);
+      ownerAddress = cookbook?.creator ?? "";
+
+      if (owner.isEmpty) {
+        owner = await walletsStore.getAccountNameByAddress(ownerAddress);
+      }
+    }
+    return ownerAddress;
+  }
 
   factory Events.fromRecipe(Recipe recipe) {
     final Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);

@@ -14,6 +14,7 @@ import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/ipc/widgets/sdk_approval_dialog.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
@@ -92,8 +93,17 @@ class IPCEngine {
   }
 
   Future handleLinksBasedOnUri(String initialLink) async {
-    if (_isEaselUniLink(initialLink)) {
+    if (_isEventlyUniLink(initialLink)) {
+      handleEventlyLink(
+        link: initialLink,
+        getEventFromRecipe: getEventsFromRecipe,
+        showOwnerView: (events) => navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events),
+        showCreateAccountView: (events) => showCreateAccountView,
+        showPurchaseView: (events) => showPurchaseView,
+      );
+    } else if (_isEaselUniLink(initialLink)) {
       onLogEvent(AnalyticsEventEnum.easelLink);
+
       handleEaselLink(
         link: initialLink,
         showOwnerView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
@@ -198,9 +208,54 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
+  Future<void> handleEventlyLink({
+    required String link,
+    required Future<Events?> Function({
+      required String cookbookId,
+      required String recipeId,
+    }) getEventFromRecipe,
+    required void Function(Events?) showOwnerView,
+    required void Function(Events?) showCreateAccountView,
+    required void Function(Events?) showPurchaseView,
+  }) async {
+    final queryParameters = Uri.parse(link).queryParameters;
+
+    final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
+    final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
+    final currentWallet = accountProvider.accountPublicInfo;
+    final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
+
+    if (currentWallet == null) {
+      repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
+    }
+
+    final nullableEvents = await getEventFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
+
+    if (nullableEvents == null) {
+      return;
+    }
+
+    if (isOwnerIsViewingEvent(nullableEvents, currentWallet)) {
+      showOwnerView(nullableEvents);
+    } else {
+      if (currentWallet != null) {
+        showPurchaseView(nullableEvents);
+      } else {
+        showCreateAccountView(nullableEvents);
+      }
+    }
+
+    walletsStore.setStateUpdatedFlag(flag: true);
+  }
+
   bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo? currentWallet) {
     if (currentWallet == null) return false;
     return nullableNFT.ownerAddress == currentWallet.publicAddress;
+  }
+
+  bool isOwnerIsViewingEvent(Events nullableEvents, AccountPublicInfo? currentWallet) {
+    if (currentWallet == null) return false;
+    return nullableEvents.ownerAddress == currentWallet.publicAddress;
   }
 
   bool getUserAcceptPolicies() => repository.getUserAcceptPolicies().getOrElse(() => false);
@@ -387,6 +442,12 @@ class IPCEngine {
     return queryParam.containsKey(kRecipeIdKey) && queryParam.containsKey(kCookbookIdKey);
   }
 
+  ///This method checks if the incoming link is generated from Easel
+  bool _isEventlyUniLink(String link) {
+    final queryParam = Uri.parse(link).queryParameters;
+    return queryParam.containsKey(kRecipeIdKey) && queryParam.containsKey(kCookbookIdKey) && link.contains(kEvently);
+  }
+
   bool _isNFTViewUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
     return queryParam.containsKey(kItemIdKey) && queryParam.containsKey(kCookbookIdKey);
@@ -450,6 +511,31 @@ class IPCEngine {
     await nft.getOwnerAddress();
 
     return nft;
+  }
+
+  /// This method get the NFT based on the cookbookId and the recipeId
+  /// Input : [cookbookId] the id of the cookbook, [recipeId] the id of the recipe
+  /// Output: returns [Events] if successful otherwise returns [null]
+  Future<Events?> getEventsFromRecipe({required String cookbookId, required String recipeId}) async {
+    final walletsStore = GetIt.I.get<WalletsStore>();
+
+    final showLoader = Loading()..showLoading();
+
+    final recipeResult = await walletsStore.getRecipe(cookbookId, recipeId);
+
+    showLoader.dismiss();
+
+    if (recipeResult.isLeft()) {
+      onLogEvent(AnalyticsEventEnum.nftNotExists);
+      LocaleKeys.nft_does_not_exists.tr().show();
+      return null;
+    }
+
+    final events = Events.fromRecipe(recipeResult.toOption().toNullable()!);
+
+    await events.getOwnerAddress();
+
+    return events;
   }
 
   void dispose() {
