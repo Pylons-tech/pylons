@@ -501,3 +501,5 @@ const String drawerKey = "drawer_key";
 const String kRemaining = 'remaining';
 const kTotal = 'total';
 const kFileExtension = "file_extension";
+
+const kEvently = "Evently";

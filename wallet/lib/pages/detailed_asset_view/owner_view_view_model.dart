@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/common.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
@@ -31,6 +32,9 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
+
+  ///* for events
+  late Events events;
 
   OwnerViewViewModel({
     required this.repository,
@@ -464,6 +468,19 @@ class OwnerViewViewModel extends ChangeNotifier {
     final address = accountPublicInfo.publicAddress;
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    return link.fold((l) {
+      LocaleKeys.something_wrong.tr().show();
+      return null;
+    }, (r) {
+      shareHelper.shareText(text: r, size: size);
+      return null;
+    });
+  }
+
+  Future<void> shareEventsLink({required Size size}) async {
+    final address = accountPublicInfo.publicAddress;
+
+    final link = await repository.createDynamicLinkForRecipeEventShare(address: address, events: events);
     return link.fold((l) {
       LocaleKeys.something_wrong.tr().show();
       return null;

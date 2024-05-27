@@ -11,6 +11,7 @@ import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/providers/collections_tab_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 
@@ -38,7 +39,7 @@ class CreateRecipeHandler implements BaseHandler {
       if (shouldShowNFTPreview()) {
         final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(jsonMap);
 
-        if (msgObj.cookbookId.contains('Evently')) {
+        if (msgObj.cookbookId.contains(kEvently)) {
           final events = await Events.eventFromRecipeId(msgObj.cookbookId, msgObj.id);
           if (events != null) {
             await navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events);
