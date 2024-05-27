@@ -1,7 +1,8 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/pages/events/events_screen.dart';
+import 'package:pylons_wallet/pages/events/event_purchase_view.dart';
+import 'package:pylons_wallet/pages/events/events_owner_view.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/recovery_screen.dart';
 
@@ -113,9 +114,19 @@ class RouteUtil {
         return createRoute(const SizedBox());
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
-      case Routes.eventView:
+      case Routes.eventOwnerView:
         if (settings.arguments != null && settings.arguments is Events) {
-          return createRoute(EventPassViewScreen(
+          return createRoute(EventOwnerView(
+            key: ValueKey(settings.arguments),
+            events: settings.arguments as Events,
+          ));
+        }
+
+        return createRoute(const SizedBox());
+
+      case Routes.eventPurchaseView:
+        if (settings.arguments != null && settings.arguments is Events) {
+          return createRoute(EventPurchaseView(
             key: ValueKey(settings.arguments),
             events: settings.arguments as Events,
           ));
@@ -158,7 +169,8 @@ enum Routes {
   transactionHistory,
   acceptPolicy,
   fallback,
-  eventView;
+  eventOwnerView,
+  eventPurchaseView;
 
   static Routes getAppRouteFromString(String routeName) {
     switch (routeName) {
@@ -210,8 +222,10 @@ enum Routes {
         return localTransactionDetails;
       case 'transactionHistory':
         return transactionHistory;
-      case 'eventView':
-        return eventView;
+      case 'eventOwnerView':
+        return eventOwnerView;
+      case 'eventPurchaseView':
+        return eventPurchaseView;
       default:
         return fallback;
     }

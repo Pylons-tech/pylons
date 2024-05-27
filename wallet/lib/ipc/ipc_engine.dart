@@ -97,9 +97,9 @@ class IPCEngine {
       handleEventlyLink(
         link: initialLink,
         getEventFromRecipe: getEventsFromRecipe,
-        showOwnerView: (events) => navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events),
-        showCreateAccountView: (events) => showCreateAccountView,
-        showPurchaseView: (events) => showPurchaseView,
+        showOwnerView: (events) => navigatorKey.currentState!.pushNamed(Routes.eventOwnerView.name, arguments: events),
+        showCreateAccountView: (events) => {},
+        showPurchaseView: (events) => navigatorKey.currentState!.pushNamed(Routes.eventPurchaseView.name, arguments: events),
       );
     } else if (_isEaselUniLink(initialLink)) {
       onLogEvent(AnalyticsEventEnum.easelLink);
