@@ -70,6 +70,7 @@ dependencies:
   just_audio: ^0.9.29
   just_the_tooltip: 0.0.12
   local_auth: ^2.1.2
+  mobile_scanner: ^5.1.1
   mobx: ^2.0.3
   modal_bottom_sheet: ^2.0.0
   model_viewer_plus:
