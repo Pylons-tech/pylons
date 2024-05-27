@@ -2,11 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/model/event.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
-
-import '../../model/event.dart';
 
 class EventPassViewScreen extends StatefulWidget {
   const EventPassViewScreen({super.key, required this.events});
@@ -18,8 +19,31 @@ class EventPassViewScreen extends StatefulWidget {
 }
 
 class _EventPassViewScreenState extends State<EventPassViewScreen> {
+  OwnerViewViewModel ownerViewViewModel = GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+    ownerViewViewModel.events = widget.events;
+  }
+
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: ownerViewViewModel,
+      builder: (_, __) => const EventPassViewContent(),
+    );
+  }
+}
+
+class EventPassViewContent extends StatelessWidget {
+  const EventPassViewContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<OwnerViewViewModel>();
     return ColoredBox(
       color: AppColors.kBlack87,
       child: SafeArea(
@@ -44,7 +68,13 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                       color: AppColors.kWhite,
                     ),
                   ),
-                  SvgPicture.asset(shareIcon),
+                  GestureDetector(
+                    onTap: () {
+                      final Size size = MediaQuery.of(context).size;
+                      viewModel.shareEventsLink(size: size);
+                    },
+                    child: SvgPicture.asset(shareIcon),
+                  ),
                 ],
               ),
             ),
@@ -59,7 +89,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.events.eventName,
+                      viewModel.events.eventName,
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 25.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                     ),
                     VerticalSpace(20.h),
@@ -74,7 +104,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              widget.events.startDate,
+                              viewModel.events.startDate,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],
@@ -87,7 +117,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              widget.events.startDate,
+                              viewModel.events.startTime,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],
@@ -106,7 +136,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              widget.events.location,
+                              viewModel.events.location,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],
@@ -115,11 +145,11 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'SEAT',
+                              'PRICE',
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              "no seat",
+                              viewModel.events.price == "0" ? "Free" : viewModel.events.price,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],
@@ -143,7 +173,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                                 SvgPicture.asset(kDiamondIcon),
                                 SizedBox(width: 5.w),
                                 Text(
-                                  'x ${widget.events.listOfPerks?.length}',
+                                  'x ${viewModel.events.listOfPerks?.length}',
                                   style: TextStyle(fontSize: 15.sp, color: AppColors.kWhite, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 5.w),
@@ -164,7 +194,7 @@ class _EventPassViewScreenState extends State<EventPassViewScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 20.w),
                 child: CachedNetworkImage(
                   fit: BoxFit.fill,
-                  imageUrl: widget.events.thumbnail,
+                  imageUrl: viewModel.events.thumbnail,
                   errorWidget: (a, b, c) => const Center(
                       child: Icon(
                     Icons.error_outline,

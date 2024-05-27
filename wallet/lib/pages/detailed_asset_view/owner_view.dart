@@ -288,7 +288,7 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
     final ibcEnumCoins = viewModel.nft.ibcCoins;
 
     /// This change will reflect only for upylon ibcCoins
-    final coinWithDenom =ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
+    final coinWithDenom = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
         ? "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}"
         : "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}";
 
@@ -334,9 +334,7 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
                 children: [
                   if (viewModel.nft.type != NftType.TYPE_ITEM)
                     Text(
-                      viewModel.nft.price == "0"
-                          ? LocaleKeys.free.tr()
-                          : coinWithDenom,
+                      viewModel.nft.price == "0" ? LocaleKeys.free.tr() : coinWithDenom,
                       style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
                     )
                 ],
@@ -402,7 +400,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
     final ibcEnumCoins = viewModel.nft.ibcCoins;
 
     // This change will reflect only for upylon ibcCoins
-    final coinWithDenom =  ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
+    final coinWithDenom = ibcEnumCoins.getAbbrev() == constants.kPYLN_ABBREVATION
         ? "\$${ibcEnumCoins.pylnToCredit(viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price))} ${viewModel.nft.ibcCoins.getAbbrev()}"
         : "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}";
 
@@ -664,9 +662,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                         children: [
                           if (viewModel.nft.type != NftType.TYPE_ITEM) ...[
                             Text(
-                              viewModel.nft.price == "0"
-                                  ? LocaleKeys.free.tr()
-                                  : coinWithDenom,
+                              viewModel.nft.price == "0" ? LocaleKeys.free.tr() : coinWithDenom,
                               style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
                             )
                           ]
