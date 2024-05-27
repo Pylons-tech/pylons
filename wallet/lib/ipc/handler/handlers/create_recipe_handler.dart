@@ -42,7 +42,7 @@ class CreateRecipeHandler implements BaseHandler {
         if (msgObj.cookbookId.contains(kEvently)) {
           final events = await Events.eventFromRecipeId(msgObj.cookbookId, msgObj.id);
           if (events != null) {
-            await navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events);
+            await navigatorKey.currentState!.pushNamed(Routes.eventOwnerView.name, arguments: events);
           }
         } else {
           final nft = await NFT.fromRecipeId(msgObj.cookbookId, msgObj.id);

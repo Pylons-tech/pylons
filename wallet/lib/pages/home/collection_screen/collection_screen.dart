@@ -186,7 +186,7 @@ class NONNftCreations extends StatelessWidget {
 
                   if (recipe.cookbookId.contains(kEvently)) {
                     final events = Events.fromRecipe(recipe);
-                    navigatorKey.currentState!.pushNamed(Routes.eventView.name, arguments: events);
+                    navigatorKey.currentState!.pushNamed(Routes.eventOwnerView.name, arguments: events);
                     return;
                   }
 

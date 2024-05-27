@@ -9,16 +9,16 @@ import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-class EventPassViewScreen extends StatefulWidget {
-  const EventPassViewScreen({super.key, required this.events});
+class EventOwnerView extends StatefulWidget {
+  const EventOwnerView({super.key, required this.events});
 
   final Events events;
 
   @override
-  State<EventPassViewScreen> createState() => _EventPassViewScreenState();
+  State<EventOwnerView> createState() => _EventOwnerViewState();
 }
 
-class _EventPassViewScreenState extends State<EventPassViewScreen> {
+class _EventOwnerViewState extends State<EventOwnerView> {
   OwnerViewViewModel ownerViewViewModel = GetIt.I.get();
 
   @override
