@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
@@ -25,7 +26,7 @@ class Events extends Equatable {
   final String isFreeDrops;
   final String cookbookID;
   final String step;
-  final String denom;
+  final IBCCoins denom;
   String ownerAddress = "";
   String owner = "";
 
@@ -52,7 +53,7 @@ class Events extends Equatable {
     this.numberOfTickets = '0',
     this.price = '',
     this.isFreeDrops = 'unselected',
-    this.denom = '',
+    this.denom = IBCCoins.upylon,
 
     ///* other
     this.cookbookID = '',
@@ -104,7 +105,7 @@ class Events extends Equatable {
       listOfPerks: listOfPerks,
       cookbookID: map[kCookBookId]!,
       recipeID: map[kRecipeId]!,
-      denom: denom!,
+      denom: denom!.toIBCCoinsEnum(),
     );
   }
 
