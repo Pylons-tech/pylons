@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -30,15 +31,25 @@ class _EventPurchaseViewState extends State<EventPurchaseView> {
 }
 
 class EventPassViewContent extends StatelessWidget {
-  const EventPassViewContent({
+  EventPassViewContent({
     super.key,
     required this.events,
   });
 
   final Events events;
 
+  final MobileScannerController controller = MobileScannerController(
+    formats: const [BarcodeFormat.qrCode],
+  );
+
   @override
   Widget build(BuildContext context) {
+    final scanWindow = Rect.fromCenter(
+      center: MediaQuery.sizeOf(context).center(Offset.zero),
+      width: 100,
+      height: 100,
+    );
+
     return ColoredBox(
       color: AppColors.kBlack87,
       child: SafeArea(
@@ -65,7 +76,7 @@ class EventPassViewContent extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {},
-                    child: SvgPicture.asset(shareIcon),
+                    child: Container(),
                   ),
                 ],
               ),
@@ -73,6 +84,20 @@ class EventPassViewContent extends StatelessWidget {
           ),
           body: Column(
             children: [
+              Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    height: 200.h,
+                    child: MobileScanner(
+                      controller: controller,
+                      onDetect: (_) {
+                        print(_);
+                      },
+                    ),
+                  ),
+                ],
+              ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.w),
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
@@ -200,5 +225,68 @@ class EventPassViewContent extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ScannerOverlay extends CustomPainter {
+  const ScannerOverlay({
+    required this.scanWindow,
+    this.borderRadius = 12.0,
+  });
+
+  final Rect scanWindow;
+  final double borderRadius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: use `Offset.zero & size` instead of Rect.largest
+    // we need to pass the size to the custom paint widget
+    final backgroundPath = Path()..addRect(Rect.largest);
+
+    final cutoutPath = Path()
+      ..addRRect(
+        RRect.fromRectAndCorners(
+          scanWindow,
+          topLeft: Radius.circular(borderRadius),
+          topRight: Radius.circular(borderRadius),
+          bottomLeft: Radius.circular(borderRadius),
+          bottomRight: Radius.circular(borderRadius),
+        ),
+      );
+
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withOpacity(0.5)
+      ..style = PaintingStyle.fill
+      ..blendMode = BlendMode.dstOut;
+
+    final backgroundWithCutout = Path.combine(
+      PathOperation.difference,
+      backgroundPath,
+      cutoutPath,
+    );
+
+    final borderPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0;
+
+    final borderRect = RRect.fromRectAndCorners(
+      scanWindow,
+      topLeft: Radius.circular(borderRadius),
+      topRight: Radius.circular(borderRadius),
+      bottomLeft: Radius.circular(borderRadius),
+      bottomRight: Radius.circular(borderRadius),
+    );
+
+    // First, draw the background,
+    // with a cutout area that is a bit larger than the scan window.
+    // Finally, draw the scan window itself.
+    canvas.drawPath(backgroundWithCutout, backgroundPaint);
+    canvas.drawRRect(borderRect, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(ScannerOverlay oldDelegate) {
+    return scanWindow != oldDelegate.scanWindow || borderRadius != oldDelegate.borderRadius;
   }
 }

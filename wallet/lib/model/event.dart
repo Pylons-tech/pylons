@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import '../modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 
 enum FreeDrop { yes, no, unselected }
@@ -81,6 +82,8 @@ class Events extends Equatable {
   factory Events.fromRecipe(Recipe recipe) {
     final Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
 
+    final denom = recipe.coinInputs.isEmpty ? "" : _extractCoinValue(recipe.coinInputs[0].coins)[kDenom];
+
     final List<PerksModel> listOfPerks = [];
     jsonDecode(map[kPerks]!).map((jsonMap) {
       listOfPerks.add(PerksModel.fromJson(jsonMap as Map<String, dynamic>));
@@ -101,6 +104,7 @@ class Events extends Equatable {
       listOfPerks: listOfPerks,
       cookbookID: map[kCookBookId]!,
       recipeID: map[kRecipeId]!,
+      denom: denom!,
     );
   }
 
@@ -131,6 +135,10 @@ class Events extends Equatable {
     }
 
     return attributeValues;
+  }
+
+  static Map<String, String> _extractCoinValue(List<Coin> coins) {
+    return {kDenom: coins[0].denom, kPrice: coins[0].amount};
   }
 
   @override
@@ -177,6 +185,7 @@ const transferFeeAmount = '1';
 const kEventlyEvent = "Evently_Event";
 const kExtraInfo = "extraInfo";
 const costPerBlock = '0';
+const kDenom = "kDenom";
 
 class PerksModel {
   PerksModel({required this.name, required this.description});

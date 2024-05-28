@@ -135,9 +135,7 @@ extension CreateRecipe on Events {
       description: description.trim(),
       version: kVersion,
       coinInputs: [
-        if (isFreeDrop == FreeDrop.yes)
-          CoinInput()
-        else
+        if (isFreeDrop == FreeDrop.no)
           CoinInput(
             coins: [Coin(amount: price, denom: symbol)],
           )

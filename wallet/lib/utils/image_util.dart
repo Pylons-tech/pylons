@@ -28,6 +28,7 @@ class ImageUtil {
   static String LIKE_FULL = 'assets/images/icons/like_full.png';
   static String SPLASH_SCREEN_BG = "assets/images/splash/Splash_Screen.jpg";
   static String CLOSE_ICON = 'assets/images/icons/close.png';
+  static String QR_OVERLAY = "assets/images/qr_overlay.png";
 
   static List<Image> BG_IMAGES = [
     Image.asset(

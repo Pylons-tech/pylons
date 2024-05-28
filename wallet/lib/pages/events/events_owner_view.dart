@@ -194,6 +194,7 @@ class EventPassViewContent extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 20.w),
                 child: CachedNetworkImage(
                   fit: BoxFit.fill,
+                  width: double.infinity,
                   imageUrl: viewModel.events.thumbnail,
                   errorWidget: (a, b, c) => const Center(
                       child: Icon(
