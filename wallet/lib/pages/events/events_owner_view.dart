@@ -5,8 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
+import 'package:pylons_wallet/pages/events/event_qr_code_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
@@ -205,10 +207,20 @@ class EventPassViewContent extends StatelessWidget {
                   // placeholder: (context, url) => Shimmer(color: AppColors.kLightGray, child: const SizedBox.expand()),
                 ),
               ),
-
-
-
-
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => EventQrCodeScreen(
+                      events: viewModel.events,
+                    ),
+                  );
+                },
+                child: SvgPicture.asset(
+                  Assets.images.icons.qr,
+                  height: 20.h,
+                ),
+              ),
             ],
           ),
         ),

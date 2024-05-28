@@ -67,6 +67,35 @@ class Events extends Equatable {
     this.owner = '',
   });
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> map = <String, dynamic>{};
+
+    final perks = [];
+
+    listOfPerks?.map((e) => perks.add(e.toJson())).toList();
+
+    map['id'] = id;
+    map['recipeID'] = recipeID;
+    map['eventName'] = eventName;
+    map['hostName'] = hostName;
+    map['thumbnail'] = thumbnail;
+    map['startDate'] = startDate;
+    map['endDate'] = endDate;
+    map['startTime'] = startTime;
+    map['endTime'] = endTime;
+    map['location'] = location;
+    map['description'] = description;
+    map['numberOfTickets'] = numberOfTickets;
+    map['price'] = price;
+    map['isFreeDrops'] = isFreeDrops;
+    map['cookbookID'] = cookbookID;
+    map['step'] = step;
+    map['denom'] = denom.toString();
+    map['listOfPerks'] = perks;
+
+    return map;
+  }
+
   Future<String> getOwnerAddress() async {
     if (ownerAddress.isEmpty) {
       final walletsStore = GetIt.I.get<WalletsStore>();
