@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class EventOwnerView extends StatefulWidget {
@@ -149,7 +150,7 @@ class EventPassViewContent extends StatelessWidget {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              viewModel.events.price == "0" ? "Free" : viewModel.events.price,
+                              viewModel.events.price == "0" ? "Free" : '${viewModel.events.price} ${viewModel.events.denom.getName()}',
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],

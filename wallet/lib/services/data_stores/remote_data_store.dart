@@ -1460,7 +1460,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<String> createDynamicLinkForRecipeEventShare({required String address, required Events events}) async {
-    final updateText = '${events.eventName} is hosted by ${events.hostName} at location ${events.location} ticket price is ${events.price}';
+    final updateText = events.denom.getAbbrev() == constants.kPYLN_ABBREVATION
+        ? "\$${events.denom.pylnToCredit(events.denom.getCoinWithProperDenomination(events.price))}"
+        : "${events.denom.getCoinWithProperDenomination(events.price)} ${events.denom.getAbbrev()}";
+
     final dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse("$bigDipperBaseLink?recipe_id=${events.recipeID}&cookbook_id=${events.cookbookID}&address=$address"),
         uriPrefix: kDeepLink,
@@ -1538,35 +1541,4 @@ class GoogleInAppPurchaseModel {
   String getReceiptDataInBase64() {
     return base64Url.encode(utf8.encode(jsonEncode(receiptData)));
   }
-}
-
-class EventlyDenom {
-  final String name;
-  final String symbol;
-  final String icon;
-
-  EventlyDenom({required this.name, required this.symbol, required this.icon});
-
-  factory EventlyDenom.initial() {
-    return EventlyDenom(icon: '', name: '', symbol: '');
-  }
-
-  @override
-  String toString() {
-    return '{name: $name, symbol: $symbol, icon: $icon}';
-  }
-
-  Map<String, String> toJson() {
-    final Map<String, String> map = {};
-    map['name'] = name;
-    map['symbol'] = symbol;
-    map['icon'] = icon;
-    return map;
-  }
-
-  factory EventlyDenom.fromJson(Map<String, String> json) => EventlyDenom(
-        name: json['name']!,
-        symbol: json['symbol']!,
-        icon: json['icon']!,
-      );
 }
