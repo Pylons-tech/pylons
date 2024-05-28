@@ -6,6 +6,7 @@ import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
 import 'package:evently/screens/event_hub/event_hub_view_model.dart';
 import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/di/di.dart';
+import 'package:evently/utils/enums.dart';
 import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/space_utils.dart';
@@ -27,221 +28,228 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: EventlyAppTheme.kWhite,
-      child: SafeArea(
-        child: Scaffold(
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.symmetric(horizontal: 30.w),
-            height: 110.h,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                BottomButtons(
-                  onPressContinue: () {
-                    onPublishPressed();
-                  },
-                  onPressSaveDraft: () {},
-                  isContinueEnable: true,
-                  clipBtnTxt: LocaleKeys.publish.tr(),
+        color: EventlyAppTheme.kWhite,
+        child: Consumer<EventlyProvider>(
+          builder: (_, provider, __) => SafeArea(
+            child: Scaffold(
+              bottomNavigationBar: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                height: 110.h,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BottomButtons(
+                      onPressContinue: () {
+                        onPublishPressed();
+                      },
+                      onPressSaveDraft: () {
+                        final navigator = Navigator.of(context);
+                        provider.saveAsDraft(
+                          onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
+                          uploadStep: UploadStep.price,
+                        );
+                      },
+                      isContinueEnable: true,
+                      clipBtnTxt: LocaleKeys.publish.tr(),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Consumer<EventlyProvider>(
-              builder: (_, provider, __) => ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
-                  decoration: BoxDecoration(
-                    image: const DecorationImage(image: AssetImage(PngUtils.kHostPreview), fit: BoxFit.fitHeight),
+              ),
+              body: SingleChildScrollView(
+                child: Consumer<EventlyProvider>(
+                  builder: (_, provider, __) => ClipRRect(
                     borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(14),
-                            topLeft: Radius.circular(14),
-                          ),
-                          child: Stack(
-                            alignment: Alignment.bottomLeft,
-                            children: [
-                              Image.asset(
-                                PngUtils.kPhantom,
-                                fit: BoxFit.cover,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 20.w, horizontal: 20.w),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(image: AssetImage(PngUtils.kHostPreview), fit: BoxFit.fitHeight),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(14),
+                                topLeft: Radius.circular(14),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10.h, left: 10.w),
-                                child: Text(
-                                  provider.eventName,
-                                  style: TextStyle(fontSize: 20.sp, color: EventlyAppTheme.kWhite, fontWeight: FontWeight.w700),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      VerticalSpace(10.h),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.w, right: 30.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'DATE',
-                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  provider.startDate,
-                                  style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Time',
-                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  provider.startTime,
-                                  style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      VerticalSpace(20.h),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.w, right: 30.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'LOCATION',
-                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                                ),
-                                SizedBox(height: 1.h),
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 1.sw / 2.4),
-                                  child: Text(
-                                    provider.location,
-                                    style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                                    maxLines: 2,
+                              child: Stack(
+                                alignment: Alignment.bottomLeft,
+                                children: [
+                                  Image.asset(
+                                    PngUtils.kPhantom,
+                                    fit: BoxFit.cover,
                                   ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 10.h, left: 10.w),
+                                    child: Text(
+                                      provider.eventName,
+                                      style: TextStyle(fontSize: 20.sp, color: EventlyAppTheme.kWhite, fontWeight: FontWeight.w700),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          VerticalSpace(10.h),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.w, right: 30.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'DATE',
+                                      style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      provider.startDate,
+                                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Time',
+                                      style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Text(
+                                      provider.startTime,
+                                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            // Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   mainAxisAlignment: MainAxisAlignment.start,
-                            //   children: [
-                            //     Text(
-                            //       'SEAT',
-                            //       style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                            //     ),
-                            //     SizedBox(height: 1.h),
-                            //     Column(
-                            //       mainAxisAlignment: MainAxisAlignment.start,
-                            //       crossAxisAlignment: CrossAxisAlignment.start,
-                            //       children: [
-                            //         Text(
-                            //           '6A',
-                            //           style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                            //         ),
-                            //         Text(
-                            //           'Room 3',
-                            //           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
-                            //         )
-                            //       ],
-                            //     ),
-                            //   ],
-                            // ),
-                          ],
-                        ),
-                      ),
-                      VerticalSpace(20.h),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.w, right: 30.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
+                          ),
+                          VerticalSpace(20.h),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.w, right: 30.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  'PERKS',
-                                  style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
-                                ),
-                                SizedBox(height: 1.h),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SvgPicture.asset(SVGUtils.kDiamond),
-                                    SizedBox(width: 5.w),
                                     Text(
-                                      'x ${provider.perks.length}',
-                                      style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kWhite, fontWeight: FontWeight.bold),
+                                      'LOCATION',
+                                      style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
                                     ),
-                                    SizedBox(width: 5.w),
+                                    SizedBox(height: 1.h),
+                                    ConstrainedBox(
+                                      constraints: BoxConstraints(maxWidth: 1.sw / 2.4),
+                                      child: Text(
+                                        provider.location,
+                                        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // Column(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   mainAxisAlignment: MainAxisAlignment.start,
+                                //   children: [
+                                //     Text(
+                                //       'SEAT',
+                                //       style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                                //     ),
+                                //     SizedBox(height: 1.h),
+                                //     Column(
+                                //       mainAxisAlignment: MainAxisAlignment.start,
+                                //       crossAxisAlignment: CrossAxisAlignment.start,
+                                //       children: [
+                                //         Text(
+                                //           '6A',
+                                //           style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                                //         ),
+                                //         Text(
+                                //           'Room 3',
+                                //           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: EventlyAppTheme.kWhite),
+                                //         )
+                                //       ],
+                                //     ),
+                                //   ],
+                                // ),
+                              ],
+                            ),
+                          ),
+                          VerticalSpace(20.h),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.w, right: 30.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      'Redeem',
-                                      style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kGreenText, fontWeight: FontWeight.bold),
+                                      'PERKS',
+                                      style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w400, color: EventlyAppTheme.kWhite),
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(SVGUtils.kDiamond),
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          'x ${provider.perks.length}',
+                                          style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kWhite, fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          'Redeem',
+                                          style: TextStyle(fontSize: 15.sp, color: EventlyAppTheme.kGreenText, fontWeight: FontWeight.bold),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
+                                ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          VerticalSpace(16.h),
+                          Image.asset(PngUtils.kDottedLine),
+                          VerticalSpace(40.h),
+                          Text(
+                            'Scan QR to enter',
+                            style: TextStyle(
+                              color: EventlyAppTheme.kWhite,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          VerticalSpace(10.h),
+                          Container(
+                            decoration: const BoxDecoration(color: EventlyAppTheme.kBlack),
+                            width: 338,
+                            height: 338,
+                          ),
+                          SizedBox(height: 20.h),
+                        ],
                       ),
-                      VerticalSpace(16.h),
-                      Image.asset(PngUtils.kDottedLine),
-                      VerticalSpace(40.h),
-                      Text(
-                        'Scan QR to enter',
-                        style: TextStyle(
-                          color: EventlyAppTheme.kWhite,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                      VerticalSpace(10.h),
-                      Container(
-                        decoration: const BoxDecoration(color: EventlyAppTheme.kBlack),
-                        width: 338,
-                        height: 338,
-                      ),
-                      SizedBox(height: 20.h),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Future<void> onPublishPressed() async {
