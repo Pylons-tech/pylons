@@ -39,12 +39,29 @@ class EventPassViewContent extends StatelessWidget {
 
   final Events events;
 
-  final MobileScannerController controller = MobileScannerController(
+  late Rect scanWindow;
+
+  MobileScannerController cameraController = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
+    autoStart: true,
+    detectionSpeed: DetectionSpeed.noDuplicates,
   );
+
+  void _foundBarcode(BarcodeCapture barcodeCapture) {
+    debugPrint('$barcodeCapture');
+    final String code = barcodeCapture.barcodes.last.displayValue ?? '';
+    debugPrint('Code: $code');
+    // context.read<QRScannerBloc>().add(ScannerTextEvent(scannedText: code));
+  }
 
   @override
   Widget build(BuildContext context) {
+    scanWindow = Rect.fromCenter(
+      center: MediaQuery.sizeOf(context).center(Offset(0, -130.h)),
+      width: 100.r,
+      height: 100.r,
+    );
+
     return ColoredBox(
       color: AppColors.kBlack87,
       child: SafeArea(
@@ -85,12 +102,12 @@ class EventPassViewContent extends StatelessWidget {
                     margin: EdgeInsets.symmetric(horizontal: 20.w),
                     height: 200.h,
                     child: MobileScanner(
-                      controller: controller,
                       onDetect: (_) {
                         print(_);
                       },
                     ),
                   ),
+
                 ],
               ),
               Container(

@@ -207,6 +207,7 @@ class EventPassViewContent extends StatelessWidget {
                   // placeholder: (context, url) => Shimmer(color: AppColors.kLightGray, child: const SizedBox.expand()),
                 ),
               ),
+              SizedBox(height: 10.h),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -218,7 +219,7 @@ class EventPassViewContent extends StatelessWidget {
                 },
                 child: SvgPicture.asset(
                   Assets.images.icons.qr,
-                  height: 20.h,
+                  height: 40.h,
                 ),
               ),
             ],
