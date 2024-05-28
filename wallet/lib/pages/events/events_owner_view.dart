@@ -204,7 +204,11 @@ class EventPassViewContent extends StatelessWidget {
                   )),
                   // placeholder: (context, url) => Shimmer(color: AppColors.kLightGray, child: const SizedBox.expand()),
                 ),
-              )
+              ),
+
+
+
+
             ],
           ),
         ),
