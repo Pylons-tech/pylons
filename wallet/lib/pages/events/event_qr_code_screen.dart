@@ -69,7 +69,7 @@ class _EventQrCodeScreenState extends State<EventQrCodeScreen> {
                 key: renderObjectKey,
                 child: QrImageView(
                   padding: EdgeInsets.zero,
-                  data: jsonEncode(widget.events),
+                  data: jsonEncode(widget.events.toJson()),
                   size: 200,
                   dataModuleStyle: const QrDataModuleStyle(color: AppColors.kWhite),
                   eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: AppColors.kWhite),
