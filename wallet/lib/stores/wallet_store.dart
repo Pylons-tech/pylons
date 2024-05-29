@@ -37,6 +37,11 @@ abstract class WalletsStore {
   /// Output : [Execution] of the transaction (data field - idk that this is - this is a mess)
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json);
 
+  /// Input : [Map] containing the info related to the execution of recipe for event
+  /// Output : [Execution] of the transaction (data field - idk that this is - this is a mess)
+  Future<SdkIpcResponse<Execution>> executeRecipeForEvent(Map json);
+
+
   /// This method is for create Trade
   /// MsgCreateTrade proto
   /// request fields: {String creator, list<CoinInput> coinInputs, List<ItemInputs> itemInputs, List<Coin> coinOutputs, List<ItemRef> itemOutputs, String extraInfo}

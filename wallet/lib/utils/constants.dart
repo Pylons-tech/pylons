@@ -451,6 +451,11 @@ const String kCookbookID = "cookbookID";
 const String kPaymentInfosMap = "paymentInfos";
 const String kItemAlreadyOwned = "itemAlreadyOwned";
 
+const kEventNam = "eventName";
+const kEventPrice = "eventPrice";
+const kEventCurrency = "eventCurrency";
+
+
 class AnalyticsScreenEvents {
   static String mainLanding = "MainLandingScreen";
   static String createKey = "CreateKeyScreen";

@@ -96,6 +96,32 @@ class Events extends Equatable {
     return map;
   }
 
+  factory Events.fromJson(Map<String, dynamic> json) {
+    final List<PerksModel> listOfPerks = [];
+
+    json['listOfPerks'].map((jsonData) => listOfPerks.add(PerksModel.fromJson(jsonData as Map<String, dynamic>))).toList();
+
+    return Events(
+      recipeID: json['recipeID'] as String,
+      eventName: json['eventName'] as String,
+      hostName: json['hostName'] as String,
+      thumbnail: json['thumbnail'] as String,
+      startDate: json['startDate'] as String,
+      endDate: json['endDate'] as String,
+      startTime: json['startTime'] as String,
+      endTime: json['endTime'] as String,
+      location: json['location'] as String,
+      description: json['description'] as String,
+      numberOfTickets: json['numberOfTickets'] as String,
+      price: json['price'] as String,
+      isFreeDrops: json['isFreeDrops'] as String,
+      cookbookID: json['cookbookID'] as String,
+      step: json['step'] as String,
+      listOfPerks: listOfPerks,
+      denom: json['denom'].toString().toIBCCoinsEnumforEvent(),
+    );
+  }
+
   Future<String> getOwnerAddress() async {
     if (ownerAddress.isEmpty) {
       final walletsStore = GetIt.I.get<WalletsStore>();

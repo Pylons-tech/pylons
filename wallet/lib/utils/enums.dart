@@ -25,7 +25,8 @@ enum TransactionTypeEnum {
   AppleInAppCoinsRequest,
   GoogleInAppCoinsRequest,
   BuyProduct,
-  Unknown
+  Unknown,
+  BuyEvent,
 }
 
 enum TransactionStatus {
