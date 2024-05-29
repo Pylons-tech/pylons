@@ -47,6 +47,11 @@ class EventPassViewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<OwnerViewViewModel>();
+
+    final coinWithDenom = viewModel.events.denom.getAbbrev() == kPYLN_ABBREVATION
+        ? "\$${viewModel.events.denom.pylnToCredit(viewModel.events.denom.getCoinWithProperDenomination(viewModel.events.price))} ${viewModel.events.denom.getAbbrev()}"
+        : "${viewModel.events.denom.getCoinWithProperDenomination(viewModel.events.price)} ${viewModel.events.denom.getAbbrev()}";
+
     return ColoredBox(
       color: AppColors.kBlack87,
       child: SafeArea(
@@ -152,7 +157,7 @@ class EventPassViewContent extends StatelessWidget {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              viewModel.events.price == "0" ? "Free" : '${viewModel.events.price} ${viewModel.events.denom.getName()}',
+                              coinWithDenom,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],

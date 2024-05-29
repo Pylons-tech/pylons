@@ -12,19 +12,6 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-const jsonExecuteRecipe = '''
-      {
-        "creator": "",
-        "cookbook_id": "",
-        "recipe_id": "",
-        "eventName": "",
-        "eventPrice": "",
-        "eventCurrency": "",
-        "coinInputsIndex": 0
-        }
-        ''';
-final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
-
 class EventQrCodeScreen extends StatefulWidget {
   const EventQrCodeScreen({
     super.key,

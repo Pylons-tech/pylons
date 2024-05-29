@@ -290,12 +290,15 @@ class EventlyProvider extends ChangeNotifier {
       step: '',
     );
 
+    final String prices = isFreeDrop == FreeDrop.yes ? "0" : _selectedDenom.formatAmount(price: price.toString());
+
+
     final recipe = event.createRecipe(
       cookbookId: _cookbookId!,
       recipeId: _recipeId,
       isFreeDrop: isFreeDrop,
       symbol: selectedDenom.symbol,
-      price: price.toString(),
+      price: prices,
     );
 
     final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
