@@ -121,7 +121,7 @@ class _PerksScreenState extends State<PerksScreen> {
                         final navigator = Navigator.of(context);
                         provider.saveAsDraft(
                           onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
-                          uploadStep: UploadStep.perks,
+                          uploadStep:provider.perks.isEmpty ? UploadStep.detail : UploadStep.perks,
                         );
                       },
                       isContinueEnable: true,

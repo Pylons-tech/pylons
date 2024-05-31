@@ -136,6 +136,7 @@ class EventlyProvider extends ChangeNotifier {
 
   set setPerks(PerksModel perksModel) {
     _perks.add(perksModel);
+    setSelectedPerks = _perks.length - 1;
     notifyListeners();
   }
 
@@ -146,6 +147,7 @@ class EventlyProvider extends ChangeNotifier {
 
   removePerks(int index) {
     _perks.removeAt(index);
+    setSelectedPerks = _perks.length - 1;
     notifyListeners();
   }
 
@@ -291,7 +293,6 @@ class EventlyProvider extends ChangeNotifier {
     );
 
     final String prices = isFreeDrop == FreeDrop.yes ? "0" : _selectedDenom.formatAmount(price: price.toString());
-
 
     final recipe = event.createRecipe(
       cookbookId: _cookbookId!,

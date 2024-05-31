@@ -41,7 +41,11 @@ class BottomButtons extends StatelessWidget {
         const VerticalSpace(10),
         Center(
           child: InkWell(
-            onTap: onPressSaveDraft,
+            onTap: () {
+              if (isContinueEnable) {
+                onPressSaveDraft();
+              }
+            },
             child: Text(
               LocaleKeys.save_draft.tr(),
               style: TextStyle(color: EventlyAppTheme.kTextGrey02, fontSize: 14.sp, fontWeight: FontWeight.w700),

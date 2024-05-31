@@ -18,6 +18,8 @@ class EventlyTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.onChanged,
     this.enable,
+    this.imageBackground,
+    this.inputTextColor,
   });
 
   final String label;
@@ -31,6 +33,9 @@ class EventlyTextField extends StatelessWidget {
 
   final ValueChanged<String>? onChanged;
   final bool? enable;
+
+  final String? imageBackground;
+  final Color? inputTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +52,13 @@ class EventlyTextField extends StatelessWidget {
           children: [
             ScreenResponsive(
               mobileScreen: (context) => Image.asset(
-                noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
+                imageBackground ?? (noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine),
                 height: noOfLines == 1 ? 40.h : 120.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
               ),
               tabletScreen: (context) => Image.asset(
-                noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
+                imageBackground ?? (noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine),
                 height: noOfLines == 1 ? 32.h : 110.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
@@ -73,7 +78,7 @@ class EventlyTextField extends StatelessWidget {
         child: TextFormField(
           enabled: enable,
           onChanged: onChanged,
-          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+          style: TextStyle(fontSize: noOfLines == 1 ? 18.sp : 15, fontWeight: FontWeight.w400, color: inputTextColor ?? EventlyAppTheme.kTextGrey02),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -83,7 +88,7 @@ class EventlyTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: EventlyAppTheme.kTextGrey),
+            hintStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: inputTextColor ?? EventlyAppTheme.kTextGrey02),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),

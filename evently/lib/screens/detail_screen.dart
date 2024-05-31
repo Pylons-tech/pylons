@@ -5,7 +5,9 @@ import 'package:evently/screens/custom_widgets/bottom_buttons.dart';
 import 'package:evently/screens/custom_widgets/page_app_bar.dart';
 import 'package:evently/screens/custom_widgets/step_labels.dart';
 import 'package:evently/screens/custom_widgets/steps_indicator.dart';
+import 'package:evently/utils/constants.dart';
 import 'package:evently/utils/enums.dart';
+import 'package:evently/utils/evently_app_theme.dart';
 import 'package:evently/utils/route_util.dart';
 import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
@@ -60,11 +62,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             });
                           },
                           child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.start_date.tr(),
-                            controller: TextEditingController(text: provider.startDate),
-                            textCapitalization: TextCapitalization.sentences,
-                          ),
+                              enable: false,
+                              label: LocaleKeys.start_date.tr(),
+                              controller: TextEditingController(text: provider.startDate),
+                              textCapitalization: TextCapitalization.sentences,
+                              imageBackground: PngUtils.textFieldBottomLeft,
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
                         ),
                       ),
                       HorizontalSpace(20.w),
@@ -77,14 +80,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             });
                           },
                           child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.end_date.tr(),
-                            controller: TextEditingController(text: provider.endDate),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
-                            },
-                          ),
+                              enable: false,
+                              label: LocaleKeys.end_date.tr(),
+                              controller: TextEditingController(text: provider.endDate),
+                              textCapitalization: TextCapitalization.sentences,
+                              validator: (value) {
+                                return null;
+                              },
+                              imageBackground: PngUtils.textFieldTopRight,
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
                         ),
                       ),
                     ],
@@ -103,14 +107,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             });
                           },
                           child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.start_time.tr(),
-                            controller: TextEditingController(text: provider.startTime),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
-                            },
-                          ),
+                              enable: false,
+                              label: LocaleKeys.start_time.tr(),
+                              controller: TextEditingController(text: provider.startTime),
+                              textCapitalization: TextCapitalization.sentences,
+                              validator: (value) {
+                                return null;
+                              },
+                              imageBackground: PngUtils.textFieldBottomLeft,
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
                         ),
                       ),
                       HorizontalSpace(20.w),
@@ -132,6 +137,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             validator: (value) {
                               return null;
                             },
+                            imageBackground: PngUtils.textFieldTopRight,
+                            inputTextColor: EventlyAppTheme.kTextDarkBlue,
                           ),
                         ),
                       ),
@@ -163,10 +170,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     textCapitalization: TextCapitalization.sentences,
                     noOfLines: 4,
                   ),
-                  const VerticalSpace(80),
+                  const VerticalSpace(40),
                   BottomButtons(
                     onPressContinue: () {
-
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
