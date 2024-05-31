@@ -71,5 +71,6 @@ abstract class  LocaleKeys {
   static const are_you_sure_you_want_to_delete = 'are_you_sure_you_want_to_delete';
   static const published = 'published';
   static const delete = 'delete';
+  static const event_preview = 'event_preview';
 
 }

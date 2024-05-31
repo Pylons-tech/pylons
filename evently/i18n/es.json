@@ -71,5 +71,6 @@
   "event_name" : "Event Name",
   "are_you_sure_you_want_to_delete": "¿Seguro que quieres eliminar este Plan Preliminar?",
   "published": "Publicado",
-  "delete": "Borrar"
+  "delete": "Borrar",
+  "event_preview" : "event_preview"
 }

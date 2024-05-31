@@ -333,6 +333,7 @@ class _EventPassViewContentState extends State<EventPassViewContent> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.w),
                 child: CachedNetworkImage(
+                  height: 160.h,
                   width: double.infinity,
                   fit: BoxFit.fill,
                   imageUrl: widget.events.thumbnail,
