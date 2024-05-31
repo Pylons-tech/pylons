@@ -91,7 +91,7 @@ class Denom {
     return map;
   }
 
-  factory Denom.fromJson(Map<String, String> json) => Denom(
+  factory Denom.fromJson(Map<String, dynamic> json) => Denom(
         name: json['name']!,
         symbol: json['symbol']!,
         icon: json['icon']!,

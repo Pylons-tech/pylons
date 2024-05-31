@@ -23,6 +23,7 @@ class CreateEventViewModel extends ChangeNotifier {
     LocaleKeys.detail.tr(),
     LocaleKeys.perks.tr(),
     LocaleKeys.price.tr(),
+    LocaleKeys.event_preview.trim(),
   ];
 
   Events? events;
