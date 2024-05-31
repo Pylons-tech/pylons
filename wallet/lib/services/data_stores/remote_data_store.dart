@@ -1112,7 +1112,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<String> getAppCheckToken() async {
-    return "6B189291-D2AE-439B-AA5D-E2B99679C01E";
     final String? token = await firebaseAppCheck.getToken();
 
     if (token == null || token.isEmpty) {
