@@ -74,8 +74,8 @@ class _EventPassViewContentState extends State<EventPassViewContent> {
     final ibcEnumCoins = provider.getEvents.denom;
 
     if (ibcEnumCoins == IBCCoins.ustripeusd) {
-      // stripePaymentForRecipe(context, provider.getEvents);
-      print('needed to work for this');
+      //@TODO
+      // needed to work on this flow
     } else {
       paymentByCoins();
     }
