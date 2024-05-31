@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/gen/assets.gen.dart';
+import 'package:pylons_wallet/generated/locale_keys.g.dart';
 import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/events/event_qr_code_screen.dart';
@@ -58,30 +62,62 @@ class EventPassViewContent extends StatelessWidget {
         child: Scaffold(
           backgroundColor: AppColors.kBlack87,
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.black,
             flexibleSpace: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.kWhite,
-                  ),
-                  Text(
-                    'Event Pass',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.kWhite,
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        color: AppColors.kWhite,
+                      ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      final Size size = MediaQuery.of(context).size;
-                      viewModel.shareEventsLink(size: size);
-                    },
-                    child: SvgPicture.asset(shareIcon),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Event Pass',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.kWhite,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            final Size size = MediaQuery.of(context).size;
+                            viewModel.shareEventsLink(size: size);
+                          },
+                          child: SvgPicture.asset(shareIcon),
+                        ),
+                        SizedBox(width: 20.w),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => EventQrCodeScreen(
+                                events: viewModel.events,
+                              ),
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            Assets.images.icons.qr,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -157,7 +193,7 @@ class EventPassViewContent extends StatelessWidget {
                               style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 11.sp, fontWeight: FontWeight.w400, color: AppColors.kWhite),
                             ),
                             Text(
-                              coinWithDenom,
+                              viewModel.events.price == "0" ? LocaleKeys.free.tr() : coinWithDenom,
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kWhite),
                             ),
                           ],
@@ -213,20 +249,6 @@ class EventPassViewContent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.h),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => EventQrCodeScreen(
-                      events: viewModel.events,
-                    ),
-                  );
-                },
-                child: SvgPicture.asset(
-                  Assets.images.icons.qr,
-                  height: 40.h,
-                ),
-              ),
             ],
           ),
         ),
