@@ -148,11 +148,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
                       createEventViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
-                      final navigator = Navigator.of(context);
-                      provider.saveAsDraft(
-                        onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
-                        uploadStep: UploadStep.overView,
-                      );
+                      if (provider.isOverviewEnable) {
+                        final navigator = Navigator.of(context);
+                        provider.saveAsDraft(
+                          onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
+                          uploadStep: UploadStep.overView,
+                        );
+                      }
                     },
                     isContinueEnable: provider.isOverviewEnable,
                   )

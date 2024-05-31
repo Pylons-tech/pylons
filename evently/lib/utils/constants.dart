@@ -28,7 +28,6 @@ const int kEthIntBase = 1000000000000000000;
 final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "heif"];
 const kPylons = "Pylons";
 
-
 const kErrProfileNotExist = 'profileDoesNotExist';
 
 const cookbookName = "Evently Cookbook";
@@ -93,6 +92,10 @@ class PngUtils {
   /// i need this variable to be used
   static const kPhantom = "assets/images/phantom.png";
   static const kDottedLine = "assets/images/dotted_line.png";
+
+  ///text field background
+  static const textFieldBottomLeft = "assets/images/text_field_bottom_left.png";
+  static const textFieldTopRight = "assets/images/text_field_top_right.png";
 }
 
 /// Currency ABRR
@@ -104,4 +107,3 @@ const String kAgoricAbr = "RUN";
 const String kAtomAbr = "ATOM";
 const String kLunaAbr = "Luna";
 const String kEthereumAbr = "ETH";
-

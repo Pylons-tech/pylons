@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
 import '../generated/locale_keys.g.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -206,7 +205,6 @@ class _PriceScreenState extends State<PriceScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: BottomButtons(
                     onPressContinue: () {
-
                       homeViewModel.nextPage();
                     },
                     onPressSaveDraft: () {
