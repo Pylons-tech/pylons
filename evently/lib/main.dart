@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/evently_provider.dart';
 import 'package:evently/screens/buyer_status_screen.dart';
@@ -65,7 +66,8 @@ class MyApp extends StatelessWidget {
           builder: (context, widget) {
             ScreenUtil.init(context);
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.noScaling),
               child: widget!,
             );
           },
@@ -89,6 +91,7 @@ class MyApp extends StatelessWidget {
 }
 
 bool _getIsCurrentDeviceTablet() {
-  final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
+  final MediaQueryData mediaQuery =
+      MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
   return mediaQuery.size.shortestSide >= tabletMinWidth;
 }
