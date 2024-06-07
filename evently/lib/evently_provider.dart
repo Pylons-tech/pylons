@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/generated/locale_keys.g.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pylons_sdk/low_level.dart';
+
 import 'services/third_party_services/quick_node.dart';
 
 @LazySingleton()
@@ -66,7 +68,8 @@ class EventlyProvider extends ChangeNotifier {
   }
 
   checkIsOverEnable() {
-    setOverviewEnable = thumbnail!.isNotEmpty && eventName.length > 8 && hostName.isNotEmpty;
+    setOverviewEnable =
+        thumbnail!.isNotEmpty && eventName.length > 4 && hostName.isNotEmpty;
   }
 
   ///* detail screen
@@ -190,9 +193,11 @@ class EventlyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  final StreamController<UploadProgress> _uploadProgressController = StreamController.broadcast();
+  final StreamController<UploadProgress> _uploadProgressController =
+      StreamController.broadcast();
 
-  Stream<UploadProgress> get uploadProgressStream => _uploadProgressController.stream;
+  Stream<UploadProgress> get uploadProgressStream =>
+      _uploadProgressController.stream;
 
   void pickThumbnail() async {
     final pickedFile = await repository.pickFile();
@@ -207,11 +212,15 @@ class EventlyProvider extends ChangeNotifier {
 
     if (result.path.isEmpty) return;
 
-    final loading = LoadingProgress()..showLoadingWithProgress(message: LocaleKeys.uploading.tr());
+    final loading = LoadingProgress()
+      ..showLoadingWithProgress(message: LocaleKeys.uploading.tr());
 
     Either<Failure, StorageResponseModel> response;
     response = await repository.uploadFileUsingQuickNode(
-      uploadIPFSInput: UploadIPFSInput(fileName: result.fileName, filePath: result.path, contentType: QuickNode.getContentType(result.extension)),
+      uploadIPFSInput: UploadIPFSInput(
+          fileName: result.fileName,
+          filePath: result.path,
+          contentType: QuickNode.getContentType(result.extension)),
       onUploadProgressCallback: (value) {
         _uploadProgressController.sink.add(value);
       },
@@ -223,7 +232,8 @@ class EventlyProvider extends ChangeNotifier {
       return;
     }
 
-    final fileUploadResponse = response.getOrElse(() => StorageResponseModel.initial());
+    final fileUploadResponse =
+        response.getOrElse(() => StorageResponseModel.initial());
     loading.dismiss();
 
     setThumbnail = "$ipfsDomain/${fileUploadResponse.value?.cid}";
@@ -234,7 +244,10 @@ class EventlyProvider extends ChangeNotifier {
   String? _cookbookId;
   String? get cookbookId => _cookbookId;
 
-  bool showStripeDialog() => !stripeAccountExists && _selectedDenom.symbol == kUsdSymbol && isFreeDrop == FreeDrop.no;
+  bool showStripeDialog() =>
+      !stripeAccountExists &&
+      _selectedDenom.symbol == kUsdSymbol &&
+      isFreeDrop == FreeDrop.no;
 
   ///* this method is used to get the profile
   Future<SDKIPCResponse<Profile>> getProfile() async {
@@ -243,7 +256,10 @@ class EventlyProvider extends ChangeNotifier {
     if (sdkResponse.success) {
       stripeAccountExists = sdkResponse.data!.stripeExists;
 
-      supportedDenomList = Denom.availableDenoms.where((Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol)).toList();
+      supportedDenomList = Denom.availableDenoms
+          .where(
+              (Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol))
+          .toList();
 
       if (supportedDenomList.isNotEmpty && selectedDenom.symbol.isEmpty) {
         _selectedDenom = supportedDenomList.first;
@@ -292,7 +308,9 @@ class EventlyProvider extends ChangeNotifier {
       step: '',
     );
 
-    final String prices = isFreeDrop == FreeDrop.yes ? "0" : _selectedDenom.formatAmount(price: price.toString());
+    final String prices = isFreeDrop == FreeDrop.yes
+        ? "0"
+        : _selectedDenom.formatAmount(price: price.toString());
 
     final recipe = event.createRecipe(
       cookbookId: _cookbookId!,
@@ -302,7 +320,8 @@ class EventlyProvider extends ChangeNotifier {
       price: prices,
     );
 
-    final response = await PylonsWallet.instance.txCreateRecipe(recipe, requestResponse: false);
+    final response = await PylonsWallet.instance
+        .txCreateRecipe(recipe, requestResponse: false);
 
     if (!response.success) {
       scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
