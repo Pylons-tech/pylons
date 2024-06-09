@@ -242,7 +242,7 @@ class PerksModel {
       );
 
   factory PerksModel.updateDescription(
-          {required String description, required PerksModel perksModel}) =>
+          {required String description, required PerksModel perksModel,}) =>
       PerksModel(
         name: perksModel.name,
         description: description,
