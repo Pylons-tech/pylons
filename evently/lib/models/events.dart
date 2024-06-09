@@ -249,7 +249,7 @@ class PerksModel {
       );
 
   factory PerksModel.fromJson(Map<String, dynamic> map) => PerksModel(
-      name: map['name'] ?? '', description: map['description'] ?? '');
+      name: map['name'] ?? '', description: map['description'] ?? '',);
 
   Map<String, String> toJson() {
     Map<String, String> map = {};
