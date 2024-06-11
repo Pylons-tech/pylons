@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:evently/utils/enums.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:floor/floor.dart';
 import 'package:pylons_sdk/low_level.dart';
-import 'package:fixnum/fixnum.dart';
 
 @entity
 class Events extends Equatable {
@@ -60,7 +60,8 @@ class Events extends Equatable {
   });
 
   factory Events.fromRecipe(Recipe recipe) {
-    Map<String, String> map = _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
+    Map<String, String> map =
+        _extractAttributeValues(recipe.entries.itemOutputs[0].strings);
     return Events(
       eventName: map[kEventName]!,
       hostName: map[kEventHostName]!,
@@ -80,7 +81,8 @@ class Events extends Equatable {
     );
   }
 
-  static Map<String, String> _extractAttributeValues(List<StringParam> attributes) {
+  static Map<String, String> _extractAttributeValues(
+      List<StringParam> attributes) {
     final Map<String, String> attributeValues = {};
     for (final attribute in attributes) {
       switch (attribute.key) {
@@ -110,8 +112,24 @@ class Events extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID, step];
+  List<Object?> get props => [
+        eventName,
+        hostName,
+        thumbnail,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        location,
+        description,
+        numberOfTickets,
+        price,
+        listOfPerks,
+        isFreeDrops,
+        cookbookID,
+        recipeID,
+        step
+      ];
 
   @override
   String toString() {
@@ -131,7 +149,7 @@ extension CreateRecipe on Events {
       cookbookId: cookbookId,
       id: recipeId,
       nodeVersion: Int64(1),
-      name: eventName.trim(),
+      name: eventName.trim() + hostName.trim(),
       description: description.trim(),
       version: kVersion,
       coinInputs: [
@@ -216,17 +234,22 @@ class PerksModel {
   final String name;
   final String description;
 
-  factory PerksModel.updateName({required String name, required PerksModel perksModel}) => PerksModel(
+  factory PerksModel.updateName(
+          {required String name, required PerksModel perksModel}) =>
+      PerksModel(
         name: name,
         description: perksModel.description,
       );
 
-  factory PerksModel.updateDescription({required String description, required PerksModel perksModel}) => PerksModel(
+  factory PerksModel.updateDescription(
+          {required String description, required PerksModel perksModel,}) =>
+      PerksModel(
         name: perksModel.name,
         description: description,
       );
 
-  factory PerksModel.fromJson(Map<String, dynamic> map) => PerksModel(name: map['name'] ?? '', description: map['description'] ?? '');
+  factory PerksModel.fromJson(Map<String, dynamic> map) => PerksModel(
+      name: map['name'] ?? '', description: map['description'] ?? '',);
 
   Map<String, String> toJson() {
     Map<String, String> map = {};
