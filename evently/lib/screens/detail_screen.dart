@@ -13,8 +13,10 @@ import 'package:evently/utils/space_utils.dart';
 import 'package:evently/viewmodels/create_event_viewmodel.dart';
 import 'package:evently/widgets/evently_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
@@ -24,6 +26,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
@@ -32,177 +36,180 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final createEventViewModel = context.watch<CreateEventViewModel>();
+    final provider = context.watch<EventlyProvider>();
 
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Consumer<EventlyProvider>(
-        builder: (_, provider, __) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const VerticalSpace(20),
-            MyStepsIndicator(currentStep: createEventViewModel.currentStep),
-            StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
-            const VerticalSpace(20),
-            PageAppBar(onPressBack: () {
-              createEventViewModel.previousPage();
-            }),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () async {
-                            _showDatePicker(onSelected: (DateTime? val) {
-                              if (val == null) return;
-                              provider.setStartDate = _dateFormatter(val);
-                            });
-                          },
-                          child: EventlyTextField(
+    return ScaffoldMessenger(
+      key: scaffoldMessengerKey,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const VerticalSpace(20),
+              MyStepsIndicator(currentStep: createEventViewModel.currentStep),
+              StepLabels(currentPage: createEventViewModel.currentPage, currentStep: createEventViewModel.currentStep),
+              const VerticalSpace(20),
+              PageAppBar(onPressBack: () {
+                createEventViewModel.previousPage();
+              }),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              _showDatePicker(onSelected: (DateTime? val) {
+                                if (val == null) return;
+                                provider.setStartDate = _formatDateToIso(val);
+                                // Validate dates only if both dates are set
+                                if (provider.endDate.isNotEmpty) {
+                                  _validateDates(provider);
+                                }
+                              });
+                            },
+                            child: EventlyTextField(
                               enable: false,
                               label: LocaleKeys.start_date.tr(),
-                              controller: TextEditingController(text: provider.startDate),
+                              controller: TextEditingController(text: _formatDateDisplay(provider.startDate)),
                               textCapitalization: TextCapitalization.sentences,
                               imageBackground: PngUtils.textFieldBottomLeft,
-                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue,
+                            ),
+                          ),
                         ),
-                      ),
-                      HorizontalSpace(20.w),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            _showDatePicker(onSelected: (DateTime? val) {
-                              if (val == null) return;
-                              provider.setEndDate = _dateFormatter(val);
-                            });
-                          },
-                          child: EventlyTextField(
+                        HorizontalSpace(20.w),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              _showDatePicker(onSelected: (DateTime? val) {
+                                if (val == null) return;
+                                provider.setEndDate = _formatDateToIso(val);
+                                // Validate dates only if both dates are set
+                                if (provider.startDate.isNotEmpty) {
+                                  _validateDates(provider);
+                                }
+                              });
+                            },
+                            child: EventlyTextField(
                               enable: false,
                               label: LocaleKeys.end_date.tr(),
-                              controller: TextEditingController(text: provider.endDate),
+                              controller: TextEditingController(text: _formatDateDisplay(provider.endDate)),
                               textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                return null;
-                              },
                               imageBackground: PngUtils.textFieldTopRight,
-                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  VerticalSpace(20.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
-                              if (timeOfDay == null) return;
-                              final currentTime = DateTime.now();
-                              final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
-                              provider.setStartTime = _timerFormatter(time);
-                            });
-                          },
-                          child: EventlyTextField(
+                      ],
+                    ),
+                    VerticalSpace(20.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              _showTimePicker(onSelected: (TimeOfDay? timeOfDay) {
+                                if (timeOfDay == null) return;
+                                final currentTime = DateTime.now();
+                                final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                                provider.setStartTime = _formatTimeToIso(time);
+                              });
+                            },
+                            child: EventlyTextField(
                               enable: false,
                               label: LocaleKeys.start_time.tr(),
                               controller: TextEditingController(text: provider.startTime),
                               textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                return null;
-                              },
                               imageBackground: PngUtils.textFieldBottomLeft,
-                              inputTextColor: EventlyAppTheme.kTextDarkBlue),
-                        ),
-                      ),
-                      HorizontalSpace(20.w),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            _showTimerPicker(onSelected: (TimeOfDay? timeOfDay) {
-                              if (timeOfDay == null) return;
-                              final currentTime = DateTime.now();
-                              final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
-                              provider.setEndTime = _timerFormatter(time);
-                            });
-                          },
-                          child: EventlyTextField(
-                            enable: false,
-                            label: LocaleKeys.end_time.tr(),
-                            controller: TextEditingController(text: provider.endTime),
-                            textCapitalization: TextCapitalization.sentences,
-                            validator: (value) {
-                              return null;
-                            },
-                            imageBackground: PngUtils.textFieldTopRight,
-                            inputTextColor: EventlyAppTheme.kTextDarkBlue,
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  VerticalSpace(20.h),
-                  EventlyTextField(
-                    onChanged: (_) => provider.setLocation = _,
-                    label: LocaleKeys.location.tr(),
-                    hint: LocaleKeys.search_location.tr(),
-                    controller: TextEditingController(text: provider.location)
-                      ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: provider.location.length),
-                      ),
-                    textCapitalization: TextCapitalization.sentences,
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                  VerticalSpace(20.h),
-                  EventlyTextField(
-                    onChanged: (_) => provider.setDescription = _,
-                    label: LocaleKeys.description.tr(),
-                    hint: LocaleKeys.what_event_for.tr(),
-                    controller: TextEditingController(text: provider.description)
-                      ..selection = TextSelection.fromPosition(
-                        TextPosition(offset: provider.description.length),
-                      ),
-                    textCapitalization: TextCapitalization.sentences,
-                    noOfLines: 4,
-                  ),
-                  const VerticalSpace(40),
-                  BottomButtons(
-                    onPressContinue: () {
-                      createEventViewModel.nextPage();
-                    },
-                    onPressSaveDraft: () {
-                      final navigator = Navigator.of(context);
-                      provider.saveAsDraft(
-                        onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
-                        uploadStep: UploadStep.detail,
-                      );
-                    },
-                    isContinueEnable: provider.startDate.isNotEmpty &&
-                        provider.endDate.isNotEmpty &&
-                        provider.startTime.isNotEmpty &&
-                        provider.endTime.isNotEmpty &&
-                        provider.description.isNotEmpty &&
-                        provider.location.isNotEmpty,
-                  ),
-                ],
+                        HorizontalSpace(20.w),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              _showTimePicker(onSelected: (TimeOfDay? timeOfDay) {
+                                if (timeOfDay == null) return;
+                                final currentTime = DateTime.now();
+                                final time = currentTime.copyWith(hour: timeOfDay.hour, minute: timeOfDay.minute);
+                                provider.setEndTime = _formatTimeToIso(time);
+                              });
+                            },
+                            child: EventlyTextField(
+                              enable: false,
+                              label: LocaleKeys.end_time.tr(),
+                              controller: TextEditingController(text: provider.endTime),
+                              textCapitalization: TextCapitalization.sentences,
+                              imageBackground: PngUtils.textFieldTopRight,
+                              inputTextColor: EventlyAppTheme.kTextDarkBlue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    VerticalSpace(20.h),
+                    EventlyTextField(
+                      onChanged: (val) => provider.setLocation = val,
+                      label: LocaleKeys.location.tr(),
+                      hint: LocaleKeys.search_location.tr(),
+                      controller: TextEditingController(text: provider.location)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.location.length),
+                        ),
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                    VerticalSpace(20.h),
+                    EventlyTextField(
+                      onChanged: (val) => provider.setDescription = val,
+                      label: LocaleKeys.description.tr(),
+                      hint: LocaleKeys.what_event_for.tr(),
+                      controller: TextEditingController(text: provider.description)
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: provider.description.length),
+                        ),
+                      textCapitalization: TextCapitalization.sentences,
+                      noOfLines: 4,
+                    ),
+                    const VerticalSpace(40),
+                    BottomButtons(
+                      onPressContinue: () {
+                        if (_validateDates(provider)) {
+                          createEventViewModel.nextPage();
+                        } else {
+                          _showSnackBarWithPostFrameCallback('End date cannot be before start date!');
+                        }
+                      },
+                      onPressSaveDraft: () {
+                        final navigator = Navigator.of(context);
+                        if (_validateDates(provider)) {
+                          provider.saveAsDraft(
+                            onCompleted: () => navigator.popUntil((route) => route.settings.name == RouteUtil.kRouteEventHub),
+                            uploadStep: UploadStep.detail,
+                          );
+                        } else {
+                          _showSnackBarWithPostFrameCallback('End date cannot be before start date!');
+                        }
+                      },
+                      isContinueEnable: provider.startDate.isNotEmpty &&
+                          provider.endDate.isNotEmpty &&
+                          provider.startTime.isNotEmpty &&
+                          provider.endTime.isNotEmpty &&
+                          provider.description.isNotEmpty &&
+                          provider.location.isNotEmpty,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     );
-  }
-
-  _showTimerPicker({required ValueChanged<TimeOfDay?> onSelected}) {
-    showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-    ).then((value) => onSelected(value!));
   }
 
   _showDatePicker({required ValueChanged<DateTime?> onSelected}) {
@@ -210,14 +217,60 @@ class _DetailsScreenState extends State<DetailsScreen> {
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime(2099, 12),
-    ).then((value) => onSelected(value!));
+    ).then((value) => onSelected(value));
   }
 
-  _timerFormatter(DateTime dateTime) {
-    return DateFormat('hh:mm a').format(dateTime);
+  _showTimePicker({required ValueChanged<TimeOfDay?> onSelected}) {
+    showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    ).then((value) => onSelected(value));
   }
 
-  _dateFormatter(DateTime dateTime) {
-    return DateFormat.yMMMMd('en_US').format(dateTime);
+  String _formatDateToIso(DateTime? dateTime) {
+    if (dateTime == null) return '';
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
+
+  String _formatDateDisplay(String? date) {
+    if (date == null || date.isEmpty) return '';
+    try {
+      final DateTime parsedDate = DateFormat('yyyy-MM-dd').parse(date);
+      return DateFormat.yMMMMd('en_US').format(parsedDate);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  String _formatTimeToIso(DateTime? dateTime) {
+    if (dateTime == null) return '';
+    return DateFormat('HH:mm').format(dateTime);
+  }
+
+  bool _validateDates(EventlyProvider provider) {
+    if (provider.startDate.isEmpty || provider.endDate.isEmpty) {
+      return true; // Dates are not set yet, so no validation needed
+    }
+
+    try {
+      final DateTime start = DateFormat('yyyy-MM-dd').parse(provider.startDate);
+      final DateTime end = DateFormat('yyyy-MM-dd').parse(provider.endDate);
+      if (end.isBefore(start)) {
+        return false; // End date is before start date
+      }
+    } catch (e) {
+      return false; // Invalid date format
+    }
+
+    return true; // Dates are valid
+  }
+
+  void _showSnackBarWithPostFrameCallback(String message) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      scaffoldMessengerKey.currentState!.showSnackBar(SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      ));
+    });
   }
 }
