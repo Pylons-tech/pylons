@@ -1,9 +1,12 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/pages/events/event_purchase_view.dart';
+import 'package:pylons_wallet/pages/events/events_owner_view.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/recovery_screen.dart';
 
+import '../model/event.dart';
 import '../model/nft.dart';
 import '../model/transaction_failure_model.dart';
 import '../pages/detailed_asset_view/owner_view.dart';
@@ -111,6 +114,25 @@ class RouteUtil {
         return createRoute(const SizedBox());
       case Routes.transactionHistory:
         return createRoute(const TransactionHistoryScreen());
+      case Routes.eventOwnerView:
+        if (settings.arguments != null && settings.arguments is Events) {
+          return createRoute(EventOwnerView(
+            key: ValueKey(settings.arguments),
+            events: settings.arguments as Events,
+          ));
+        }
+
+        return createRoute(const SizedBox());
+
+      case Routes.eventPurchaseView:
+        if (settings.arguments != null && settings.arguments is Events) {
+          return createRoute(EventPurchaseView(
+            key: ValueKey(settings.arguments),
+            events: settings.arguments as Events,
+          ));
+        }
+
+        return createRoute(const SizedBox());
     }
 
     return null;
@@ -146,7 +168,9 @@ enum Routes {
   purchaseView,
   transactionHistory,
   acceptPolicy,
-  fallback;
+  fallback,
+  eventOwnerView,
+  eventPurchaseView;
 
   static Routes getAppRouteFromString(String routeName) {
     switch (routeName) {
@@ -198,6 +222,10 @@ enum Routes {
         return localTransactionDetails;
       case 'transactionHistory':
         return transactionHistory;
+      case 'eventOwnerView':
+        return eventOwnerView;
+      case 'eventPurchaseView':
+        return eventPurchaseView;
       default:
         return fallback;
     }

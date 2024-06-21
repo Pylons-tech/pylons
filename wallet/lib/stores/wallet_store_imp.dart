@@ -484,6 +484,94 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
+  Future<SdkIpcResponse<Execution>> executeRecipeForEvent(Map json) async {
+    final networkInfo = GetIt.I.get<ConnectivityInfoImpl>();
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.BuyEvent,
+      transactionData: jsonEncode(json),
+      transactionDescription: "${LocaleKeys.bought_nft.tr()}  ${json[kEventNam] ?? ""}",
+      transactionCurrency: "${json[kEventCurrency] ?? ""}",
+      transactionPrice: "${json[kEventPrice] ?? ""}",
+    );
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: LocaleKeys.no_internet.tr(),
+        errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+      );
+    }
+
+    json.remove(kEventNam);
+    json.remove(kEventCurrency);
+    json.remove(kEventPrice);
+
+    final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
+    }
+
+    final executionEither = await repository.getExecutionsByRecipeId(
+      recipeId: json.containsKey(kRecipeIdKey) ? json[kRecipeIdKey].toString() : json[kRecipeIdMap].toString(),
+      cookBookId: json.containsKey(kCookbookIdKey) ? json[kCookbookIdKey].toString() : json[kCookbookIdMap].toString(),
+    );
+    if (executionEither.isLeft()) {
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
+    }
+
+    if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
+    }
+
+    await saveTransactionRecord(
+      transactionHash: sdkResponse.data.toString(),
+      transactionStatus: TransactionStatus.Success,
+      txLocalModel: localTransactionModel,
+    );
+    return SdkIpcResponse.success(
+      data: executionEither.toOption().toNullable()!.completedExecutions.last,
+      sender: sdkResponse.sender,
+      transaction: sdkResponse.data.toString(),
+    );
+  }
+
+
+  @override
   Future<SdkIpcResponse> fulfillTrade(Map json) async {
     final msgObj = pylons.MsgFulfillTrade.create()..mergeFromProto3Json(json);
     msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;

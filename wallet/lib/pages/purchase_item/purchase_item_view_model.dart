@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -143,6 +143,33 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final showLoader = Loading()..showLoading();
 
     final response = await walletsStore.executeRecipe(jsonMap);
+    showLoader.dismiss();
+    return response;
+  }
+
+  Future<SdkIpcResponse<Execution>> paymentForEventRecipe() async {
+    const jsonExecuteRecipe = '''
+      {
+        "creator": "",
+        "cookbook_id": "",
+        "recipe_id": "",
+        "eventName": "",
+        "eventPrice": "",
+        "eventCurrency": "",
+        "coinInputsIndex": 0
+        }
+        ''';
+    final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
+
+    jsonMap[kCookbookIdKey] = getEvents.cookbookID;
+    jsonMap[kRecipeIdKey] = getEvents.recipeID;
+    jsonMap[kEventNam] = getEvents.eventName;
+    jsonMap[kEventPrice] = getEvents.denom.getCoinWithProperDenomination(getEvents.price);
+    jsonMap[kEventCurrency] = getEvents.denom.getAbbrev();
+
+    final showLoader = Loading()..showLoading();
+
+    final response = await walletsStore.executeRecipeForEvent(jsonMap);
     showLoader.dismiss();
     return response;
   }
@@ -494,8 +521,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> shouldShowSwipeToBuy(
-      {required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
     final walletAddress = accountPublicInfo!.publicAddress;
     final balancesEither = await repository.getBalance(walletAddress);
 
@@ -511,8 +537,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
       return const Right(true);
     }
 
-    final mappedBalances =
-        balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
     if (mappedBalances.isEmpty) {
       return const Right(false);
     }
@@ -603,7 +628,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   TradeReceiptModel createTradeReciptModel({
     required double price,
-    required double fee, 
+    required double fee,
     required String txTime,
     required String txId,
   }) =>
@@ -619,4 +644,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
         nftName: nft.name,
         transactionID: txId,
       );
+
+  Events _event = Events();
+
+  set setEvents(Events event) => _event = event;
+
+  Events get getEvents => _event;
 }

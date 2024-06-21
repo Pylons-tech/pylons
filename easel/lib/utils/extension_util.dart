@@ -232,7 +232,7 @@ extension GetCoinWithProperDenomination on String {
     }
   }
 
-   String getEaselInputCoinWithDenomination(String amount) {
+  String getEaselInputCoinWithDenomination(String amount) {
     if (this == kUsdSymbol) {
       return double.parse(amount).toStringAsFixed(2);
     } else if (this == kPylonSymbol) {

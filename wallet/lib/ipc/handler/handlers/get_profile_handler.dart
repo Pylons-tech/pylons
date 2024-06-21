@@ -8,7 +8,6 @@ import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
-
 class GetProfileHandler implements BaseHandler {
   @override
   SdkIpcMessage sdkIpcMessage;
@@ -38,13 +37,7 @@ class Profile {
   final List<Item> items;
   final List<String> supportedCoins;
 
-  Profile(
-      {required this.address,
-      required this.username,
-      required this.coins,
-      required this.stripeExists,
-      required this.items,
-      required this.supportedCoins});
+  Profile({required this.address, required this.username, required this.coins, required this.stripeExists, required this.items, required this.supportedCoins});
 
   Map<String, dynamic> toJson() => {
         "address": address,

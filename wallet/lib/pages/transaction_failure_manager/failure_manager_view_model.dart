@@ -54,6 +54,9 @@ class FailureManagerViewModel extends ChangeNotifier {
       case TransactionTypeEnum.Unknown:
         LocaleKeys.something_wrong.tr().show();
         break;
+      case TransactionTypeEnum.BuyEvent:
+        LocaleKeys.something_wrong.tr().show();
+        break;
     }
   }
 
