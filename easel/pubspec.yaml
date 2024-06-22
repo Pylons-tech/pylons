@@ -36,7 +36,7 @@ dependencies:
   collection: ^1.16.0
   cupertino_icons: ^1.0.2
   dartz: ^0.10.0
-  detectable_text_field: ^2.0.4
+  detectable_text_field: ^3.0.2
   device_preview: 1.1.0
   dio: ^5.0.1
   easy_localization:

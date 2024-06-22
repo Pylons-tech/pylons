@@ -7,21 +7,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension SetScreenSize on WidgetTester {
-  Future<void> setScreenSize({double width = 480, double height = 965, double pixelDensity = 1}) async {
+  Future<void> setScreenSize(
+      {double width = 480,
+      double height = 965,
+      double pixelDensity = 1}) async {
     final size = Size(width, height);
     await binding.setSurfaceSize(size);
     view.physicalSize = size;
     view.devicePixelRatio = pixelDensity;
   }
 
-  Future testAppForWidgetTesting(Widget child, {Duration duration = Duration.zero}) async {
+  Future testAppForWidgetTesting(Widget child,
+      {Duration duration = Duration.zero}) async {
     SharedPreferences.setMockInitialValues({});
 
     await EasyLocalization.ensureInitialized();
 
     return pumpWidget(Builder(builder: (context) {
       return EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ru', 'RU'), Locale('es'), Locale('de')],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ru', 'RU'),
+          Locale('es'),
+          Locale('de')
+        ],
         path: 'i18n',
         fallbackLocale: const Locale('en'),
         useOnlyLangCode: true,
@@ -36,7 +45,8 @@ extension SetScreenSize on WidgetTester {
               builder: (context, widget) {
                 ScreenUtil.init(context);
                 return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaler:  TextScaler.noScaling),
+                  data: MediaQuery.of(context)
+                      .copyWith(textScaler: TextScaler.noScaling),
                   child: widget!,
                 );
               },
@@ -45,6 +55,6 @@ extension SetScreenSize on WidgetTester {
           },
         ),
       );
-    }), duration);
+    }));
   }
 }
