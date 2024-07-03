@@ -48,10 +48,12 @@ class _StripeScreenState extends State<StripeScreen> {
 
   Future<bool> loadLoginLink() async {
     final loading = Loading()..showLoading();
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
-      _controller.loadUrl(urlRequest: URLRequest(url: Uri.parse(accountlink)));
+      _controller.loadUrl(
+          urlRequest: URLRequest(url: WebUri.uri(Uri.parse(accountlink))));
     });
 
     return true;
@@ -73,7 +75,8 @@ class _StripeScreenState extends State<StripeScreen> {
               top: 40.h,
               bottom: 0,
               child: InAppWebView(
-                initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+                initialUrlRequest:
+                    URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
                 onWebViewCreated: (InAppWebViewController webViewController) {
                   _controller = webViewController;
                 },
@@ -88,7 +91,8 @@ class _StripeScreenState extends State<StripeScreen> {
                     getAccountLinkAndRedirect();
                     return NavigationActionPolicy.CANCEL;
                   }
-                  if (urlInString.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
+                  if (urlInString
+                      .contains(baseEnv.baseStripeCallbackRefreshUrl)) {
                     getAccountLinkAndRedirect();
                     return NavigationActionPolicy.CANCEL;
                   }
@@ -103,9 +107,11 @@ class _StripeScreenState extends State<StripeScreen> {
                   }
                   return NavigationActionPolicy.ALLOW;
                 },
-                androidOnPermissionRequest:
-                    (InAppWebViewController controller, String origin, List<String> resources) async {
-                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
+                androidOnPermissionRequest: (InAppWebViewController controller,
+                    String origin, List<String> resources) async {
+                  return PermissionRequestResponse(
+                      resources: resources,
+                      action: PermissionRequestResponseAction.GRANT);
                 },
                 initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
@@ -148,10 +154,12 @@ class _StripeScreenState extends State<StripeScreen> {
   Future getAccountLinkAndRedirect() async {
     final loading = Loading()..showLoading();
 
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
-      _controller.loadUrl(urlRequest: URLRequest(url: Uri.parse(accountlink)));
+      _controller.loadUrl(
+          urlRequest: URLRequest(url: WebUri.uri(Uri.parse(accountlink))));
     });
   }
 }
