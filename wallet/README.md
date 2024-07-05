@@ -6,6 +6,11 @@ Pylons Wallet
 
 This project is a starting point for a Flutter application.
 
+1) Req .prod_env file and place it in /wallet/env/ dir.
+2) Req GoogleService-Info.plist file and place it in /wallet/ios/runner dir.
+3) Req Google-services.json file and place it in /wallet/android/app dir.
+4) Remove comments in AppDelegate.swift file to play in ios simulator
+5) Req to add generated simulator Debug token to be added in firebase console>ios debug.
 
 
 

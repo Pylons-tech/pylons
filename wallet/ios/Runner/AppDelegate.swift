@@ -9,9 +9,12 @@ import flutter_downloader
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // Uncomment while using ios simulator 
-//     let providerFactory = AppCheckDebugProviderFactory()
-//     AppCheck.setAppCheckProviderFactory(providerFactory)
+    // Uncomment while using ios simulator
+
+     let providerFactory = AppCheckDebugProviderFactory()
+     AppCheck.setAppCheckProviderFactory(providerFactory)
+     FirebaseApp.configure()
+      // Register Flutter plugins
       GeneratedPluginRegistrant.register(with: self)
       FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
       return super.application(application, didFinishLaunchingWithOptions: launchOptions)
