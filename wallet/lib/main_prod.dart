@@ -32,6 +32,8 @@ Future<void> main() async {
     await FlutterDownloader.initialize(ignoreSsl: true);
     await EasyLocalization.ensureInitialized();
     await Firebase.initializeApp();
+    await FirebaseAppCheck.instance.activate(
+        appleProvider: AppleProvider.debug,);
     await FirebaseCrashlytics.instance
         .setCrashlyticsCollectionEnabled(!kDebugMode);
 
@@ -96,15 +98,7 @@ Future<void> initializeAppCheck() async {
   // This kDebugMode check gets a android debug token from FirebaseAppCheck which can then be added on the Firebase console
   // iOS debug token from FirebaseAppCheck automatically get without method channel when run on debug mode which can then be added on the Firebase console
   // So that the application can be allowed to access to Firebase AppCheck token in debug mode.
-  if (kDebugMode && Platform.isAndroid) {
-    try {
-      const MethodChannel methodChannel =
-          MethodChannel(kGetFirebaseAppCheckTokenMethodChannelKey);
-      await methodChannel.invokeMethod(kGetFirebaseAppCheckDebugTokenKey);
-    } catch (e) {
-      e.toString().show();
-    }
-  }
+
 }
 
 class MyHttpOverrides extends HttpOverrides {
