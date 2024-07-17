@@ -11,9 +11,11 @@ import flutter_downloader
   ) -> Bool {
     // Uncomment while using ios simulator
 
+     #if DEBUG
      let providerFactory = AppCheckDebugProviderFactory()
      AppCheck.setAppCheckProviderFactory(providerFactory)
      FirebaseApp.configure()
+     #endif
       // Register Flutter plugins
       GeneratedPluginRegistrant.register(with: self)
       FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
