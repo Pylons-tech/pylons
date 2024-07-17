@@ -57,7 +57,7 @@
     "react-loadingg": "^1.7.2",
     "react-pose": "^4.0.10",
     "react-responsive-pagination": "^1.8.0",
-    "react-router-dom": "^6.4.3",
+    "react-router-dom": "^6.25.0",
     "react-showdown": "^2.3.1",
     "react-sidebar": "^3.0.2",
     "react-toastify": "^9.0.8",
