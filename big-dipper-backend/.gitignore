@@ -1,8 +1,0 @@
-.DS_Store
-node_modules/
-.vscode
-output/
-.envrc
-ali-scripts.txt
-firebase.json
-
