@@ -11,41 +11,41 @@ dependencies:
     path: pkgs/pdf_viewer-master
   alan:
     path: pkgs/alan
-  audio_video_progress_bar: ^1.0.0
+  audio_video_progress_bar: ^2.0.3
   auto_size_text: ^3.0.0
   backdrop: ^0.9.0
   bottom_drawer: ^0.0.3
   cached_network_image:
-  cloud_firestore: ^4.3.0
+  cloud_firestore: ^5.0.2
   cupertino_icons: ^1.0.3
   dartz: ^0.10.1
   decimal: ^2.3.0
-  detectable_text_field: ^2.0.3
+  detectable_text_field: ^3.0.2
   dotted_border: ^2.0.0+2
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   expandable: ^5.0.1
   firebase_analytics:
-  firebase_app_check: ^0.1.1+7
-  firebase_core: ^2.4.0
-  firebase_crashlytics: ^3.0.8
-  firebase_dynamic_links: ^5.0.10
-  firebase_messaging: ^14.2.0
-  firebase_remote_config: ^3.0.8
+  firebase_app_check: ^0.3.0+2
+  firebase_core: ^3.1.1
+  firebase_crashlytics: ^4.0.2
+  firebase_dynamic_links: ^6.0.2
+  firebase_messaging: ^15.0.2
+  firebase_remote_config: ^5.0.2
   fixnum: ^1.0.0
   floor: ^1.3.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
   flutter_downloader: ^1.9.1
-  flutter_inappwebview: ^5.7.2+2
-  flutter_local_notifications: ^13.0.0
+  flutter_inappwebview: ^6.0.0
+  flutter_local_notifications: ^17.2.1
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.1
   flutter_screenutil: ^5.5.4
   flutter_secure_storage: ^8.0.0
-  flutter_staggered_grid_view: ^0.6.2
+  flutter_staggered_grid_view: ^0.7.0
   flutter_sticky_header: ^0.6.0
   flutter_stripe:
   flutter_svg:
@@ -56,14 +56,14 @@ dependencies:
   focus_detector: ^2.0.1
   get_it: ^7.2.0
   google_sign_in: ^6.0.2
-  googleapis: ^11.1.0
+  googleapis: ^13.2.0
   grpc: ^3.0.2
-  home_widget: ^0.2.0+1
+  home_widget: ^0.6.0
   http:
   icloud_storage: ^2.0.0
   image: ^4.0.12
   image_cropper:
-  image_picker: ^0.8.5+3
+  image_picker: ^1.1.2
   in_app_purchase: ^3.0.7
   internet_connection_checker: ^1.0.0+1
   intl:
@@ -72,11 +72,11 @@ dependencies:
   local_auth: ^2.1.2
   mobile_scanner: ^5.1.1
   mobx: ^2.0.3
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: ^3.0.0
   model_viewer_plus:
     path: pkgs/model_viewer_plus.dart-master
   path_provider: ^2.0.11
-  permission_handler: ^10.0.1
+  permission_handler: ^11.3.1
   provider: ^6.0.3
   qr_flutter: ^4.0.0
   
