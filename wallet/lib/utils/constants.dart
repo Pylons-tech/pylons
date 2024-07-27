@@ -421,7 +421,7 @@ const String kNotificationsIds = "notificationIDs";
 const String kZeroDouble = "0.0";
 const String kZeroInt = "0";
 
-const ipfsDomain = 'https://ipfs.io/ipfs';
+const ipfsDomain = 'https://proxy.pylons.tech/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
 
 const hintTextEmail = 'x@pylons.tech';
