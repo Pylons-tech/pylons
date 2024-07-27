@@ -138,7 +138,7 @@ export default function EaselBuyMainPage({
 export async function getServerSideProps({ res, query }: any): Promise<any> {
   const recipeId: string = query?.recipe_id ?? "";
   const cookbookId: string = query?.cookbook_id ?? "";
-  const baseURL: string = "https://api.pylons.nodestake.top";
+  const baseURL: string = process.env.NEXT_PUBLIC_API_KEY ?? "";
   if (!recipeId || !cookbookId) {
     return {
       redirect: {
