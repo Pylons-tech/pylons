@@ -12,7 +12,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['ipfs.io']
+    domains: ['proxy.pylons.tech' , 'ipfs.io']
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
