@@ -217,8 +217,8 @@ class _PriceScreenState extends State<PriceScreen> {
                     isContinueEnable: provider.isFreeDrop == FreeDrop.unselected
                         ? false
                         : provider.isFreeDrop == FreeDrop.yes
-                            ? provider.numberOfTickets > 0
-                            : provider.numberOfTickets > 0 && provider.price > 0,
+                        ? (provider.numberOfTickets > 0 && provider.numberOfTickets <= 1000)
+                        : (provider.numberOfTickets > 0 && provider.numberOfTickets <= 1000 && provider.price > 0),
                   ),
                 )
               ],
