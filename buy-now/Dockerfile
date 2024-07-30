@@ -10,7 +10,7 @@ RUN npm i  --legacy-peer-deps
 
 
 # Rebuild the source code only when needed
-FROM node:16-alpine AS builder
+FROM node:18-alpine AS builder
 ENV GENERATE_SOURCEMAP false
 
 WORKDIR /app
@@ -34,7 +34,7 @@ RUN npm run build
 # RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
