@@ -181,7 +181,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         if (_validateDates(provider)) {
                           createEventViewModel.nextPage();
                         } else {
-                          _showSnackBarWithPostFrameCallback('End date cannot be before start date!');
+                          _showSnackBarWithPostFrameCallback('End date and time cannot be before start date and time!');
                         }
                       },
                       onPressSaveDraft: () {
@@ -192,7 +192,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             uploadStep: UploadStep.detail,
                           );
                         } else {
-                          _showSnackBarWithPostFrameCallback('End date cannot be before start date!');
+                          _showSnackBarWithPostFrameCallback('End date and time cannot be before start date and time!');
                         }
                       },
                       isContinueEnable: provider.startDate.isNotEmpty &&
@@ -257,6 +257,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
       final DateTime end = DateFormat('yyyy-MM-dd').parse(provider.endDate);
       if (end.isBefore(start)) {
         return false; // End date is before start date
+      }
+      // Check times if the dates are the same
+      if (provider.startDate.compareTo(provider.endDate) == 0) {
+        final DateTime startTime = DateFormat('HH:mm').parse(provider.startTime);
+        final DateTime endTime = DateFormat('HH:mm').parse(provider.endTime);
+
+        if (endTime.isBefore(startTime)) {
+          return false; // End time is before start time on the same day
+        }
       }
     } catch (e) {
       return false; // Invalid date format
