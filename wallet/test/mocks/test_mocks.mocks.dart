@@ -920,23 +920,24 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i19.FirebaseAppCheck {
       ) as Map<dynamic, dynamic>);
   @override
   _i8.Future<void> activate({
-    String? webRecaptchaSiteKey,
-    _i20.AndroidProvider? androidProvider = _i20.AndroidProvider.playIntegrity,
-    _i20.AppleProvider? appleProvider = _i20.AppleProvider.deviceCheck,
+    _i20.AndroidProvider androidProvider = _i20.AndroidProvider.playIntegrity, // Set a default value if necessary
+    _i20.AppleProvider appleProvider = _i20.AppleProvider.deviceCheck, // Set a default value if necessary
+    _i20.WebProvider? webProvider,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
           #activate,
           [],
           {
-            #webRecaptchaSiteKey: webRecaptchaSiteKey,
             #androidProvider: androidProvider,
             #appleProvider: appleProvider,
+            #webProvider: webProvider,
           },
         ),
         returnValue: _i8.Future<void>.value(),
         returnValueForMissingStub: _i8.Future<void>.value(),
       ) as _i8.Future<void>);
+
   @override
   _i8.Future<String?> getToken([bool? forceRefresh]) => (super.noSuchMethod(
         Invocation.method(
