@@ -120,7 +120,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
                                 onTap: () => provider.pickThumbnail(),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 180,
+                                  height: 200,
                                   padding: EdgeInsets.symmetric(vertical: 20.w),
                                   child: Column(
                                     children: [
