@@ -25,7 +25,6 @@ class LoadingProgress {
     }
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
-      barrierDismissible: true,
       builder: (ctx) => PopScope(
         canPop: false,
         child: AlertDialog(

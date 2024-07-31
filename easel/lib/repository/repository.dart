@@ -324,8 +324,8 @@ class RepositoryImp implements Repository {
     try {
       final storageResponseModel = await remoteDataSource.uploadFile(file: file, uploadProgressCallback: onUploadProgressCallback);
       return Right(storageResponseModel);
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
+    } on Exception catch (e) {
+      crashlyticsHelper.recordFatalError(error: e.toString());
       return Left(CacheFailure(LocaleKeys.update_failed.tr()));
     }
   }
