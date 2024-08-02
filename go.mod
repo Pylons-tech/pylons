@@ -23,7 +23,7 @@ require (
 	github.com/rogpeppe/go-internal v1.9.0
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.6.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.9.0
 	github.com/tendermint/tendermint v0.34.23
 	github.com/tendermint/tm-db v0.6.7
 	github.com/zach-klippenstein/goregen v0.0.0-20160303162051-795b5e3961ea
