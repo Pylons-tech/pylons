@@ -35,7 +35,6 @@ class NoInternetDialog {
 
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
-      barrierDismissible: true,
       barrierColor: Colors.white.withOpacity(0),
       builder: (ctx) {
         setIsShowing = true;

@@ -21,7 +21,6 @@ class Loading {
     }
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
-      barrierDismissible: true,
       barrierColor: Colors.white.withOpacity(0),
       builder: (ctx) => PopScope(
         canPop: false,

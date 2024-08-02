@@ -24,6 +24,6 @@ extension SetScreenSize on WidgetTester {
               }),
             );
           });
-    }), duration);
+    }), duration: duration);
   }
 }

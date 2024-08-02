@@ -14,7 +14,6 @@ analyzer:
 #    implicit-dynamic: true
   errors:
     avoid_setters_without_getters: ignore
-    import_of_legacy_library_into_null_safe: error
     avoid_single_cascade_in_expression_statements: ignore
     missing_required_param: error
 #    implicit_dynamic_map_literal: ignore

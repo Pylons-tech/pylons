@@ -50,7 +50,7 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
       downloading.value = true;
     }, onDone: () async {
       downloading.value = false;
-      await Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
+      await Wallpaper.lockScreen();
       done.value = true;
     }, onError: (error) {
       downloading.value = false;
