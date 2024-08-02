@@ -11,6 +11,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -581,6 +582,11 @@ abstract class Repository {
   Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address});
 
   Future<Either<Failure, List<PylonItems>>> getPylonItem({required Address address});
+
+  /// This method will create dynamic link for the event share recipe
+  /// Input : [address] the address against which the invite link to be generated, [Events] the event whose link to be created
+  /// Output: [String] return the generated dynamic link else will return [Failure]
+  Future<Either<Failure, String>> createDynamicLinkForRecipeEventShare({required String address, required Events events});
 }
 
 class RepositoryImp implements Repository {
@@ -913,8 +919,7 @@ class RepositoryImp implements Repository {
         );
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
-      await saveTransactionRecord(
-          transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (error) {
       await saveTransactionRecord(
@@ -2450,13 +2455,22 @@ class RepositoryImp implements Repository {
   final BaseEnv Function() getBaseEnv;
 
   @override
-  Future<Either<Failure, List<PylonItems>>> getPylonItem({required Address address}) async{
+  Future<Either<Failure, List<PylonItems>>> getPylonItem({required Address address}) async {
     try {
-     final response =  await remoteDataStore.getPylonItem(address: address);
-      return  Right(response);
+      final response = await remoteDataStore.getPylonItem(address: address);
+      return Right(response);
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeEventShare({required String address, required Events events}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForRecipeEventShare(address: address, events: events));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure(LocaleKeys.dynamic_link_failure.tr()));
     }
   }
 }

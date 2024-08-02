@@ -19,6 +19,16 @@ extension IBCCoinsPar on String {
       return e.toString().toLowerCase() == 'IBCCoins.$this'.toLowerCase();
     }, orElse: () => IBCCoins.none); //return null if not found
   }
+
+  IBCCoins toIBCCoinsEnumforEvent() {
+    if (this == kEthereumSymbol) {
+      return IBCCoins.weth_wei;
+    }
+
+    return IBCCoins.values.firstWhere((e) {
+      return e.toString().toLowerCase() == toLowerCase();
+    }, orElse: () => IBCCoins.none); //return null if not found
+  }
 }
 
 extension IBCCoinsDePar on IBCCoins {
@@ -146,7 +156,7 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ustripeusd:
         return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.upylon:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.weth_wei:
         return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
     }
@@ -185,7 +195,6 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.none:
       case IBCCoins.eeur:
       case IBCCoins.ujuno:
-
       case IBCCoins.uatom:
         return "${(double.parse(amount) / kBigIntBase).toStringAsFixed(kCurrencyDecimalLength)} ${getAbbrev()}";
       case IBCCoins.upylon:
@@ -197,11 +206,9 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 
-
   String pylnToCredit(String amount) {
-    return( double.parse(amount)/10).toStringAsFixed(2);
+    return (double.parse(amount) / 10).toStringAsFixed(2);
   }
-
 }
 
 SizedBox getIconFromAsset(String ibcCoinIcon) => SizedBox(

@@ -7,16 +7,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/gen/assets.gen.dart';
+import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/widgets/creation_collection_sheet.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/widgets/show_recipe_json.dart';
 import 'package:pylons_wallet/providers/items_provider.dart';
 import 'package:pylons_wallet/providers/recipes_provider.dart';
+import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-
 import '../../../providers/collections_tab_provider.dart';
 import 'widgets/purchase_collection_sheet.dart';
 import 'widgets/trades_collection_sheet.dart';
@@ -181,9 +182,17 @@ class NONNftCreations extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
+                  final recipe = viewModel.nonNFTRecipes[index];
+
+                  if (recipe.cookbookId.contains(kEvently)) {
+                    final events = Events.fromRecipe(recipe);
+                    navigatorKey.currentState!.pushNamed(Routes.eventOwnerView.name, arguments: events);
+                    return;
+                  }
+
                   final showRecipeJsonDialog = ShowRecipeJsonDialog(
                     context: context,
-                    recipe: viewModel.nonNFTRecipes[index],
+                    recipe: recipe,
                   );
                   showRecipeJsonDialog.show();
                 },
