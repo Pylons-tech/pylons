@@ -15,6 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable" # or: 'beta', 'dev' or 'master'
@@ -26,8 +30,6 @@ jobs:
           ./borg.sh boot
           flutter analyze
           flutter test
-          
-
 
   easel:
     name: easel
@@ -39,6 +41,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable" # or: 'beta', 'dev' or 'master'
@@ -54,7 +60,6 @@ jobs:
           flutter build appbundle --debug
           flutter test
 
-  
   dart_sdk:
     name: SDK
     runs-on: ubuntu-latest
@@ -65,6 +70,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable" # or: 'beta', 'dev' or 'master'
