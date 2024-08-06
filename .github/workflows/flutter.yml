@@ -54,7 +54,7 @@ jobs:
           flutter build appbundle --debug
           flutter test
 
-  
+
   dart_sdk:
     name: SDK
     runs-on: ubuntu-latest
