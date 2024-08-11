@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class HostTicketPreview extends StatefulWidget {
   const HostTicketPreview({super.key});
@@ -204,8 +205,18 @@ class _HostTicketPreviewState extends State<HostTicketPreview> {
                                   ],
                                 ),
                               ),
-                              VerticalSpace(30.h),
+                              VerticalSpace(22.h),
                               Image.asset(PngUtils.kDottedLine),
+                              //implement digital certificate in qrcode
+                              //currently for demo location of event is set in qr code
+
+                              QrImageView(
+                                data: provider.location,
+                                version: QrVersions.auto,
+                                size: 180.0,
+                                foregroundColor: Colors.white,
+                              ),
+
                             ],
                           ),
                         ],

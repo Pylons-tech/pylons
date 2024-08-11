@@ -20,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class EventHubScreen extends StatefulWidget {
   const EventHubScreen({super.key});
@@ -240,21 +241,46 @@ class _EventHubContentState extends State<EventHubContent> {
   }
 
   Widget getCreateEventWidget() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 20.h),
-      child: ClippedButton(
-        title: LocaleKeys.create_event.tr(),
-        bgColor: EventlyAppTheme.kBlue,
-        textColor: EventlyAppTheme.kWhite,
-        onPressed: () {
-          Navigator.of(context).pushNamed(RouteUtil.kCreateEvent);
-        },
-        cuttingHeight: 15.h,
-        clipperType: ClipperType.bottomLeftTopRight,
-        isShadow: false,
-        fontWeight: FontWeight.w700,
-        fontSize: 14,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 20.h), // Adjust the padding as needed
+          child: ClippedButton(
+            title: 'Scan Ticket!', // Add your localized title here if needed
+            bgColor: EventlyAppTheme.kBlue,
+            textColor: EventlyAppTheme.kWhite,
+            onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => QRViewExample()),
+            );
+              // Add your QR code scanning logic here
+            },
+            cuttingHeight: 15.h,
+            clipperType: ClipperType.bottomLeftTopRight,
+            isShadow: false,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 20.h),
+          child: ClippedButton(
+            title: LocaleKeys.create_event.tr(),
+            bgColor: EventlyAppTheme.kBlue,
+            textColor: EventlyAppTheme.kWhite,
+            onPressed: () {
+              Navigator.of(context).pushNamed(RouteUtil.kCreateEvent);
+            },
+            cuttingHeight: 15.h,
+            clipperType: ClipperType.bottomLeftTopRight,
+            isShadow: false,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -451,5 +477,40 @@ class BuildGridView extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class QRViewExample extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _QRViewExampleState();
+}
+
+class _QRViewExampleState extends State<QRViewExample> {
+  late QRViewController controller;
+  final GlobalKey qrKey = GlobalKey();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: QRView(
+        key: qrKey,
+        onQRViewCreated: _onQRViewCreated,
+      ),
+    );
+  }
+
+  void _onQRViewCreated(QRViewController newController) {
+    this.controller = newController;
+    controller.scannedDataStream.listen((scanData) {
+      // Handle the scanned QR code data here
+      print(scanData.code);
+      // Implement dsc validation
+    });
   }
 }
