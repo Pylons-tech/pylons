@@ -5,7 +5,6 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart';
 import '../modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
-
 enum FreeDrop { yes, no, unselected }
 
 class Events extends Equatable {
@@ -29,6 +28,7 @@ class Events extends Equatable {
   final IBCCoins denom;
   String ownerAddress = "";
   String owner = "";
+  bool isStamped = false;
 
   Events({
     this.id,
@@ -65,6 +65,7 @@ class Events extends Equatable {
     ///*
     this.ownerAddress = "",
     this.owner = '',
+    this.isStamped = false,
   });
 
   Map<String, dynamic> toJson() {

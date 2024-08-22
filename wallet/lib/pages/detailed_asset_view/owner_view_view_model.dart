@@ -506,6 +506,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
   Future<void> cancelTrade({required String tradeId, required String address}) async {
     final tradeResponse = await repository.cancelTrade(
       tradeId: TradeId(Int64(int.parse(tradeId))),
@@ -515,6 +516,21 @@ class OwnerViewViewModel extends ChangeNotifier {
     if (tradeResponse.isLeft()) {
       throw tradeResponse.swap().toOption().toNullable()!;
     }
+  }
+
+  Future<void> stampTicket({required bool enabled}) async {
+    final response = await repository.stampTicket(
+      cookBookId: CookbookId(events.cookbookID),
+      recipeId: RecipeId(events.recipeID),
+      creatorAddress: Address(events.ownerAddress),
+    );
+
+    if (response.isLeft()) {
+      throw response.getLeft();
+    }
+
+    events.isStamped = true;
+    notifyListeners();
   }
 
   void logEvent() {
