@@ -577,6 +577,12 @@ abstract class Repository {
     required Address creatorAddress,
   });
 
+  Future<Either<Failure, void>> stampTicket({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required Address creatorAddress,
+  });
+
   Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
 
   Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address});
