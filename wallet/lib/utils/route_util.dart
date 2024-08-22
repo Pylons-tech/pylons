@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/pages/events/event_purchase_view.dart';
 import 'package:pylons_wallet/pages/events/events_owner_view.dart';
+import 'package:pylons_wallet/pages/events/mobile_scanner.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/recovery_screen.dart';
-
 import '../model/event.dart';
 import '../model/nft.dart';
 import '../model/transaction_failure_model.dart';
@@ -32,12 +32,16 @@ import '../pages/settings/settings_screen.dart';
 import '../pages/transaction_failure_manager/local_transaction_detail_screen.dart';
 import '../pages/transaction_failure_manager/local_transactions_screen.dart';
 import 'dependency_injection/dependency_injection.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class RouteUtil {
   RouteUtil();
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final route = Routes.getAppRouteFromString(settings.name ?? "");
+
     switch (route) {
+      case Routes.mobileQrScanner:
+        return createRoute(const MobileQrScanner());
       case Routes.initial:
         return createRoute(const SplashScreen());
       case Routes.home:
@@ -170,10 +174,13 @@ enum Routes {
   acceptPolicy,
   fallback,
   eventOwnerView,
-  eventPurchaseView;
+  eventPurchaseView,
+  mobileQrScanner;
 
   static Routes getAppRouteFromString(String routeName) {
     switch (routeName) {
+      case'mobileQrScanner':
+        return mobileQrScanner;
       case '/':
         return initial;
       case 'home':

@@ -309,6 +309,16 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   ),
                 ),
               ),
+            Positioned(
+                top: 0.06.sh,
+                right: 0.25.sw,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.mobileQrScanner.name);
+                  },
+                  child: const Text('Open Scanner'),
+                ),
+            ),
               Positioned(
                 top: 0.06.sh,
                 left: 0.09.sw,
