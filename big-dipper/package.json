@@ -13,7 +13,7 @@
     "genversion": "./scripts/genversion.sh"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.17",
+    "@babel/runtime": "^7.25.4",
     "@braintree/sanitize-url": "^6.0.0",
     "@google-cloud/storage": "^5.8.5",
     "@google/model-viewer": "^1.12.0",
