@@ -361,6 +361,13 @@ abstract class RemoteDataStore {
   /// Input : [address] the address & [Event] against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForRecipeEventShare({required String address, required Events events});
+
+  Future<String> stampTicket({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required Address creatorAddress,
+    required String challenge,
+  });
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1305,24 +1312,30 @@ class RemoteDataStoreImp implements RemoteDataStore {
     return _signAndBroadcast(msgUpdateRecipe);
   }
 
+  @override
   Future<String> stampTicket({
     required CookbookId cookBookId,
     required RecipeId recipeId,
     required Address creatorAddress,
+    required String challenge,
   }) async {
     final recipe = await getRecipe(cookBookId: cookBookId, recipeId: recipeId);
 
     final recipeProto3Json = recipe.toProto3Json()! as Map;
     recipeProto3Json.remove(kCreatedAtCamelCase);
     recipeProto3Json.remove(kUpdatedAtCamelCase);
-    recipeProto3Json.putIfAbsent("isStamped", true as Function());
+    recipeProto3Json.putIfAbsent("isStamped", () => true);
 
-    final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(recipeProto3Json);
+    final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()
+      ..mergeFromProto3Json(recipeProto3Json);
+
+    msgUpdateRecipe.extraInfo = challenge;
     msgUpdateRecipe.version = msgUpdateRecipe.version.incrementRecipeVersion();
     msgUpdateRecipe.creator = creatorAddress.toString();
 
     return _signAndBroadcast(msgUpdateRecipe);
   }
+
 
   @override
   Future<String> createDynamicLinkForItemNftShare({

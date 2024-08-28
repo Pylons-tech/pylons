@@ -518,11 +518,17 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> stampTicket({required bool enabled}) async {
+  Future<void> stampTicket({
+    required bool enabled,
+    required String cookbookId,
+    required String recipeId,
+    required String challenge,
+  }) async {
     final response = await repository.stampTicket(
-      cookBookId: CookbookId(events.cookbookID),
-      recipeId: RecipeId(events.recipeID),
+      cookBookId: CookbookId(cookbookId),
+      recipeId: RecipeId(recipeId),
       creatorAddress: Address(events.ownerAddress),
+      challenge: challenge,
     );
 
     if (response.isLeft()) {
@@ -532,6 +538,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     events.isStamped = true;
     notifyListeners();
   }
+
 
   void logEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);

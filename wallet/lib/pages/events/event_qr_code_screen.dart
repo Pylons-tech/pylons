@@ -12,7 +12,6 @@ import 'package:pylons_wallet/model/event.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 
 import '../../providers/account_provider.dart';
 
@@ -29,7 +28,7 @@ class EventQrCodeScreen extends StatefulWidget {
 }
 
 class _EventQrCodeScreenState extends State<EventQrCodeScreen> {
-  String link = "";
+  String qrdata = "";
   GlobalKey renderObjectKey = GlobalKey();
 
 
@@ -48,7 +47,10 @@ class _EventQrCodeScreenState extends State<EventQrCodeScreen> {
     if (wallet == null) {
       return;
     }
-    link = widget.events.recipeID;
+    qrdata = jsonEncode({
+      'cookbookId': widget.events.cookbookID,
+      'recipeId': widget.events.recipeID,
+    });
   }
 
     @override
@@ -83,7 +85,7 @@ class _EventQrCodeScreenState extends State<EventQrCodeScreen> {
                   key: renderObjectKey,
                   child: QrImageView(
                     padding: EdgeInsets.zero,
-                    data: link,
+                    data: qrdata,
                     size: 200,
                     dataModuleStyle: const QrDataModuleStyle(
                         color: AppColors.kWhite),

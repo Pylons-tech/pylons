@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../utils/string_utils.dart';
 import '../detailed_asset_view/owner_view_view_model.dart';
 
 class MobileQrScanner extends StatefulWidget {
@@ -39,22 +40,39 @@ class _MobileQrScannerState extends State<MobileQrScanner> {
         _barcode = barcodes.barcodes.firstOrNull;
 
         if (_barcode != null) {
+          final qrData = _barcode!.displayValue ?? '';
+          final dataParts = qrData.split(',');
 
-          final String eventId = _barcode!.displayValue ?? '';
+          if (dataParts.length >= 2) {
+            final cookbookId = dataParts[0];
+            final recipeId = dataParts[1];
 
-          // Use the QR code data to stamp the ticket
-          _stampTicket(eventId);
+
+            final challenge = StringUtils.generateRandomString(16);
+
+
+            stampTicket(cookbookId, recipeId, challenge);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Invalid QR code data.')),
+            );
+          }
         }
       });
     }
   }
 
-  Future<void> stampTicket(String eventId) async {
+  Future<void> stampTicket(String cookbookId, String recipeId, String challenge) async {
     try {
+      await ownerViewViewModel.stampTicket(
+        enabled: true,
+        cookbookId: cookbookId,
+        recipeId: recipeId,
+        challenge: challenge,
+      );
 
-      await ownerViewViewModel.stampTicket(enabled: true);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ticket $eventId stamped successfully!')),
+        SnackBar(content: Text('Ticket with challenge $challenge stamped successfully!')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,6 +80,7 @@ class _MobileQrScannerState extends State<MobileQrScanner> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
