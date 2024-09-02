@@ -50,6 +50,7 @@ class _EventQrCodeScreenState extends State<EventQrCodeScreen> {
     qrdata = jsonEncode({
       'cookbookId': widget.events.cookbookID,
       'recipeId': widget.events.recipeID,
+      'challenge': widget.events.challenge,
     });
   }
 

@@ -519,15 +519,15 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   Future<void> stampTicket({
-    required bool enabled,
     required String cookbookId,
     required String recipeId,
+    required Address creatorAddress,
     required String challenge,
   }) async {
     final response = await repository.stampTicket(
       cookBookId: CookbookId(cookbookId),
       recipeId: RecipeId(recipeId),
-      creatorAddress: Address(events.ownerAddress),
+      creatorAddress: creatorAddress,
       challenge: challenge,
     );
 
@@ -535,9 +535,9 @@ class OwnerViewViewModel extends ChangeNotifier {
       throw response.getLeft();
     }
 
-    events.isStamped = true;
     notifyListeners();
   }
+
 
 
   void logEvent() {

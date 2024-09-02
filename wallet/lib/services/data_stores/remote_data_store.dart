@@ -1324,7 +1324,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final recipeProto3Json = recipe.toProto3Json()! as Map;
     recipeProto3Json.remove(kCreatedAtCamelCase);
     recipeProto3Json.remove(kUpdatedAtCamelCase);
-    recipeProto3Json.putIfAbsent("isStamped", () => true);
 
     final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()
       ..mergeFromProto3Json(recipeProto3Json);

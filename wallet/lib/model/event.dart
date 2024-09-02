@@ -21,6 +21,7 @@ class Events extends Equatable {
   final String description;
   final String numberOfTickets;
   final String price;
+  final String? challenge;
   final List<PerksModel>? listOfPerks;
   final String isFreeDrops;
   final String cookbookID;
@@ -28,7 +29,6 @@ class Events extends Equatable {
   final IBCCoins denom;
   String ownerAddress = "";
   String owner = "";
-  bool isStamped = false;
 
   Events({
     this.id,
@@ -58,6 +58,7 @@ class Events extends Equatable {
     ///* other
     this.cookbookID = '',
     this.recipeID = '',
+    this.challenge,
 
     ///* for tracking where its save as draft
     this.step = '',
@@ -65,7 +66,6 @@ class Events extends Equatable {
     ///*
     this.ownerAddress = "",
     this.owner = '',
-    this.isStamped = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -90,6 +90,7 @@ class Events extends Equatable {
     map['price'] = price;
     map['isFreeDrops'] = isFreeDrops;
     map['cookbookID'] = cookbookID;
+    map['challenge'] = challenge ?? '';
     map['step'] = step;
     map['denom'] = denom.toString();
     map['listOfPerks'] = perks;
@@ -117,6 +118,7 @@ class Events extends Equatable {
       price: json['price'] as String,
       isFreeDrops: json['isFreeDrops'] as String,
       cookbookID: json['cookbookID'] as String,
+      challenge: json['challenge'] as String?,
       step: json['step'] as String,
       listOfPerks: listOfPerks,
       denom: json['denom'].toString().toIBCCoinsEnumforEvent(),
@@ -161,6 +163,7 @@ class Events extends Equatable {
       listOfPerks: listOfPerks,
       cookbookID: map[kCookBookId]!,
       recipeID: map[kRecipeId]!,
+      challenge: map[kChallenge],
       denom: denom.isEmpty ? IBCCoins.upylon : denom.toIBCCoinsEnum(),
     );
   }
@@ -183,6 +186,7 @@ class Events extends Equatable {
         case kPerks:
         case kFreeDrop:
         case kCookBookId:
+        case kChallenge:
         case kRecipeId:
           attributeValues[attribute.key] = attribute.value;
           break;
@@ -203,11 +207,11 @@ class Events extends Equatable {
 
   @override
   List<Object?> get props =>
-      [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID, step];
+      [eventName, hostName, thumbnail, startDate, endDate, startTime, endTime, location, description, numberOfTickets, price, listOfPerks, isFreeDrops, cookbookID, recipeID, step, challenge];
 
   @override
   String toString() {
-    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, listOfPerks: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step}';
+    return 'Event{eventName: $eventName, hostName: $hostName, thumbnail: $thumbnail, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, location: $location, description: $description, numberOfTickets: $numberOfTickets, price: $price, listOfPerks: $listOfPerks, isFreeDrop: $isFreeDrops, cookbookID: $cookbookID, recipeID: $recipeID, step: $step, challenge: $challenge}';
   }
 
   static Future<Events?> eventFromRecipeId(String cookbookId, String recipeId) async {
@@ -238,6 +242,7 @@ const kPrice = "kPrice";
 const kFreeDrop = "kFreeDrop";
 const kRecipeId = "kRecipeId";
 const kCookBookId = "kCookBookId";
+const kChallenge = "kChallenge";
 const kVersion = "v0.2.0";
 const kUpylon = "upylon";
 const kPylonSymbol = 'upylon';
