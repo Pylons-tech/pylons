@@ -577,6 +577,13 @@ abstract class Repository {
     required Address creatorAddress,
   });
 
+  Future<Either<Failure, void>> stampTicket({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required Address creatorAddress,
+    required String challenge,
+  });
+
   Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
 
   Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address});
@@ -2421,6 +2428,28 @@ class RepositoryImp implements Repository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> stampTicket({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required Address creatorAddress,
+    required String challenge,
+  }) async {
+    try {
+      await remoteDataStore.stampTicket(
+        cookBookId: cookBookId,
+        recipeId: recipeId,
+        creatorAddress: creatorAddress,
+        challenge: challenge,
+      );
+      return const Right(null);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
 
   @override
   Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade}) async {

@@ -7,6 +7,7 @@ class UpdateRecipeModel {
   String nftPrice = "";
   String denom = "";
   int quantity = 0;
+  String challenge = "";
 
   UpdateRecipeModel({
     required this.recipe,
@@ -15,10 +16,11 @@ class UpdateRecipeModel {
     required this.nftPrice,
     required this.denom,
     required this.quantity,
+    required this.challenge,
   });
 
   @override
   String toString() {
-    return 'UpdateRecipeModel{recipe: $recipe, publicAddress: $publicAddress, enabledStatus: $enabledStatus, nftPrice: $nftPrice, denom: $denom, quantity: $quantity}';
+    return 'UpdateRecipeModel{recipe: $recipe, publicAddress: $publicAddress, enabledStatus: $enabledStatus, nftPrice: $nftPrice, denom: $denom, quantity: $quantity, challenge: $challenge}';
   }
 }
