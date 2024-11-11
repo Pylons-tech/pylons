@@ -13,7 +13,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		A4A8D90A284E2F3E00DFDE59 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A8D909284E2F3D00DFDE59 /* StoreKit.framework */; };
 		F0141E24A6BA0796DB8F855D /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51AA264E01C28B508FFE1809 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +51,6 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A4A8D909284E2F3D00DFDE59 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A4D3E8432768CB44009FC1B3 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		F0345B6003A65B27B0F42AB7 /* Pods-Runner.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-prod.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,7 +61,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0141E24A6BA0796DB8F855D /* Pods_Runner.framework in Frameworks */,
-				A4A8D90A284E2F3E00DFDE59 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,7 +70,6 @@
 		40BD3CB917AE99236BF7F951 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A4A8D909284E2F3D00DFDE59 /* StoreKit.framework */,
 				51AA264E01C28B508FFE1809 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -431,7 +427,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -441,7 +437,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -569,7 +565,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GOOGLE_SERVICE_PATH = "";
@@ -580,7 +576,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -602,7 +598,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -612,7 +608,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -688,7 +684,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/prod/GoogleService-Info.plist";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -698,7 +694,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -772,7 +768,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/prod/GoogleService-Info.plist";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -782,7 +778,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -858,7 +854,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/development/GoogleService-Info.plist";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -868,7 +864,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.development;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -942,7 +938,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = QV67PMQ8H3;
+				DEVELOPMENT_TEAM = VBTGJ398PV;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/development/GoogleService-Info.plist";
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -952,7 +948,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.development;
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.pylons.wallet.blah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

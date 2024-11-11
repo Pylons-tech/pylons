@@ -50,6 +50,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FDMaximumConcurrentTasks</key>
+	<integer>5</integer>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
 		<string>https://wallet.pylons.tech</string>
@@ -64,6 +66,21 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>proxy.pylons.tech</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Pylons Wallet needs to use your camera to capture images for minting and user profile</string>
 	<key>NSFaceIDUsageDescription</key>
@@ -72,6 +89,8 @@
 	<string>Pylons Wallet needs to use your microphone to record audios for minting purposes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pylons Wallet needs to access your photo library for minting and user profile</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -94,26 +113,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-    <dict>
-      <key>NSExceptionDomains</key>
-      <dict>
-        <key>proxy.pylons.tech</key>
-        <dict>
-          <key>NSIncludesSubdomains</key>
-          <true/>
-          <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-          <key>NSTemporaryExceptionMinimumTLSVersion</key>
-          <string>TLSv1.1</string>
-        </dict>
-      </dict>
-    </dict>
-    <!-- changes this number to configure the maximum number of concurrent tasks -->
-    <key>FDMaximumConcurrentTasks</key>
-    <integer>5</integer>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
 </plist>

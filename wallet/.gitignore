@@ -55,4 +55,6 @@ env/.dev_env
 env/.local_env
 env/.prod_env
 
+google-services.json
+
 .vscode/launch.json

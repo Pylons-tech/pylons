@@ -42,6 +42,9 @@ class _StampingScreenState extends State<StampingScreen> {
 
   Future<void> fetchEvent() async {
     try {
+      debugPrint(widget.cookbookId);
+      debugPrint(widget.recipeId);
+
       final fetchedEvent = await eventFromRecipeId(widget.cookbookId, widget.recipeId);
 
       if (mounted) {

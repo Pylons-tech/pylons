@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
@@ -11,19 +12,21 @@ import 'package:pylons_wallet/services/third_party_services/analytics_helper.dar
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
 
+import '../../../mocks/mock_analytics_helper.dart';
 import '../../../mocks/mock_constants.dart';
 import '../../../mocks/mock_firebase_dynamic_link.dart';
-import '../../../mocks/mock_store_payment_service.dart';
 import '../../../mocks/mock_firestore_helper.dart';
-import '../../../mocks/mock_analytics_helper.dart';
-import '../../../mocks/test_mocks.mocks.dart';
+import '../../../mocks/mock_store_payment_service.dart';
 
 void main() {
-  test('should get account link and account id on getAccountLinkBasedOnUpdateToken', () async {
+  test(
+      'should get account link and account id on getAccountLinkBasedOnUpdateToken',
+      () async {
     dotenv.testLoad(fileInput: '''ENV=true''');
 
     final StorePaymentService storePaymentService = MockStripePaymentService();
-    final MockFirebaseDynamicLinks mockFirebaseDynamicLinks = MockFirebaseDynamicLinks();
+    final MockFirebaseDynamicLinks mockFirebaseDynamicLinks =
+        MockFirebaseDynamicLinks();
     final AnalyticsHelper analyticsHelper = MockAnalyticsHelper();
     final FirestoreHelper firestoreHelper = MockFirestoreHelper();
 
@@ -33,7 +36,6 @@ void main() {
     final remoteDataStore = RemoteDataStoreImp(
       httpClient: client,
       storePaymentService: storePaymentService,
-      firebaseAppCheck: MockFirebaseAppCheck(),
       dynamicLinksGenerator: mockFirebaseDynamicLinks,
       firebaseHelper: firestoreHelper,
       analyticsHelper: analyticsHelper,
@@ -60,5 +62,7 @@ Future<Response> requestHandler(Request request) async {
   expect(mapBody["token"], MOCK_TOKEN);
   expect(mapBody["signature"], SIGNATURE);
 
-  return http.Response(jsonEncode({"accountlink": MOCK_ACCOUNT_LINK, "account": MOCK_ACCOUNT}), 200);
+  return http.Response(
+      jsonEncode({"accountlink": MOCK_ACCOUNT_LINK, "account": MOCK_ACCOUNT}),
+      200);
 }
