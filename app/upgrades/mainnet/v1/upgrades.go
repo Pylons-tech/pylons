@@ -60,7 +60,7 @@ func BurnToken(ctx sdk.Context, _ *authkeeper.AccountKeeper, bank *bankkeeper.Ba
 					break
 				}
 
-				// If account address address is not equal to delegator address burn token
+				// If account address is not equal to delegator address burn token
 				found = false
 			}
 			if !found {
