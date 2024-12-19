@@ -73,7 +73,7 @@ func BurnToken(ctx sdk.Context, _ *authkeeper.AccountKeeper, bank *bankkeeper.Ba
 
 // Mint ubedrock for master wallet
 func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, _ *stakingkeeper.Keeper) {
-	// Get currect balance of master wallet address
+	// Get current balance of master wallet address
 	balance := bank.GetBalance(ctx, sdk.MustAccAddressFromBech32(MasterWallet), types.StakingCoinDenom)
 	// check difference in amount to add
 	toAdd := MasterWalletbalance.Sub(balance.Amount)
