@@ -323,7 +323,7 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, _ *authkeeper
 		// Query All recipes made with cookbook on chain
 		recipes := pylons.GetAllRecipesByCookbook(ctx, cookbook.Id)
 		for _, recipe := range recipes {
-			// Check If Recipe is executed atleast once
+			// Check If Recipe is executed at least once
 			if recipe.Entries.ItemOutputs[0].AmountMinted > 0 {
 				// Query All Execution Record of the Recipe
 				executions := pylons.GetAllExecuteRecipeHis(ctx, cookbook.Id, recipe.Id)
