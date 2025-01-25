@@ -32,7 +32,7 @@ Let's start by creating the following cookbook:
 <br />
 - The "ID" is the unique identifier string of the cookbook. This is currently chosen by the developer when creating the cookbook.  
 <br />
-- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that the can provide users and apps with more details about the experience.  
+- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that can provide users and apps with more details about the experience.  
 <br />
 - The "version" is the string form of the cookbook's semantic version. If the cookbook is updated, this version string MUST also be increased.  
 <br />
