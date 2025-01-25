@@ -44,7 +44,7 @@ Let's start by creating the following cookbook:
 
 - The "ID" is the unique identifier string of the cookbook. This is currently chosen by the developer when creating the cookbook.
 
-- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that the can provide users and apps with more details about the experience.
+- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that can provide users and apps with more details about the experience.
 
 - The "version" is the string form of the cookbook's [semantic version](https://semver.org/). If the cookbook is updated, this version string MUST also be increased.
 
@@ -81,7 +81,7 @@ To get a better look at the data structures that comprise a Recipe, check out ou
 - The "Name" and "Description" fields are the name and description of the recipe
 - The "CoinInputs" are the fields that detail what coins are required to run the recipe
 - The "ItemInputs" is the field for items which are required to run the recipe
-- The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh oout the outputs.
+- The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh out the outputs.
 - The "Outputs" field calls the unique IDs of the items in entries list and uses them as outputs after the execution of the recipe.
 - The "BlockInterval" field indicates what block the recipe will execute. For instance, if blockInterval is at 2, the recipe won't execute until the chain has executed 2 blocks.
 - The "CostPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the `execute-recipe` transaction before the recipe's `blockInterval` is met.
@@ -171,7 +171,7 @@ Here we implement a basic recipe, one that builds a unique base character with a
 
 Note both coinInputs and itemInputs are empty, so this recipe doesn't require anything to execute. given that this is a basic character, mutableStrings, transferFee and itemModifyOutputs are empty. TradePercentage refers to the percentage of a trade sale retained by the cookbook owner (In the range 0.0 to 1.0) and the boolean field tradable is true (item can be traded).
 
-In the outputs field we return the new character by calling the item output ID. Weight refers how often it will occur and since the character is are only output it'll always return a character.
+In the outputs field we return the new character by calling the item output ID. Weight refers to how often it will occur and since the character is are only output it'll always return a character.
 
 ### Cookbook tokens facuet recipe
 
