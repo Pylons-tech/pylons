@@ -28,7 +28,7 @@ Run this command in the same directory as your Pylons directory:
 git clone https://github.com/Pylons-tech/dev-tool.git
 ```
 
-If you haven't created an account on the test-net before, open a new terminal window and go to the pylons directory. Use the pylonsd commands to create a new account on the test-net. [See here for instructions.](https://github.com/Pylons-tech/pylons/blob/main/docs/Developer-CLI-Tutorial.md)
+If you haven't created an account on the test-net before, open a new terminal window and go to the pylons directory. Use the pylonsd commands to create a new account on the testnet. [See here for instructions.](https://github.com/Pylons-tech/pylons/blob/main/docs/Developer-CLI-Tutorial.md)
 
 Within the codebase of the dev-tool, open the developer folder and edit the `config.json` file. Add the account name that cookbooks/recipes will be created by and the home directory of the Pylons folder.
 
@@ -66,7 +66,7 @@ The update-cookbook command takes a json file as a parameter with an updated coo
 go run main.go parse update-cookbook “path/to/json/file”
 ```
 
-The update-recipe command intakes a json file with an updated recipe and updates the recipe with a matching Id on the chain to match the recipein the json file. In order for the update to succeed, the version number must be updated.
+The update-recipe command intakes a json file with an updated recipe and updates the recipe with a matching Id on the chain to match the recipe in the json file. In order for the update to succeed, the version number must be updated.
 
 ## How to Verify Recipe On-Chain (bdjuno or pylonsd)
 
