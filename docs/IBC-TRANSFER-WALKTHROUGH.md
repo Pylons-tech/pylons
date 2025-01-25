@@ -51,7 +51,7 @@ host:
   dev-ui: ":13346"
   grpc-web: ":8093"
 ```
-You can have different ports but the respective ports on both chain should not match.
+You can have different ports but the respective ports on both chains should not match.
 
 ## Installing the relayer
 
@@ -59,7 +59,7 @@ We will be using the @confio/ts-relayer.
 The Command to install the relayer is:
 `sudo npm i -g @confio/relayer@main`
 
-It will allows you to use following commands `ibc-setup` & `ibc-relayer`.
+It will allows you to use the following commands `ibc-setup` & `ibc-relayer`.
 
 Here is the Link for relayer installation : https://github.com/confio/ts-relayer
 
