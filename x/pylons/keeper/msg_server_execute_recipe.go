@@ -61,7 +61,7 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 	return matchedItems, nil
 }
 
-// ExecuteRecipe will excute the recipe provided in msg
+// ExecuteRecipe will execute the recipe provided in msg
 // We will update coins of during locking if user did not have enough normal coin
 // But user have enough IBC coins
 func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
