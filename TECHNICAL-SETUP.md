@@ -50,7 +50,7 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 
 ## Install goimports tool
 
-The `goimports` tool is used int the `make format` command taht is provided to developers.
+The `goimports` tool is used int the `make format` command that is provided to developers.
 
 To install `goimports` using the `go get` command:
 
