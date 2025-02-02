@@ -118,7 +118,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID, recipeID string, add
 	}, nil
 }
 
-// Actualize is used to update an existing item from an ItemModifyOutout
+// Actualize is used to update an existing item from an ItemModifyOutput
 func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk.AccAddress, ec CelEnvCollection) error {
 	if io.Doubles != nil {
 		dblKeyValues, err := DoubleParamList(io.Doubles).Actualize(ec)
