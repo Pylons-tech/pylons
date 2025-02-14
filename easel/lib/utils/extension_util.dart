@@ -249,7 +249,7 @@ extension GetAbbrev on String {
       case kAgoricSymbol:
         return kAgoricAbr;
       case kPylonSymbol:
-        return kPYLNAbbrevation;
+        return kPYLNAbbreviation;
       case kUsdSymbol:
         return kStripeUSDABR;
       case kEuroSymbol:
@@ -259,7 +259,7 @@ extension GetAbbrev on String {
       case kEthereumSymbol:
         return kEthereumAbr;
       default:
-        return kPYLNAbbrevation;
+        return kPYLNAbbreviation;
     }
   }
 }
