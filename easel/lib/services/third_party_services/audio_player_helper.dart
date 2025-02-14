@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 
 /// Abstract Class for providing audio player
 abstract class AudioPlayerHelper {
-  ///This method works as an intializer for Audio Player,
+  ///This method works as an initializer for Audio Player,
   ///Input: [String] as path of audio
   ///Output: [bool] tells weather the audio is set or not
   Future<bool> setFile({required String file});
