@@ -2,7 +2,7 @@
   "main": "index.js",
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
-    "@slack/webhook": "^6.1.0",
+    "@slack/webhook": "^7.0.4",
     "body-parser": "^1.20.0",
     "json5": "^2.2.1"
   },
