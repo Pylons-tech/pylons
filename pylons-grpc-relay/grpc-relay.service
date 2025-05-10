@@ -1,0 +1,16 @@
+[Unit]
+Description=gRPC Relay Service
+After=network.target
+
+[Service]
+Type=simple
+User=grpc-relay
+Group=grpc-relay
+WorkingDirectory=/opt/grpc-relay
+ExecStart=/opt/grpc-relay/relay
+Restart=always
+RestartSec=5
+Environment=TARGET_ADDRESS=pylons.api.m.stavr.tech:443
+
+[Install]
+WantedBy=multi-user.target 
