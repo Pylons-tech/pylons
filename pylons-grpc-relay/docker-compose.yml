@@ -2,8 +2,6 @@ services:
   grpc-relay:
     build: .
     ports:
-      - "50051:50051"
+      - "8080:50051"
     environment:
       - TARGET_ADDRESS=pylons.api.m.stavr.tech:443
-    volumes:
-      - .:/app

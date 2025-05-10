@@ -13,5 +13,7 @@ RUN go mod download
 # Copy the source code
 COPY . .
 
+RUN go build -v -o relay
+
 # Build and run the application
-CMD ["go", "run", "."] 
+CMD ["/app/relay"]
