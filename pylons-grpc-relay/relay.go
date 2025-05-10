@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/run"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
@@ -18,44 +19,56 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
-func main() {
-	// Get target address from command line or use default
-	targetAddr := "pylons.api.m.stavr.tech:443"
-	if len(os.Args) > 1 {
-		targetAddr = os.Args[1]
-		// Remove any protocol prefix if present
-		targetAddr = strings.TrimPrefix(targetAddr, "https://")
-		targetAddr = strings.TrimPrefix(targetAddr, "http://")
+var (
+	targetAddr string
+	port       string
+	logger     *log.Logger
+)
+
+func init() {
+	// Get target address from environment variable or use default
+	targetAddr = os.Getenv("TARGET_ADDRESS")
+	if targetAddr == "" {
+		targetAddr = "pylons.api.m.stavr.tech:443"
 	}
-	
-	listenAddr := ":50051"
-	if len(os.Args) > 2 {
-		listenAddr = os.Args[2]
+	// Remove any protocol prefix if present
+	targetAddr = strings.TrimPrefix(targetAddr, "https://")
+	targetAddr = strings.TrimPrefix(targetAddr, "http://")
+
+	// Get port from environment variable or use default
+	port = os.Getenv("PORT")
+	if port == "" {
+		port = "50051"
 	}
-	
-	// Create log file
+
+	// Set up logging to both file and stdout for local development
 	logFile, err := os.OpenFile("grpc_relay.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatalf("Failed to open log file: %v", err)
+		log.Printf("Warning: Failed to open log file: %v. Logging to stdout only.", err)
+		logger = log.New(os.Stdout, "", log.LstdFlags)
+	} else {
+		// Create a multi-writer to log to both file and stdout
+		multiWriter := io.MultiWriter(os.Stdout, logFile)
+		logger = log.New(multiWriter, "", log.LstdFlags)
 	}
-	defer logFile.Close()
-	logger := log.New(logFile, "", log.LstdFlags)
-	
+}
+
+func main() {
 	// Set up server
-	lis, err := net.Listen("tcp", listenAddr)
+	lis, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		logger.Fatalf("Failed to listen: %v", err)
 	}
-	
+
 	// Create a router that passes all requests through to the target
 	server := grpc.NewServer(
 		grpc.UnknownServiceHandler(proxyHandler(targetAddr, logger)),
 	)
 	reflection.Register(server)
-	
-	fmt.Printf("Starting gRPC relay on %s -> %s\n", listenAddr, targetAddr)
-	fmt.Printf("Logging to grpc_relay.log\n")
-	log.Fatal(server.Serve(lis))
+
+	logger.Printf("Starting gRPC relay on port %s -> %s\n", port, targetAddr)
+	logger.Printf("Logging to both stdout and grpc_relay.log\n")
+	logger.Fatal(server.Serve(lis))
 }
 
 func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
