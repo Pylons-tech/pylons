@@ -1,4 +1,3 @@
-version: '3'
 services:
   grpc-relay:
     build: .
@@ -8,4 +7,3 @@ services:
       - TARGET_ADDRESS=pylons.api.m.stavr.tech:443
     volumes:
       - .:/app
-    command: go run . 

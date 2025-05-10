@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"cloud.google.com/go/run"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
@@ -78,12 +77,12 @@ func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
 		if !ok {
 			return fmt.Errorf("failed to get method name")
 		}
-		
+
 		// Enhanced request logging
 		logMsg := fmt.Sprintf("[REQUEST] %s %s", time.Now().Format(time.RFC3339), fullMethodName)
 		logger.Println(logMsg)
 		fmt.Println(logMsg)
-		
+
 		// Log request metadata
 		md, _ := metadata.FromIncomingContext(stream.Context())
 		if len(md) > 0 {
@@ -91,17 +90,17 @@ func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
 			logger.Println(mdLog)
 			fmt.Println(mdLog)
 		}
-		
+
 		// Log connection attempt
-		connMsg := fmt.Sprintf("[CONNECTING] %s - Attempting to connect to %s", 
+		connMsg := fmt.Sprintf("[CONNECTING] %s - Attempting to connect to %s",
 			fullMethodName, targetAddr)
 		logger.Println(connMsg)
 		fmt.Println(connMsg)
-		
+
 		// Create a context with timeout
 		ctx, cancel := context.WithTimeout(stream.Context(), 5*time.Second)
 		defer cancel()
-		
+
 		// Connect to target server with enhanced options
 		conn, err := grpc.DialContext(ctx, targetAddr,
 			grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
@@ -111,36 +110,36 @@ func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
 			grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
 		)
 		if err != nil {
-			errMsg := fmt.Sprintf("[ERROR] %s %s - Connection failed: %v", 
+			errMsg := fmt.Sprintf("[ERROR] %s %s - Connection failed: %v",
 				time.Now().Format(time.RFC3339), fullMethodName, err)
 			logger.Println(errMsg)
 			fmt.Println(errMsg)
 			return err
 		}
 		defer conn.Close()
-		
+
 		// Log connection success
-		connMsg = fmt.Sprintf("[CONNECTED] %s - Successfully connected to %s", 
+		connMsg = fmt.Sprintf("[CONNECTED] %s - Successfully connected to %s",
 			fullMethodName, targetAddr)
 		logger.Println(connMsg)
 		fmt.Println(connMsg)
-		
+
 		// Create a new stream to the target server
 		targetStream, err := conn.NewStream(ctx, &grpc.StreamDesc{
 			ServerStreams: true,
 			ClientStreams: true,
 		}, fullMethodName)
 		if err != nil {
-			errMsg := fmt.Sprintf("[ERROR] %s %s - Failed to create target stream: %v", 
+			errMsg := fmt.Sprintf("[ERROR] %s %s - Failed to create target stream: %v",
 				time.Now().Format(time.RFC3339), fullMethodName, err)
 			logger.Println(errMsg)
 			fmt.Println(errMsg)
 			return err
 		}
-		
+
 		// Forward messages in both directions
 		errChan := make(chan error, 2)
-		
+
 		// Forward from client to target
 		go func() {
 			for {
@@ -158,7 +157,7 @@ func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
 				}
 			}
 		}()
-		
+
 		// Forward from target to client
 		go func() {
 			for {
@@ -176,24 +175,24 @@ func proxyHandler(targetAddr string, logger *log.Logger) grpc.StreamHandler {
 				}
 			}
 		}()
-		
+
 		// Wait for either direction to complete
 		err = <-errChan
-		
+
 		// Enhanced result logging
 		duration := time.Since(start).Milliseconds()
 		if err != nil {
-			errMsg := fmt.Sprintf("[ERROR] %s %s (%dms) - %v", 
+			errMsg := fmt.Sprintf("[ERROR] %s %s (%dms) - %v",
 				time.Now().Format(time.RFC3339), fullMethodName, duration, err)
 			logger.Println(errMsg)
 			fmt.Println(errMsg)
 		} else {
-			successMsg := fmt.Sprintf("[SUCCESS] %s %s (%dms)", 
+			successMsg := fmt.Sprintf("[SUCCESS] %s %s (%dms)",
 				time.Now().Format(time.RFC3339), fullMethodName, duration)
 			logger.Println(successMsg)
 			fmt.Println(successMsg)
 		}
-		
+
 		return err
 	}
 }
