@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"cloud.google.com/go/run"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
