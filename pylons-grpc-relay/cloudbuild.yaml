@@ -13,7 +13,7 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE"
     id: Push
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
     args:
