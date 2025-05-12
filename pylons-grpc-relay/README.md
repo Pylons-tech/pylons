@@ -214,4 +214,52 @@ The relay server handles the conversion between:
 ```
 
 ## Testing
-See [INCIDENT_REPORT.md](INCIDENT_REPORT.md) for detailed testing procedures and data contracts. 
+See [INCIDENT_REPORT.md](INCIDENT_REPORT.md) for detailed testing procedures and data contracts.
+
+## Enhanced Diagnostics and Patching (May 2025)
+
+The gRPC relay has been significantly enhanced to aid in diagnosing and incrementally fixing issues with gRPC calls, particularly those originating from clients that might not correctly wrap messages in the `google.protobuf.Any` type as expected by the target Pylons node.
+
+### Key Features:
+
+1.  **Detailed Logging**:
+    *   The relay now produces verbose logs (to `grpc_relay.log` and stdout) for each gRPC call.
+    *   **`[MSG_FLOW]`**: Traces messages at various stages:
+        *   `request_received_by_relay`: Initial incoming request with metadata.
+        *   `client_msg_raw_unpacked`: After the relay receives a message from the client, showing its raw `TypeUrl` and a snippet of its `Value`. This is crucial for seeing what the client actually sent.
+        *   `client_msg_patched_pre_send` / `client_msg_unpatched_pre_send`: Shows the message just before it's sent to the target, indicating if a patch was applied.
+        *   `target_msg_sent_successfully`: Confirmation of successful send to target.
+        *   `target_response_received_by_relay`: Response received from the target.
+        *   `target_response_sent_to_client`: Confirmation of successful send of target's response back to the client.
+    *   **`[ERROR_DETAIL]`**: Provides detailed context when an error occurs, including:
+        *   `Method`: The gRPC method name.
+        *   `Stage`: Where in the relay's processing the error happened (e.g., `client_recv_error`, `target_send_error`, `patch_application_error`).
+        *   `MsgTypeURL`, `MsgValueLen`, `MsgValueSnippet`: Details of the message being processed when the error occurred.
+        *   `Metadata`: Incoming request metadata.
+    *   **`PatchInfo`**: Both `[MSG_FLOW]` and `[ERROR_DETAIL]` logs include patch information:
+        *   `PatchNotAttempted`: No patch was tried for this message.
+        *   `PatchAttempted(Name:..., Success:false, ...)`: A patch was tried but was not successful (e.g., conditions for patching weren't fully met, or the patch logic itself had an issue).
+        *   `PatchApplied(Name:..., Success:true, OriginalURL:..., PatchedURL:...)`: A patch was successfully applied, showing the original and new `TypeUrl`.
+
+2.  **Message Patching (`attemptToApplyFix` function)**:
+    *   The relay now includes a mechanism to "patch" incoming messages before forwarding them to the target gRPC server.
+    *   Currently, the primary patch (`any_typeurl_rewrap`) focuses on fixing issues where client messages are not correctly wrapped in `google.protobuf.Any`.
+    *   It uses a predefined map `knownRequestPayloadTypeURLs` in `relay.go`. This map links gRPC method names (e.g., `/pylons.pylons.Query/ListItemByOwner`) to their expected `TypeUrl` (e.g., `type.googleapis.com/pylons.pylons.QueryListItemByOwnerRequest`).
+    *   **How it works**:
+        1.  If an incoming message's `TypeUrl` is empty or different from the `expectedTypeURL` for that method, AND the message `Value` is not empty:
+            *   The relay assumes `Value` contains the raw protobuf bytes of the actual request.
+            *   It creates a new `anypb.Any` message, setting its `TypeUrl` to the `expectedTypeURL` and its `Value` to the original message's `Value`.
+        2.  If the incoming message's `TypeUrl` already matches the expected one, or if no specific mapping exists for the method, the message is passed through as-is (or with minimal intervention).
+    *   **Adding New Patches/Mappings**: To support fixing new methods or refining existing ones, update the `knownRequestPayloadTypeURLs` map in `relay.go`.
+
+3.  **Identifying Incorrect Calls**:
+    *   Look for `[ERROR_DETAIL]` logs, especially "target_send_error" with "failed to marshal" messages.
+    *   Examine the preceding `[MSG_FLOW]` logs for that method, particularly the `client_msg_raw_unpacked` stage. This will show the `TypeUrl` and `Value` snippet sent by the client.
+    *   If `TypeUrl` is empty or incorrect, and `Value` seems to contain the actual payload, this method is a candidate for adding/updating its entry in `knownRequestPayloadTypeURLs`.
+
+### Environment Variables:
+
+*   `TARGET_ADDRESS`: The address (host:port) of the target gRPC server (e.g., `pylons.api.m.stavr.tech:443`). Do NOT include `http://` or `https://`.
+*   `PORT`: The port on which this relay server will listen (e.g., `50051`).
+
+This enhanced relay aims to simplify debugging and allow for rapid, iterative fixes to client-server gRPC communication issues without requiring immediate client-side code changes. 
