@@ -50,6 +50,57 @@ cd wallet
 flutter test test/grpc_test.dart
 ```
 
+### Step 4: Flutter gRPC Test Details
+
+The Flutter gRPC tests (`wallet/test/grpc_test.dart`) validate direct connectivity between the Flutter app and the blockchain node. These tests are crucial for verifying the client-side implementation.
+
+#### Test Setup
+1. Ensure you have Flutter installed and configured
+2. Navigate to the wallet directory:
+```bash
+cd wallet
+```
+
+3. Install dependencies:
+```bash
+flutter pub get
+```
+
+#### Running Tests
+Run the gRPC tests with:
+```bash
+flutter test test/grpc_test.dart
+```
+
+#### Test Coverage
+The tests verify:
+1. Node Info Retrieval
+   - Tests basic Tendermint node connectivity
+   - Verifies network information retrieval
+
+2. Item Listing
+   - Tests `ListItemByOwner` endpoint
+   - Validates pagination handling
+   - Verifies response format
+
+3. Cookbook Listing
+   - Tests `ListCookbooksByCreator` endpoint
+   - Validates pagination handling
+   - Verifies response format
+
+#### Expected Results
+- All tests should pass with proper responses
+- No connection timeouts or protocol errors
+- Proper handling of pagination parameters
+- Correct response object structure
+
+#### Troubleshooting
+If tests fail:
+1. Check network connectivity to `pylons.api.m.stavr.tech:443`
+2. Verify TLS/SSL configuration
+3. Ensure proper protobuf message formatting
+4. Check for any proxy or firewall issues
+
 ## Current Status
 
 ### Blockchain Tests
