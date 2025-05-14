@@ -1,0 +1,17 @@
+2025/05/10 20:21:14 Starting gRPC relay on :50051 -> pylons.api.m.stavr.tech:443
+2025/05/10 20:21:14 Logging to grpc_relay.log
+2025/05/10 20:21:56 [REQUEST] Method: /cosmos.base.tendermint.v1beta1.Service/GetNodeInfo
+2025/05/10 20:21:56 [METADATA] Headers: map[:authority:[localhost:50051] content-type:[application/grpc] user-agent:[dart-grpc/2.0.0]]
+2025/05/10 20:21:56 [CLIENT->TARGET] Error receiving: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
+2025/05/10 20:21:56 [ERROR] Stream error: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
+2025/05/10 20:21:56 [TARGET->CLIENT] Error receiving: rpc error: code = Canceled desc = context canceled
+2025/05/10 20:21:57 [REQUEST] Method: /pylons.pylons.Query/ListItemByOwner
+2025/05/10 20:21:57 [METADATA] Headers: map[:authority:[localhost:50051] content-type:[application/grpc] user-agent:[dart-grpc/2.0.0]]
+2025/05/10 20:21:57 [CLIENT->TARGET] Error receiving: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
+2025/05/10 20:21:57 [ERROR] Stream error: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
+2025/05/10 20:21:57 [TARGET->CLIENT] Error receiving: rpc error: code = Canceled desc = context canceled
+2025/05/10 20:21:57 [REQUEST] Method: /pylons.pylons.Query/ListCookbooksByCreator
+2025/05/10 20:21:57 [METADATA] Headers: map[:authority:[localhost:50051] content-type:[application/grpc] user-agent:[dart-grpc/2.0.0]]
+2025/05/10 20:21:57 [CLIENT->TARGET] Error receiving: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
+2025/05/10 20:21:57 [TARGET->CLIENT] Error receiving: rpc error: code = Canceled desc = context canceled
+2025/05/10 20:21:57 [ERROR] Stream error: rpc error: code = Internal desc = grpc: failed to unmarshal the received message: failed to unmarshal, message is *interface {}, want proto.Message
