@@ -5,7 +5,7 @@
 # before testing the relay service.
 
 # Configuration
-BLOCKCHAIN_NODE="localhost:9090"  # Default Cosmos SDK gRPC port
+BLOCKCHAIN_NODE="pylons.api.m.stavr.tech:443"  # Default Cosmos SDK gRPC port
 TEST_ADDRESS="pylo1fhvaknqx2ngyltz2qzychlm75cyp4tkh09d539"
 
 echo "=== Pylons Blockchain gRPC Acceptance Tests ==="
