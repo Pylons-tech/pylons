@@ -1,4 +1,4 @@
-go 1.18
+go 1.23.0
 
 module github.com/Pylons-tech/pylons
 
@@ -10,7 +10,7 @@ replace (
 
 require (
 	cosmossdk.io/errors v1.0.0-beta.7
-	cosmossdk.io/math v1.0.0-beta.3
+	cosmossdk.io/math v1.5.3
 	github.com/Pylons-tech/pkcs7 v0.0.0-20220624080041-1a71f79c48ff
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
 	github.com/cosmos/cosmos-sdk v0.46.6
@@ -20,10 +20,10 @@ require (
 	github.com/google/cel-go v0.12.4
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/ignite/cli v0.25.1
-	github.com/rogpeppe/go-internal v1.9.0
+	github.com/rogpeppe/go-internal v1.14.1
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.6.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.10.0
 	github.com/tendermint/tendermint v0.34.23
 	github.com/tendermint/tm-db v0.6.7
 	github.com/zach-klippenstein/goregen v0.0.0-20160303162051-795b5e3961ea
@@ -40,6 +40,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
 	github.com/googleapis/go-type-adapters v1.0.0 // indirect
 	github.com/manifoldco/promptui v0.9.0 // indirect
+	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 )
 
@@ -81,7 +82,7 @@ require (
 	github.com/cosmos/ledger-go v0.9.2 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
 	github.com/danieljoos/wincred v1.1.2 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/dgraph-io/badger/v3 v3.2103.2 // indirect
 	github.com/dgraph-io/ristretto v0.1.0 // indirect
@@ -124,7 +125,7 @@ require (
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/keybase/go-keychain v0.0.0-20190712205309-48d3d31d256d // indirect
 	github.com/klauspost/compress v1.15.11 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
+	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
@@ -142,7 +143,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.12.2 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.34.0 // indirect
@@ -171,7 +172,7 @@ require (
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/term v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
@@ -181,5 +182,5 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
-	sigs.k8s.io/yaml v1.3.0 // indirect
+	sigs.k8s.io/yaml v1.4.0 // indirect
 )
