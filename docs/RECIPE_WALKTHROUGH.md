@@ -68,7 +68,7 @@ ExtraInfo     string            `protobuf:"bytes,14,opt,name=extraInfo,proto3" j
 
 ```
 
-To get a better look at the data structures that comprise a Recipe, check out our technical [spec](https://github.com/Pylons-tech/pylons/x/pylons/spec/README.md). For now, let's briefly detail each field.
+To get a better look at the data structures that comprise a Recipe, check out our technical [spec](https://github.com/Pylons-tech/pylons/blob/main/docs/README.md). For now, let's briefly detail each field.
 
 - The "CookbookID" field is the ID of the cookbook that _contains_ this recipe
 - The "RecipeID" field is the unique identifier for this particular recipe
