@@ -11,7 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "@vuepress/plugin-google-analytics": "^1.9.7",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "markdown-it": "^13.0.1",
     "markdown-it-meta": "0.0.1",
     "vuepress": "^1.9.7",
