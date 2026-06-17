@@ -12,7 +12,7 @@
   "devDependencies": {
     "@vuepress/plugin-google-analytics": "^1.9.7",
     "lodash": "^4.17.21",
-    "markdown-it": "^13.0.1",
+    "markdown-it": "^14.2.0",
     "markdown-it-meta": "0.0.1",
     "vuepress": "^1.9.7",
     "vuepress-plugin-element-tabs": "^0.2.8"
