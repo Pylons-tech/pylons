@@ -1,9 +1,9 @@
 {
   "main": "index.js",
   "dependencies": {
-    "@google-cloud/functions-framework": "^3.1.2",
+    "@google-cloud/functions-framework": "^5.0.5",
     "@slack/webhook": "^6.1.0",
-    "body-parser": "^1.20.0",
+    "body-parser": "^2.3.0",
     "json5": "^2.2.1"
   },
   "scripts": {
